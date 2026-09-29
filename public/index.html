@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A multiplayer escape room that teaches AI prompting basics.">
+<title>Prompt Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+
+/* Layout: a station console. Sticky status bar on top, the room's briefing + puzzle in the main column, a live station map and crew ranks in a side column that stacks below on phones. Single dark theme by choice (a ship interior). */
+:root{
+  --bg:#0D1220; --panel:#151C2E; --panel-2:#1C2439; --line:#2A3450;
+  --fg:#E9EDF6; --muted:#93A0BD; --accent:#FFB547; --accent-ink:#1C1405;
+  --ok:#5CD68F; --bad:#FF7F7F; --focus:#FFD28A;
+  --l-open:#3FB950; --l-conf:#2F7FE0; --l-sens:#E97132; --l-secret:#E5484D;
+  --f-display:"Oxanium","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:10px;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.55}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;font-weight:700;text-decoration:none}
+.btn:hover:not(:disabled){border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.08)}
+.btn.danger{border-color:var(--bad);color:var(--bad);background:transparent}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.kbd{font-family:var(--f-mono);font-size:11px;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.7}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:24px}
+.hero h1{font-size:clamp(40px,7vw,76px);font-weight:800;letter-spacing:-.01em}
+.hero h1 span{color:var(--accent)}
+.lede{font-size:18px;max-width:58ch;color:var(--fg)}
+.note{font-size:14px;color:var(--muted);max-width:60ch}
+.note.warn{color:var(--accent)}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px;border-top:1px solid var(--line);padding-top:24px}
+.how h3{font-size:16px;margin-bottom:6px}
+.how .n{font-family:var(--f-mono);color:var(--accent);font-size:13px}
+
+/* panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.panel h2{font-size:20px}
+.formgrid{display:grid;gap:18px;max-width:460px}
+label.lbl{display:block;font-weight:700;margin-bottom:6px}
+.hint{font-size:13px;color:var(--muted);margin-top:4px}
+input[type=text]{width:100%;min-height:46px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+input.code{font-family:var(--f-mono);font-size:26px;letter-spacing:.35em;text-transform:uppercase}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;border-radius:8px;border:2px solid transparent;background:var(--panel-2);cursor:pointer;font-size:11px;color:var(--muted)}
+.sw[aria-checked=true]{border-color:var(--accent);color:var(--fg)}
+.err{color:var(--bad);font-weight:700;min-height:1.4em}
+
+/* code display */
+.codebig{display:flex;gap:8px;flex-wrap:wrap}
+.codebig span{font-family:var(--f-mono);font-weight:700;font-size:clamp(36px,8vw,64px);width:1.4em;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding-block:4px;color:var(--accent)}
+
+/* crew */
+.crew{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.mate{display:flex;align-items:center;gap:8px;background:var(--panel-2);border-radius:8px;padding:8px 10px;min-width:0}
+.mate b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.you{font-family:var(--f-mono);font-size:10px;color:var(--accent-ink);background:var(--accent);border-radius:4px;padding:0 5px;flex:none}
+.empty{border:1px dashed var(--line);border-radius:8px;padding:16px;color:var(--muted);font-size:14px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.bar .in{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.chip{font-family:var(--f-mono);font-size:13px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--muted)}
+.chip b{color:var(--fg)}
+.timer{font-family:var(--f-mono);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.pen{font-family:var(--f-mono);font-size:13px;color:var(--bad)}
+.letters{display:flex;gap:4px}
+.letters span{width:26px;height:30px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;border:1px solid var(--line);border-radius:5px;color:var(--muted)}
+.letters span.got{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.spacer{flex:1}
+
+/* game layout */
+.game{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.game > *{min-width:0}
+.roomhead{display:flex;flex-direction:column;gap:4px}
+.roomhead h2{font-size:clamp(24px,4vw,34px)}
+details.brief{background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+details.brief summary{cursor:pointer;padding:14px 20px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.brief summary::-webkit-details-marker{display:none}
+details.brief summary::after{content:"Hide";font-weight:400;color:var(--muted);font-size:14px}
+details.brief:not([open]) summary::after{content:"Show"}
+.brief .body{padding:0 20px 18px;display:flex;flex-direction:column;gap:12px;max-width:68ch}
+dl.parts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 14px;margin:0}
+dl.parts dt{font-family:var(--f-mono);font-size:13px;color:var(--accent);padding-top:2px}
+dl.parts dd{margin:0}
+.swap{width:100%;border-collapse:collapse;font-size:15px}
+.swap td{padding:6px 8px;border-bottom:1px solid var(--line)}
+.swap td:first-child{color:var(--bad);font-family:var(--f-mono);white-space:nowrap}
+.swap td:last-child{color:var(--ok)}
+.tablewrap{overflow-x:auto}
+pre.ex{margin:0;white-space:pre-wrap;font-family:var(--f-mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px}
+
+.challenge{background:var(--panel);border:1px solid var(--accent);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:16px}
+.challenge .q{font-size:18px;font-weight:700}
+blockquote{margin:0;padding:12px 14px;border-left:3px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0;font-style:italic}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;min-height:48px;padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer}
+.opt .k{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--muted);flex:none;margin-top:2px}
+.opt[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel-2))}
+.opt[aria-pressed=true] .k{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.words{display:flex;flex-wrap:wrap;gap:8px;font-size:20px}
+.word{padding:6px 10px;border-radius:6px;border:1px dashed var(--line);background:var(--bg);cursor:pointer}
+.word[aria-pressed=true]{border-style:solid;border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,var(--bg));text-decoration:line-through;text-decoration-color:var(--bad)}
+.match{display:grid;gap:10px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:10px;align-items:center;background:var(--panel-2);border-radius:8px;padding:10px 12px}
+.mrow select{min-height:42px;border-radius:6px;border:1px solid var(--line);background:var(--bg);padding:6px 8px;width:100%}
+.tiles{display:flex;gap:10px;flex-wrap:wrap}
+.tile{width:56px;height:64px;font-family:var(--f-mono);font-weight:700;font-size:28px;border-radius:8px;border:1px solid var(--accent);background:var(--panel-2);color:var(--accent);cursor:pointer}
+.tile:disabled{opacity:.25;cursor:default}
+.slots{display:flex;gap:10px;flex-wrap:wrap}
+.slot{width:56px;height:64px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:28px;border-radius:8px;border:2px dashed var(--line)}
+.slot.f{border-style:solid;border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.fb{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.fb.ok{background:color-mix(in srgb,var(--ok) 14%,var(--panel));border:1px solid var(--ok)}
+.fb.bad{background:color-mix(in srgb,var(--bad) 12%,var(--panel));border:1px solid var(--bad)}
+.fb b{font-family:var(--f-display)}
+
+/* map */
+.side{display:flex;flex-direction:column;gap:16px}
+.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;position:relative}
+.cell{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px;min-height:74px;display:flex;flex-direction:column;gap:6px}
+.cell.here{border-color:var(--accent)}
+.cell.exit{grid-column:1 / -1;min-height:60px;background:color-mix(in srgb,var(--ok) 10%,var(--panel-2))}
+.cell .t{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.cell .bots{display:flex;flex-wrap:wrap;gap:2px}
+.side h3{font-size:14px;font-family:var(--f-mono);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+
+/* board */
+.board{width:100%;border-collapse:collapse;font-size:15px}
+.board td,.board th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.board th{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.board .rk{font-family:var(--f-mono);color:var(--muted);width:2.2em}
+.board .tm{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.board .nm{display:flex;align-items:center;gap:8px;min-width:0}
+.board .nm b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:14ch}
+.board tr.me td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.status{font-size:13px;color:var(--muted)}
+.status.won{color:var(--ok);font-weight:700}
+
+/* podium */
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}
+.pod{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.pod.p1{border-color:var(--accent);padding-block:26px}
+.pod .place{font-family:var(--f-display);font-size:28px;color:var(--accent)}
+.pod b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+
+.big{font-family:var(--f-display);font-size:clamp(34px,7vw,60px);font-weight:800;font-variant-numeric:tabular-nums}
+.countdown{min-height:60vh;display:grid;place-items:center;text-align:center}
+.countdown .num{font-family:var(--f-display);font-size:clamp(90px,22vw,180px);font-weight:800;color:var(--accent);line-height:1}
+.banner{background:color-mix(in srgb,var(--accent) 14%,var(--panel));border:1px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:14px}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--panel-2);border:1px solid var(--bad);border-radius:8px;padding:10px 12px}
+
+/* breakout-room effects */
+.roomwrap{position:relative;overflow:clip;border-radius:var(--r)}
+.story{font-size:15px;color:var(--muted);max-width:68ch;font-style:italic}
+.devhead{display:flex;align-items:center;gap:14px}
+.devhead .led{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;padding:3px 8px;border-radius:4px;border:1px solid var(--bad);color:var(--bad)}
+.devhead .led.on{border-color:var(--ok);color:var(--ok)}
+.lock{flex:none;overflow:visible}
+.lock .shackle{fill:none;stroke:var(--muted);stroke-width:5;stroke-linecap:round;transform-box:view-box;transform-origin:34px 26px}
+.lock .lbody{fill:var(--bad);transition:fill .3s}
+.lock .hole{fill:var(--bg)}
+.lock.open .lbody{fill:var(--ok)}
+.lock.open .shackle{transform:translateY(-8px) rotate(-28deg);stroke:var(--ok)}
+.lock.anim .shackle{animation:shackle .7s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes shackle{0%{transform:none}35%{transform:translateY(-10px)}100%{transform:translateY(-8px) rotate(-28deg)}}
+.doors{position:absolute;inset:0;z-index:4;display:flex;pointer-events:none}
+.doors i{flex:1;background:repeating-linear-gradient(135deg,var(--panel-2) 0 22px,var(--panel) 22px 44px);border:1px solid var(--line)}
+.doors i.dl{border-right:3px solid var(--accent);animation:doorL .9s .35s cubic-bezier(.6,0,.3,1) forwards}
+.doors i.dr{border-left:3px solid var(--accent);animation:doorR .9s .35s cubic-bezier(.6,0,.3,1) forwards}
+.doors b{position:absolute;left:50%;top:80px;transform:translateX(-50%);font-family:var(--f-display);font-size:clamp(22px,4vw,34px);letter-spacing:.2em;text-transform:uppercase;background:var(--bg);color:var(--accent);padding:6px 16px;border-radius:6px;animation:fadeout .3s .3s forwards;white-space:nowrap}
+@keyframes doorL{to{transform:translateX(-101%)}}
+@keyframes doorR{to{transform:translateX(101%)}}
+@keyframes fadeout{to{opacity:0}}
+.challenge.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.challenge.alarm{box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 45%,transparent)}
+.challenge.solved{border-color:var(--ok)}
+.reveal{display:flex;align-items:center;gap:14px}
+.reveal .card{width:54px;height:64px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:32px;border-radius:8px;background:var(--accent);color:var(--accent-ink);animation:flip .6s ease-out}
+.reveal .card.badge{background:var(--ok);font-size:14px;width:auto;padding:0 12px}
+@keyframes flip{from{transform:rotateY(90deg) scale(.6)}to{transform:none}}
+.shield{flex:none}
+.labels{display:grid;gap:10px}
+.labelrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:start}
+.labelrow .nm{font-weight:700}
+.labelrow .scope{font-family:var(--f-mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+.mrow label{display:flex;align-items:center;gap:10px}
+.badge-slot{font-family:var(--f-mono);font-size:11px;height:30px;display:grid;place-items:center;padding:0 8px;border:1px solid var(--line);border-radius:5px;color:var(--muted)}
+.badge-slot.got{background:var(--ok);border-color:var(--ok);color:var(--accent-ink)}
+.cell.wide{grid-column:1 / -1}
+.cell .lk{font-size:11px;font-family:var(--f-mono);color:var(--muted)}
+.cell.clear .t{color:var(--ok)}
+.snd{min-height:36px;padding:6px 12px;font-size:13px}
+canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+@media (prefers-reduced-motion:reduce){.doors{display:none}.challenge.shake{animation:none}.lock.anim .shackle{animation:none}}
+
+@media (max-width:860px){
+  .game{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .how{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .mrow{grid-template-columns:minmax(0,1fr)}
+  .podium{grid-template-columns:minmax(0,1fr)}
+  .tile,.slot{width:48px;height:56px;font-size:24px}
+  .timer{font-size:18px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .countdown .num{animation:pop .9s ease-out}
+  @keyframes pop{from{transform:scale(1.4);opacity:.3}to{transform:scale(1);opacity:1}}
+  .fb{animation:rise .25s ease-out}
+  @keyframes rise{from{transform:translateY(4px);opacity:0}to{transform:none;opacity:1}}
+}
+</style>
+<script src="/vendor/xlsx.full.min.js" defer></script>
+</head>
+<body>
+<div id="bar"></div>
+<div id="offline" class="wrap" hidden style="padding-block:8px 0"><div class="banner" role="status">Connection lost. Reconnecting… Your progress on this screen is kept.</div></div>
+<main class="wrap" id="app"></main>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var app=$('#app'), barEl=$('#bar');
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+
+var PEN=10; // seconds added per wrong answer
+var COLORS=['#FF6B6B','#FFB547','#F2E266','#5CD68F','#4FC3E8','#8C9BFF','#C77DFF','#FF8FC7'];
+var COLOR_NAMES=['Red','Amber','Yellow','Green','Sky','Indigo','Violet','Pink'];
+var CATS=['Role','Task','Context','Format','Constraints'];
+function SHIELD(k){return '<svg class="shield" viewBox="0 0 24 28" width="24" height="28" aria-hidden="true"><path d="M12 1 L22 5 V13 C22 20 17 25 12 27 C7 25 2 20 2 13 V5 Z" style="fill:var(--l-'+k+')"/><path d="M12 4 V24 C8 22 5 18 5 13 V7 Z" style="fill:#FFFFFF;opacity:.18"/></svg>'}
+
+/* ---------- sound (synthesized, no files) ---------- */
+var AC=null, muted=false;
+try{muted=localStorage.getItem('ps-muted')==='1'}catch(e){}
+function ac(){if(muted)return null;if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==='suspended'){AC.resume().catch(function(){})}return AC}
+function tone(f,dur,type,vol,delay,to){var a=ac();if(!a)return;var t=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.15,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+0.02);}
+function noise(dur,vol,delay,f1,f2){var a=ac();if(!a)return;var t=a.currentTime+(delay||0),n=Math.floor(a.sampleRate*dur),buf=a.createBuffer(1,n,a.sampleRate),d=buf.getChannelData(0);
+  for(var i=0;i<n;i++)d[i]=Math.random()*2-1;var s=a.createBufferSource();s.buffer=buf;var fl=a.createBiquadFilter();fl.type='lowpass';
+  fl.frequency.setValueAtTime(f1||800,t);fl.frequency.exponentialRampToValueAtTime(f2||200,t+dur);var g=a.createGain();
+  g.gain.setValueAtTime(vol||0.2,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);s.connect(fl);fl.connect(g);g.connect(a.destination);s.start(t);}
+var sfx={
+  click:function(){tone(660,0.05,'square',0.04)},
+  beep:function(){tone(520,0.14,'square',0.07)},
+  go:function(){tone(880,0.35,'square',0.08);tone(1320,0.35,'sine',0.05)},
+  bad:function(){tone(150,0.35,'sawtooth',0.12,0,90);tone(143,0.35,'sawtooth',0.1,0.02,85)},
+  unlock:function(){noise(0.06,0.3,0,3000,1200);tone(180,0.08,'square',0.1,0.02);noise(0.08,0.25,0.18,2500,600);[523,659,784,1047].forEach(function(f,i){tone(f,0.25,'triangle',0.1,0.28+i*0.08)})},
+  door:function(){noise(1.1,0.18,0,1400,120);tone(90,0.9,'sawtooth',0.04,0,55)},
+  win:function(){[523,659,784,1047,784,1047,1319].forEach(function(f,i){tone(f,i===6?0.8:0.18,'triangle',0.12,i*0.13)});noise(0.4,0.08,0.9,5000,2000)}
+};
+function play(n){try{if(sfx[n])sfx[n]()}catch(e){}}
+function setMuted(m){muted=m;try{localStorage.setItem('ps-muted',m?'1':'0')}catch(e){}if(!m)play('click')}
+function soundBtn(){return '<button class="btn ghost snd" data-act="mute" aria-pressed="'+(!muted)+'">'+(muted?'Sound off':'Sound on')+'</button>'}
+
+/* ---------- confetti ---------- */
+function confetti(){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var c=document.createElement('canvas');c.className='confetti';document.body.appendChild(c);
+  var ctx=c.getContext('2d'),dpr=window.devicePixelRatio||1,W=c.width=innerWidth*dpr,H=c.height=innerHeight*dpr,P=[];
+  for(var i=0;i<240;i++){var left=i%2===0;P.push({x:left?0:W,y:H*0.9,vx:(left?1:-1)*(4+Math.random()*9)*dpr,vy:-(10+Math.random()*12)*dpr,
+    r:Math.random()*6,vr:(Math.random()-.5)*0.4,w:(6+Math.random()*6)*dpr,h:(3+Math.random()*4)*dpr,c:COLORS[i%COLORS.length]});}
+  var f=0;(function loop(){ctx.clearRect(0,0,W,H);P.forEach(function(p){p.vy+=0.35*dpr;p.vx*=0.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();});
+    if(++f<240)requestAnimationFrame(loop);else c.remove();})();}
+function lockSvg(open,anim){return '<svg class="lock'+(open?' open':'')+(anim?' anim':'')+'" viewBox="0 0 48 56" width="40" height="46" aria-hidden="true"><path class="shackle" d="M14 26 V16 a10 10 0 0 1 20 0 V26"/><rect class="lbody" x="6" y="24" width="36" height="28" rx="6"/><circle class="hole" cx="24" cy="36" r="4"/><rect class="hole" x="22" y="38" width="4" height="8" rx="2"/></svg>'}
+
+var STAGES=[
+{room:'Airlock',letter:'C',title:'The anatomy of a prompt',device:'Airlock terminal',
+ story:'Red lights everywhere. The airlock won’t open until the station AI receives a well-built prompt. Study the terminal manual, then crack the lock.',
+ lesson:'<p>A strong prompt gives the AI what a new teammate would need on day one. Most good prompts combine five parts:</p>'+
+ '<dl class="parts"><dt>Role</dt><dd>Who the AI should act as. <i>"You are a patient math tutor."</i></dd>'+
+ '<dt>Task</dt><dd>The job, starting with a clear verb: explain, draft, compare, summarize.</dd>'+
+ '<dt>Context</dt><dd>Background the AI cannot guess: who it is for, why, what you already have.</dd>'+
+ '<dt>Format</dt><dd>The shape of the answer: a table, 3 bullet points, an email, JSON.</dd>'+
+ '<dt>Constraints</dt><dd>Limits: length, tone, budget, things to avoid.</dd></dl>'+
+ '<p>Many prompts also add <b>examples</b> of the output you want. You will practise that in Comms.</p>',
+ type:'choice', q:'Read this prompt. Which part is missing?',
+ quote:'You are a travel planner. Plan a 3-day trip to Rome for a family with two kids under 10. Present it as a day-by-day table. Keep each day under €150.',
+ options:['Role','Context','Format','Examples of the output'], answer:3,
+ why:['"You are a travel planner" is the role, so that part is there.','"A family with two kids under 10" is context, so that part is there.','"A day-by-day table" is the format, so that part is there.','Right. The prompt never shows a sample itinerary, so it has no examples.']},
+{room:'Navigation',letter:'L',title:'Be specific',device:'Nav computer',
+ story:'The nav computer is lost. Someone fed it a vague prompt. Strike out every fuzzy word to recalibrate it.',
+ lesson:'<p>Vague words make the AI guess, and guesses come back generic. Replace each vague word with something you could check.</p>'+
+ '<div class="tablewrap"><table class="swap"><tbody>'+
+ '<tr><td>short</td><td>under 120 words</td></tr>'+
+ '<tr><td>good</td><td>friendly and encouraging</td></tr>'+
+ '<tr><td>people</td><td>first-year nursing students</td></tr>'+
+ '<tr><td>something interesting</td><td>how sleep affects memory</td></tr>'+
+ '</tbody></table></div>'+
+ '<p>A quick test: could two different people read your prompt and picture the same result? If not, it is still vague.</p>',
+ type:'tap', q:'Tap every vague word in this prompt, then submit.',
+ words:['Write','a','good,','short','blog','post','about','something','interesting','for','people.'], vague:[2,3,7,8,10]},
+{room:'Reactor',letter:'E',title:'Build it part by part',device:'Reactor control panel',cats:CATS,
+ story:'The reactor is overheating. Its control prompt got scrambled. Wire each sentence back into the right slot before it melts down.',
+ lesson:'<p>Writing one sentence per part keeps a prompt easy to read and easy to fix. When a result is off, you can see which part to change.</p>'+
+ '<pre class="ex">Role:        You are a science teacher.\nContext:     My class is 12-year-olds who find physics boring.\nTask:        Explain why the sky is blue.\nFormat:      Use one everyday analogy and 3 short steps.\nConstraints: No equations. Under 150 words.</pre>'+
+ '<p>Context usually works best before the task, so the AI reads the situation before the instruction.</p>',
+ type:'match', q:'Label each sentence with the prompt part it plays.',
+ items:[['Don’t mention salaries. Keep it under 200 words.',4],['You are a senior HR manager.',0],['Draft an announcement email to all staff.',1],['Our team of 12 is moving to a 4-day work week in May.',2],['Use a subject line and three short paragraphs.',3]]},
+{room:'Comms',letter:'A',title:'Show examples',device:'Comms relay',
+ story:'The comms relay keeps misreading messages. Fix its prompt so it can hear every kind of signal.',
+ lesson:'<p>Examples teach a pattern faster than a description. A prompt with no examples is <b>zero-shot</b>; a prompt with a few is <b>few-shot</b>.</p>'+
+ '<pre class="ex">Label each review as Positive, Negative or Neutral.\n\nReview: "Loved it, will buy again" → Positive\nReview: "Broke after two days" → Negative\nReview: "Arrived on time, works fine" → Neutral\n\nReview: """{new review here}""" →</pre>'+
+ '<p>Two habits make examples work: cover <b>every kind of answer</b> you want back, and wrap the input in <b>delimiters</b> (quotes or tags) so the AI can tell your instructions from your data.</p>',
+ type:'choice', q:'Your review-labelling prompt only ever answers Positive or Negative, never Neutral. What is the best fix?',
+ options:['Write the instruction in capital letters','Add an example that is labelled Neutral','Make the prompt shorter','Ask the AI to be more creative'], answer:1,
+ why:['Capitals add emphasis, but the AI still has never seen what a Neutral review looks like.','Right. Your examples only showed two labels, so the AI copied that pattern. One Neutral example fixes it.','Shorter is not better here. The missing piece is an example, not fewer words.','Creativity is the opposite of what a labelling task needs.']},
+{room:'Bridge',letter:'R',title:'Refine the result',device:'Captain’s console',
+ story:'The captain’s console spat out the wrong report. Send one follow-up that gets it right.',
+ lesson:'<p>The first answer is a draft. Improve it with a follow-up that says exactly what to change.</p>'+
+ '<dl class="parts"><dt>Weak</dt><dd>"Make it better." "Try again."</dd><dt>Strong</dt><dd>Name what to keep, what to change and the target: length, tone, audience.</dd></dl>'+
+ '<p>Other useful moves: ask the AI to think step by step on a hard problem, ask it to ask you questions first, and always check facts and numbers yourself.</p>',
+ type:'choice', q:'You asked for a LinkedIn post and got a 900-word essay. What is the best follow-up?',
+ options:['"Try again."','"Make it better."','"Rewrite this as a LinkedIn post under 100 words. Keep the 3 key statistics and use a friendly tone."','"Why is this so long?"'], answer:2,
+ why:['"Try again" gives no direction, so you will likely get another long essay.','"Better" is vague. The AI cannot tell what you want improved.','Right. It names the format, the length, what to keep and the tone.','This asks for an explanation, not a fix, so you still have no post.']},
+{room:'Vault',letter:'',badge:true,title:'Know your data labels',device:'Clearance scanner',
+ story:'The escape pod keycard is locked in the vault. The clearance scanner only opens for crew who know what is safe to paste into Copilot.',
+ lesson:'<p>Every file and email carries a classification label. The label tells you who may see the data, and how much harm a leak would cause.</p>'+
+ '<div class="labels">'+
+ '<div class="labelrow">'+SHIELD('open')+'<div><div class="nm">Open</div><div class="scope">Anyone · inside and outside the organization</div><p class="small">Meant for public use, with no legal, regulatory or organizational limits. Examples: press releases, published reports, anonymized statistics.</p></div></div>'+
+ '<div class="labelrow">'+SHIELD('conf')+'<div><div class="nm">Confidential</div><div class="scope">Organizational only · authorized staff</div><p class="small">About how the entity works internally. A leak would cause limited harm. Sharing outside needs approval. Examples: internal policies, performance reports, a colleague’s job title and phone number.</p></div></div>'+
+ '<div class="labelrow">'+SHIELD('sens')+'<div><div class="nm">Sensitive</div><div class="scope">Authorized people only · strict approval to share</div><p class="small">Needs strong protection: personal, financial, health or security details. A leak would cause serious harm. Examples: Emirates ID numbers, bank details, payroll, medical records.</p></div></div>'+
+ '<div class="labelrow">'+SHIELD('secret')+'<div><div class="nm">Secret</div><div class="scope">Highest protection · sharing prohibited</div><p class="small">A leak could seriously harm the UAE government, national security, social cohesion or the economy. Examples: national crisis plans, classified intelligence.</p></div></div>'+
+ '</div><p>The rule of thumb: <b>the higher the label, the tighter the rule for AI tools</b>. Always check the label before you paste anything into a prompt.</p>',
+ type:'match', q:'Can this go into a Copilot prompt? Match each label and example to the rule.',
+ cats:['Yes','Yes, in our organization’s Copilot only','Only with approval','Never'],
+ items:[['Secret',3,'secret'],['Open',0,'open'],['An employee’s Emirates ID number',3],['Sensitive',3,'sens'],['A press release already on our website',0],['Confidential',1,'conf']],
+ okText:'Scanner cleared. Open data is fine, Confidential data stays inside your organization’s Copilot, and Sensitive or Secret data never goes into an AI prompt. That includes personal details like Emirates ID numbers.'},
+{room:'Escape pod',letter:'',title:'Unlock the pod',device:'Pod launch keypad',
+ story:'The keycard slides in and the pod powers up. One lock left: the launch password.',
+ lesson:'<p>You collected five access letters, one per room. Put them in order to spell what every good prompt should be.</p><p class="muted">Hint: it is the opposite of vague.</p>',
+ type:'unscramble', q:'Tap the letters in order to spell the password.', tiles:['A','R','C','E','L'], answer:'CLEAR'}
+];
+var N=STAGES.length;
+
+var saved={};try{saved=JSON.parse(localStorage.getItem('ps-profile')||'{}')||{}}catch(e){}
+function saveProfile(){try{localStorage.setItem('ps-profile',JSON.stringify({name:S.name,color:S.color,best:S.best}))}catch(e){}}
+
+var S={screen:'home',mode:null,code:'',codeInput:'',name:typeof saved.name==='string'?saved.name.slice(0,14):'',
+  color:(saved.color>=0&&saved.color<8)?saved.color:1,best:typeof saved.best==='number'?saved.best:null,
+  stage:0,startLocal:null,penalty:0,finishMs:null,letters:[],sel:null,tap:[],match:[],unscr:[],fb:null,
+  hostPhase:'lobby',hostSeen:false,hostGone:false,noHost:false,joinErr:'',busy:false,endConfirm:false,
+  since:0,liveAt:0,cdEnd:0,connErr:''};
+var roomApi; // undefined while loading, null when unavailable
+var PID=(function(){var k='ps-pid',v=null;try{v=sessionStorage.getItem(k)}catch(e){}if(!v){v=Math.random().toString(36).slice(2,12);try{sessionStorage.setItem(k,v)}catch(e){}}return v})();
+var LIMITS=[0,5,10,15,20,30];
+S.limitMin=15;S.limitMs=0;S.record={};S.endedAt=0;S.startedAt=0;
+var R=null, unsubPeers=null, peers=[], noHostTimer=null;
+
+/* ---------- avatars ---------- */
+function bot(ci,size){size=size||26;var c=COLORS[ci]||COLORS[0];
+  return '<svg viewBox="0 0 32 32" width="'+size+'" height="'+size+'" aria-hidden="true" style="flex:none">'+
+  '<line x1="16" y1="2" x2="16" y2="8" style="stroke:'+c+'" stroke-width="2"/><circle cx="16" cy="3" r="2.2" style="fill:'+c+'"/>'+
+  '<rect x="5" y="8" width="22" height="17" rx="6" style="fill:'+c+'"/><rect x="9" y="12" width="14" height="7" rx="3.5" style="fill:var(--bg)"/>'+
+  '<circle cx="13" cy="15.5" r="1.7" style="fill:var(--fg)"/><circle cx="19" cy="15.5" r="1.7" style="fill:var(--fg)"/>'+
+  '<rect x="10" y="25" width="4" height="5" rx="1.5" style="fill:'+c+'"/><rect x="18" y="25" width="4" height="5" rx="1.5" style="fill:'+c+'"/></svg>';}
+
+/* ---------- time ---------- */
+function fmt(ms){if(ms==null||!isFinite(ms))return '--:--';ms=Math.max(0,ms);var t=Math.floor(ms/100),d=t%10,s=Math.floor(t/10)%60,m=Math.floor(t/600);return m+':'+(s<10?'0':'')+s+'.'+d}
+function elapsed(){if(S.finishMs!=null)return S.finishMs;if(!S.startLocal)return 0;return Date.now()-S.startLocal+S.penalty*1000}
+
+/* ---------- room ---------- */
+function joinLink(){return location.origin+location.pathname+'?code='+S.code}
+function exportBoard(){
+  var msg=document.getElementById('exportmsg');
+  var rows=ranked().map(function(p,i){return {
+    'Rank':i+1,'Name':p.name,'Status':p.done?'Escaped':'Did not finish',
+    'Time':p.done?fmt(p.ms):'','Time (seconds)':p.done?Math.round(p.ms/100)/10:'',
+    'Penalty (seconds)':p.pen,'Wrong answers':Math.round(p.pen/PEN),
+    'Rooms cleared':(p.done?N:p.stage)+' of '+N,'Last room':p.done?'Escaped':STAGES[Math.min(p.stage,N-1)].room,
+    'Left early':p.left&&!p.done?'Yes':'No'}});
+  if(!rows.length){if(msg)msg.textContent='No players to export yet.';return}
+  var d=new Date(S.startedAt||Date.now());function pad(n){return (n<10?'0':'')+n}
+  var dateStr=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  var info=[['Session','Prompt Station'],['Room code',S.code],['Date',dateStr],['Started',pad(d.getHours())+':'+pad(d.getMinutes())],
+    ['Time limit',S.limitMs?(S.limitMs/60000)+' minutes':'No limit'],['Players',rows.length],['Escaped',rows.filter(function(r){return r.Status==='Escaped'}).length],
+    ['Status',S.hostPhase==='ended'?'Final':'In progress (exported early)']];
+  var base='prompt-station-'+S.code+'-'+dateStr;
+  if(window.XLSX){
+    var wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(rows);
+    ws['!cols']=[{wch:6},{wch:18},{wch:15},{wch:10},{wch:14},{wch:17},{wch:14},{wch:14},{wch:14},{wch:11}];
+    XLSX.utils.book_append_sheet(wb,ws,'Leaderboard');
+    var ws2=XLSX.utils.aoa_to_sheet(info);ws2['!cols']=[{wch:14},{wch:30}];XLSX.utils.book_append_sheet(wb,ws2,'Session');
+    XLSX.writeFile(wb,base+'.xlsx');if(msg)msg.textContent='Saved '+base+'.xlsx';
+  } else {
+    var keys=Object.keys(rows[0]);var q=function(v){v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var csv='\ufeff'+keys.map(q).join(',')+'\n'+rows.map(function(r){return keys.map(function(k){return q(r[k])}).join(',')}).join('\n');
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=base+'.csv';document.body.appendChild(a);a.click();a.remove();
+    if(msg)msg.textContent='The Excel library could not load, so it saved '+base+'.csv instead. Excel opens that too.';
+  }
+}
+function genCode(){var a='ABCDEFGHJKMNPQRSTUVWXYZ',s='';for(var i=0;i<4;i++)s+=a[Math.floor(Math.random()*a.length)];return s}
+function sanitize(p){var pr=p.presence||{};
+  return {peer:p.peer,me:!!p.sameTab,role:pr.role,name:(typeof pr.name==='string'&&pr.name.trim()?pr.name:'Crewmate').slice(0,14),
+    color:(pr.color>=0&&pr.color<8)?Math.floor(pr.color):0,stage:Math.max(0,Math.min(N,Math.floor(Number(pr.stage)||0))),
+    pid:typeof pr.pid==='string'?pr.pid.slice(0,16):'',
+    done:pr.done===true&&typeof pr.ms==='number',ms:typeof pr.ms==='number'?pr.ms:null,pen:Math.max(0,Math.floor(Number(pr.pen)||0))};}
+function getHost(){var hs=peers.filter(function(p){return p.presence&&p.presence.role==='host'&&!p.sameTab});
+  hs.sort(function(a,b){return (Number(a.presence.since)||0)-(Number(b.presence.since)||0)});return hs[0]||null}
+function crew(){
+  if(S.mode==='solo')return [{peer:'me',me:true,name:S.name||'You',color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty}];
+  if(S.mode==='host'&&S.hostPhase!=='lobby')return Object.keys(S.record).map(function(k){return S.record[k]});
+  var list=peers.filter(function(p){return p.presence&&p.presence.role==='player'}).map(sanitize);
+  if(S.mode==='player'&&!list.some(function(x){return x.me}))list.push({peer:'me',me:true,name:S.name,color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty});
+  return list;}
+function ranked(){return crew().slice().sort(function(a,b){
+  if(a.done&&b.done)return a.ms-b.ms; if(a.done)return -1; if(b.done)return 1;
+  if(b.stage!==a.stage)return b.stage-a.stage; return a.pen-b.pen;});}
+function myPresence(){return {role:'player',pid:PID,name:S.name,color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty}}
+function pushPresence(){if(R&&S.mode==='player')R.presence(myPresence()).catch(function(){})}
+
+async function joinRoom(code){
+  var r=await roomApi.join('ps-'+code.toLowerCase());
+  R=r;peers=r.peers();
+  unsubPeers=r.onPeers(function(ch){peers=ch.peers;onPeersChanged()},function(e){
+    R=null;peers=[];S.connErr='The connection to room '+S.code+' dropped ('+e.code+'). Leave and join again with the same code to continue.';render();});
+  return r;}
+async function leaveRoom(){if(unsubPeers){unsubPeers();unsubPeers=null}if(R){try{await R.leave()}catch(e){}}R=null;peers=[];clearTimeout(noHostTimer)}
+
+function recordPlayers(){
+  if(S.mode!=='host'||S.hostPhase==='lobby')return;
+  var here={};
+  peers.forEach(function(p){if(!p.presence||p.presence.role!=='player')return;var x=sanitize(p);var key=x.pid||x.peer;here[key]=1;
+    var old=S.record[key];if(S.hostPhase==='ended'&&old&&old.done)return;x.left=false;S.record[key]=x;});
+  Object.keys(S.record).forEach(function(k){if(!here[k])S.record[k].left=true});}
+function onPeersChanged(){
+  recordPlayers();
+  if(S.mode==='player'){
+    var h=getHost();
+    if(h){S.hostSeen=true;S.noHost=false;S.hostGone=false;clearTimeout(noHostTimer);
+      var ph=h.presence.phase, prev=S.hostPhase; S.hostPhase=ph;
+      if(ph==='live'&&S.screen==='lobby'){S.limitMs=Math.max(0,Number(h.presence.limitMs)||0);startCountdown();return}
+      if(ph==='lobby'&&prev!=='lobby'&&S.screen!=='lobby'){resetRun();S.screen='lobby';render();return}
+      if(ph==='ended'&&prev!=='ended'){S.screen='ended';render();play('win');confetti();return}
+      if(S.screen==='lobby'&&prev==='lobby'){render();return}
+    } else if(S.hostSeen && !S.hostGone){S.hostGone=true;render();return}
+  }
+  updateLive();}
+
+/* ---------- flow ---------- */
+function resetRun(){S.stage=0;S.startLocal=null;S.penalty=0;S.finishMs=null;S.letters=[];S.badge=false;clearAnswer()}
+function clearAnswer(){S.sel=null;S.tap=[];S.match=[];S.unscr=[];S.fb=null}
+function startCountdown(){resetRun();S.screen='countdown';S.cdEnd=Date.now()+3000;pushPresence();render();play('beep')}
+
+async function hostCreate(){
+  if(!roomApi)return;S.busy=true;S.joinErr='';render();
+  for(var i=0;i<3;i++){
+    var code=genCode();
+    try{await joinRoom(code)}catch(e){S.busy=false;S.joinErr='Could not open a room ('+(e&&e.code||'error')+'). Wait a moment and try again.';render();return}
+    await sleep(1200);
+    if(getHost()){await leaveRoom();continue}
+    S.mode='host';S.code=code;S.hostPhase='lobby';S.since=Date.now();
+    R.presence({role:'host',phase:'lobby',since:S.since}).catch(function(){});
+    S.busy=false;S.screen='host';render();return;}
+  S.busy=false;S.joinErr='Every code we tried was taken. Try again.';render();}
+function hostSetPhase(ph){S.endConfirm=false;
+  if(ph==='live'){S.liveAt=Date.now()+3000;S.startedAt=Date.now();S.limitMs=S.limitMin*60000;S.record={};
+    peers.forEach(function(p){if(p.presence&&p.presence.role==='player'){var x=sanitize(p);S.record[x.pid||x.peer]=x}});}
+  if(ph==='ended')S.endedAt=Date.now();
+  S.hostPhase=ph;recordPlayers();
+  if(R)R.presence({role:'host',phase:ph,since:S.since,limitMs:S.limitMs}).catch(function(){});render();}
+
+async function playerJoin(){
+  var code=(S.codeInput||'').toUpperCase().replace(/[^A-Z]/g,'');
+  if(code.length!==4){S.joinErr='Room codes are 4 letters, like KQRT. Check the code on your host’s screen.';render();focusId('in-code');return}
+  if(!S.name.trim()){S.joinErr='Add a crew name so others can see you on the leaderboard.';render();focusId('in-name');return}
+  if(!roomApi)return;
+  S.busy=true;S.joinErr='';render();
+  try{await joinRoom(code)}catch(e){S.busy=false;S.joinErr='Could not join room '+code+' ('+(e&&e.code||'error')+'). Check your connection and try again.';render();return}
+  S.name=S.name.trim().slice(0,14);saveProfile();
+  S.mode='player';S.code=code;S.busy=false;S.hostSeen=false;S.hostGone=false;S.noHost=false;S.hostPhase='lobby';S.connErr='';
+  resetRun();S.screen='lobby';pushPresence();
+  noHostTimer=setTimeout(function(){if(!getHost()){S.noHost=true;render()}},4000);
+  onPeersChanged();render();}
+
+function solo(){if(!S.name.trim())S.name='You';S.mode='solo';startCountdown()}
+async function goHome(){await leaveRoom();S.mode=null;S.code='';S.connErr='';S.endConfirm=false;resetRun();S.screen='home';render()}
+
+function submit(){
+  var st=STAGES[S.stage];if(!st||S.screen!=='game')return;
+  if(S.fb&&S.fb.final)return;
+  if(S.fb&&S.fb.ok){advance();return}
+  if(!canSubmit())return;
+  var ok=false,msg='';
+  if(st.type==='choice'){ok=S.sel===st.answer;msg=st.why[S.sel]}
+  else if(st.type==='tap'){
+    var picked=S.tap.slice().sort(function(a,b){return a-b}), want=st.vague;
+    ok=picked.length===want.length&&picked.every(function(v,i){return v===want[i]});
+    if(ok)msg='You found all five. Each one could mean a hundred different things.';
+    else{var extra=picked.filter(function(i){return want.indexOf(i)<0}).map(function(i){return '“'+st.words[i].replace(/[.,]/g,'')+'”'});
+      var missed=want.filter(function(i){return picked.indexOf(i)<0}).length;var parts=[];
+      if(extra.length)parts.push(extra.join(' and ')+(extra.length>1?' are':' is')+' already clear, so un-mark '+(extra.length>1?'them':'it')+'.');
+      if(missed)parts.push(missed+' vague word'+(missed>1?'s are':' is')+' still unmarked. Look for words two people would picture differently.');
+      msg=parts.join(' ')||'Check which words two people would picture differently.';}}
+  else if(st.type==='match'){
+    var wrong=st.items.filter(function(it,i){return S.match[i]!==it[1]});ok=!wrong.length;
+    msg=ok?(st.okText||'Every part is in place. Notice how easy it is to spot which line to edit.'):(st.items.length-wrong.length)+' of '+st.items.length+' are right. Recheck: '+wrong.map(function(w){return '“'+w[0]+'”'}).join(' ');}
+  else if(st.type==='unscramble'){var w=S.unscr.map(function(i){return st.tiles[i]}).join('');ok=w===st.answer;
+    msg=ok?'Password accepted. Launching the escape pod…':'“'+w+'” does not open the pod. The password means the opposite of vague.';}
+  if(ok){
+    if(st.letter)S.letters.push(st.letter);
+    if(st.badge)S.badge=true;
+    S.anim=true;play('unlock');
+    if(st.type==='unscramble'){S.finishMs=Date.now()-S.startLocal+S.penalty*1000;S.fb={ok:true,text:msg,final:true};
+      if(S.mode==='solo'&&(S.best==null||S.finishMs<S.best)){S.best=S.finishMs;S.newBest=true;saveProfile()}else S.newBest=false;
+      pushPresenceDone();render();
+      setTimeout(function(){S.stage=N;S.screen='done';pushPresence();render();play('win');confetti();window.scrollTo({top:0})},1600);return;}
+    S.fb={ok:true,text:msg,letter:st.letter,badge:!!st.badge};
+  } else {S.penalty+=PEN;S.fb={ok:false,text:msg};S.shake=true;play('bad');pushPresence();}
+  render();S.anim=false;S.shake=false;
+  var f=document.getElementById('fb');if(f)f.focus();}
+function pushPresenceDone(){if(R&&S.mode==='player'){var p=myPresence();p.stage=N;p.done=true;p.ms=S.finishMs;R.presence(p).catch(function(){})}}
+function clearDoors(){setTimeout(function(){var d=document.querySelector('.doors');if(d)d.remove()},1400)}
+function advance(){S.stage++;clearAnswer();S.enter=true;play('door');pushPresence();render();S.enter=false;clearDoors();window.scrollTo({top:0});}
+function canSubmit(){var st=STAGES[S.stage];if(!st)return false;
+  if(st.type==='choice')return S.sel!=null;
+  if(st.type==='tap')return S.tap.length>0;
+  if(st.type==='match')return st.items.every(function(_,i){return S.match[i]!=null});
+  if(st.type==='unscramble')return S.unscr.length===st.tiles.length;return false;}
+
+/* ---------- views ---------- */
+function mapView(){
+  var list=crew();var here=S.mode==='host'?-1:Math.min(S.stage,N);
+  var cells=STAGES.map(function(st,i){
+    var b=list.filter(function(p){return !p.done&&p.stage===i});
+    var cls=(i===here&&S.screen==='game'?' here':'')+(i===N-1?' wide':'')+(S.mode!=='host'&&i<S.stage?' clear':'');
+    var lk=S.mode==='host'?'':((i<S.stage||(i===S.stage&&S.fb&&S.fb.ok))?' · open':(i>S.stage?' · locked':''));
+    return '<div class="cell'+cls+'"><span class="t">'+(i+1)+' · '+esc(st.room)+lk+'</span><div class="bots">'+b.map(function(p){return '<span title="'+esc(p.name)+'">'+bot(p.color,22)+'</span>'}).join('')+'</div></div>';}).join('');
+  var out=list.filter(function(p){return p.done});
+  cells+='<div class="cell exit"><span class="t">Escaped</span><div class="bots">'+out.map(function(p){return '<span title="'+esc(p.name)+'">'+bot(p.color,22)+'</span>'}).join('')+'</div></div>';
+  return cells;}
+function boardRows(){
+  var list=ranked();if(!list.length)return '<tr><td colspan="4" class="muted">No crew yet.</td></tr>';
+  return list.map(function(p,i){
+    var st=p.done?'<span class="status won">Escaped</span>':'<span class="status">'+(p.stage<N?esc(STAGES[p.stage].room):'')+'</span>';
+    return '<tr class="'+(p.me?'me':'')+'"><td class="rk">'+(i+1)+'</td><td><span class="nm">'+bot(p.color,22)+'<b>'+esc(p.name)+'</b>'+(p.me?'<span class="you">YOU</span>':'')+(p.left?'<span class="muted small">left</span>':'')+'</span></td><td>'+st+'</td><td class="tm">'+(p.done?fmt(p.ms):(p.pen?'+'+p.pen+'s':''))+'</td></tr>';}).join('');}
+function boardView(){return '<div class="tablewrap"><table class="board"><thead><tr><th>#</th><th>Crew</th><th>Room</th><th style="text-align:right">Time</th></tr></thead><tbody id="board">'+boardRows()+'</tbody></table></div>';}
+function crewCards(){var list=crew();if(!list.length)return '<div class="empty">No crew yet. Players appear here the moment they join.</div>';
+  return '<div class="crew">'+list.map(function(p){return '<div class="mate">'+bot(p.color,28)+'<b>'+esc(p.name)+'</b>'+(p.me?'<span class="you">YOU</span>':'')+'</div>'}).join('')+'</div>';}
+
+function updateLive(){
+  var el;
+  if((el=$('#board')))el.innerHTML=boardRows();
+  if((el=$('#map')))el.innerHTML=mapView();
+  if((el=$('#crew')))el.innerHTML=crewCards();
+  if((el=$('#crewcount'))){var n=crew().length;el.textContent=n+' crew member'+(n===1?'':'s')+' aboard';}
+  if((el=$('#startbtn'))){var n2=crew().length;el.disabled=n2<1;el.textContent=n2<1?'Start mission (waiting for crew)':'Start mission for '+n2+' crew';}
+  if((el=$('#podium'))&&S.hostPhase==='ended')el.innerHTML=podium();
+}
+
+function barView(){
+  if(S.screen==='game'||S.screen==='done'){
+    var room=S.stage<N?(S.stage+1)+' of '+N+' · '+STAGES[S.stage].room:'Escaped';
+    var slots=STAGES.filter(function(s){return s.letter}).map(function(s,i){return '<span class="'+(S.letters[i]?'got':'')+'" aria-label="'+(S.letters[i]?'Letter '+S.letters[i]:'Letter not found yet')+'">'+(S.letters[i]||'')+'</span>'}).join('');
+    return '<div class="bar"><div class="in"><span class="chip">'+(S.mode==='solo'?'<b>Solo practice</b>':'Room <b>'+esc(S.code)+'</b>')+'</span><span class="chip">Room <b>'+room+'</b></span>'+
+    '<div class="letters" role="img" aria-label="Access letters: '+S.letters.length+' of 5">'+slots+'</div><span class="badge-slot'+(S.badge?' got':'')+'" aria-label="'+(S.badge?'Keycard collected':'Keycard not found yet')+'">KEYCARD</span><span class="spacer"></span>'+soundBtn()+
+    (S.limitMs&&S.mode==='player'&&S.finishMs==null?'<span class="chip">Time left <b id="tleft">'+fmt(S.limitMs)+'</b></span>':'')+'<span class="pen" id="pen">'+(S.penalty?'+'+S.penalty+'s penalty':'')+'</span><span class="timer" id="timer" aria-label="Your time">'+fmt(elapsed())+'</span></div></div>';}
+  if(S.mode==='host'&&S.hostPhase==='live')return '<div class="bar"><div class="in"><span class="chip">Mission Control · Room <b>'+esc(S.code)+'</b></span><span class="spacer"></span>'+soundBtn()+'<span class="chip">'+(S.limitMs?'Time left':'Mission time')+'</span><span class="timer" id="htimer">0:00.0</span></div></div>';
+  return '';}
+
+function homeView(){
+  var status;
+  if(roomApi===undefined)status='<p class="note">Connecting to live rooms… Solo practice is ready now.</p>';
+  else if(roomApi===null)status='<p class="note warn">Can\u2019t reach the game server right now, so hosting and joining are paused. Check your internet connection and reload the page. You can still practise solo.</p>';
+  else status='';
+  var mapPreview=STAGES.map(function(st,i){return '<div class="cell'+(i===N-1?' wide':'')+'"><span class="t">'+(i+1)+' · '+esc(st.room)+'</span><span class="small">'+esc(st.title)+'</span></div>'}).join('');
+  return '<section class="hero"><div class="stack"><span class="eyebrow">Multiplayer escape room · AI prompting basics</span>'+
+  '<h1>Prompt<br><span>Station</span></h1>'+
+  '<p class="lede">The station’s AI has sealed every door. Your crew races through seven locked rooms. Each room teaches one prompting skill and hides a puzzle. Solve it to collect an access letter. The first crew member to reach the escape pod wins.</p>'+
+  '<div class="row"><button class="btn primary" data-act="host" '+(roomApi?'':'disabled')+'>Host a room</button><button class="btn" data-act="tojoin" '+(roomApi?'':'disabled')+'>Join with a code</button><button class="btn ghost" data-act="solo">Practise solo</button>'+soundBtn()+'</div>'+status+
+  (S.best!=null?'<p class="note">Your best solo time: <b>'+fmt(S.best)+'</b></p>':'')+
+  (S.joinErr&&S.screen==='home'?'<p class="err" role="alert">'+esc(S.joinErr)+'</p>':'')+
+  (S.busy?'<p class="note" role="status">Opening a room…</p>':'')+
+  '</div><div class="panel"><h3 class="eyebrow" style="margin-bottom:10px">Station map</h3><div class="map">'+mapPreview+'<div class="cell exit"><span class="t">Escape pod launch</span></div></div></div></section>'+
+  '<section class="how"><div><span class="n">01</span><h3>Host opens a room</h3><p class="muted small">You get a 4-letter code. Put it on screen or read it out.</p></div>'+
+  '<div><span class="n">02</span><h3>Crew joins with the code</h3><p class="muted small">Players open this same page, choose Join, and pick a name and colour.</p></div>'+
+  '<div><span class="n">03</span><h3>Fastest escape wins</h3><p class="muted small">The clock starts together. Every wrong answer adds '+PEN+' seconds, and you see why it was wrong.</p></div></section>';}
+
+function joinView(){
+  var sw=COLORS.map(function(c,i){return '<button type="button" class="sw" role="radio" aria-checked="'+(S.color===i)+'" data-act="color" data-i="'+i+'">'+bot(i,30)+COLOR_NAMES[i]+'</button>'}).join('');
+  return '<div class="stack" style="max-width:520px"><button class="btn ghost" data-act="home" style="align-self:flex-start">← Back</button>'+
+  '<h2 style="font-size:32px">Join a room</h2>'+
+  '<form class="formgrid panel" id="joinform" novalidate>'+
+  '<div><label class="lbl" for="in-code">Room code</label><input id="in-code" class="code" type="text" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" value="'+esc(S.codeInput)+'"><p class="hint">4 letters, shown on the host’s screen.</p></div>'+
+  '<div><label class="lbl" for="in-name">Crew name</label><input id="in-name" type="text" maxlength="14" autocomplete="nickname" placeholder="e.g. Noor" value="'+esc(S.name)+'"><p class="hint">Up to 14 characters. Everyone in the room sees it.</p></div>'+
+  '<div><span class="lbl" id="clbl">Colour</span><div class="swatches" role="radiogroup" aria-labelledby="clbl">'+sw+'</div></div>'+
+  '<p class="err" role="alert" id="joinerr">'+esc(S.joinErr)+'</p>'+
+  '<button class="btn primary" type="submit" '+(S.busy?'disabled':'')+'>'+(S.busy?'Joining…':'Join room')+'</button></form></div>';}
+
+function hostLobbyView(){
+  var code=S.code.split('').map(function(c){return '<span>'+c+'</span>'}).join('');
+  return '<div class="stack"><div class="row"><span class="eyebrow">Mission Control</span><span class="spacer"></span>'+soundBtn()+'<button class="btn ghost" data-act="home">Close room</button></div>'+
+  '<div class="panel stack"><p class="muted">Players open this page, choose <b>Join with a code</b>, and enter:</p><div class="codebig" aria-label="Room code '+esc(S.code.split('').join(' '))+'">'+code+'</div>'+
+  '<div class="row"><button class="btn" data-act="copy" id="copybtn">Copy code</button><button class="btn" data-act="copylink">Copy join link</button><span class="muted small" id="copied" role="status"></span></div><p class="muted small">The join link opens the game with the code already filled in: <b>'+esc(joinLink())+'</b></p></div>'+
+  '<div class="panel stack"><div class="row"><h2 id="crewcount"></h2></div><div id="crew">'+crewCards()+'</div>'+
+  '<div><span class="lbl" id="tl-lbl">Session time limit</span><div class="row" role="radiogroup" aria-labelledby="tl-lbl">'+LIMITS.map(function(m){return '<button class="btn'+(S.limitMin===m?' primary':'')+'" role="radio" aria-checked="'+(S.limitMin===m)+'" data-act="limit" data-i="'+m+'">'+(m?m+' min':'No limit')+'</button>'}).join('')+'</div><p class="hint">When time runs out, the mission ends for everyone and you can export the leaderboard to Excel.</p></div>'+
+  '<div class="row"><button class="btn primary" id="startbtn" data-act="start" disabled>Start mission</button><span class="muted small">Players who join after the start begin with their own clock.</span></div></div></div>';}
+
+function hostLiveView(){
+  var ended=S.hostPhase==='ended';
+  return '<div class="stack">'+
+  (ended?'<div class="stack"><span class="eyebrow">Mission complete · Room '+esc(S.code)+'</span><h2 style="font-size:36px">Final standings</h2><div class="podium" id="podium">'+podium()+'</div></div>':'')+
+  '<div class="game"><div class="panel stack"><h2>Live leaderboard</h2>'+boardView()+'</div><div class="side"><div class="panel"><h3>Station map</h3><div class="map" id="map">'+mapView()+'</div></div></div></div>'+
+  '<div class="row">'+(ended?'<button class="btn primary" data-act="export">Export leaderboard to Excel</button><span class="muted small" id="exportmsg" role="status"></span><button class="btn" data-act="again">Run another round</button><button class="btn ghost" data-act="home">Close room</button>':
+    (S.endConfirm?'<div class="confirm"><span>End the mission for everyone? Unfinished players keep their current room.</span><button class="btn danger" data-act="endyes">End mission</button><button class="btn ghost" data-act="endno">Keep playing</button></div>':'<button class="btn danger" data-act="end">End mission…</button><button class="btn ghost" data-act="export">Export current standings</button><span class="muted small" id="exportmsg" role="status"></span>'))+
+  '</div></div>';}
+function podium(){var r=ranked().filter(function(p){return p.done}).slice(0,3);
+  if(!r.length)return '<div class="empty" style="grid-column:1/-1">Nobody reached the escape pod this round.</div>';
+  var cls=['p1','p2','p3'],lbl=['1st','2nd','3rd'];
+  return r.map(function(p,i){return '<div class="pod '+cls[i]+'"><span class="place">'+lbl[i]+'</span>'+bot(p.color,48)+'<b>'+esc(p.name)+'</b><span class="timer" style="font-size:18px">'+fmt(p.ms)+'</span></div>'}).join('');}
+
+function lobbyView(){
+  var h=getHost();
+  var status=S.connErr?'<p class="err" role="alert">'+esc(S.connErr)+'</p>':
+    h?'<p role="status"><b>Mission Control is here.</b> <span class="muted">The mission starts when your host presses Start. Keep this page open.</span></p>':
+    S.noHost?'<div class="banner" role="status">No Mission Control found for room <b>'+esc(S.code)+'</b> yet. Check the code with your host, or keep waiting. You’ll join automatically when they open it. <button class="btn ghost" data-act="tojoin" style="margin-left:6px">Change code</button></div>':
+    '<p class="muted" role="status">Looking for Mission Control…</p>';
+  return '<div class="stack"><div class="row"><span class="eyebrow">Room '+esc(S.code)+'</span><span class="spacer"></span>'+soundBtn()+'<button class="btn ghost" data-act="home">Leave room</button></div>'+
+  '<h2 style="font-size:34px">Waiting for launch</h2>'+status+
+  '<div class="panel stack"><h2 id="crewcount"></h2><div id="crew">'+crewCards()+'</div></div>'+
+  '<div class="panel stack"><h2>Before you start</h2><p class="muted">Seven rooms. Each has a short briefing and a puzzle. The briefing stays on screen while you answer. Wrong answers add '+PEN+' seconds and tell you why. Keyboard: <span class="kbd">1</span>–<span class="kbd">4</span> to pick, <span class="kbd">Enter</span> to submit.</p></div></div>';}
+
+function countdownView(){var n=Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000));
+  return '<div class="countdown"><div class="stack" style="align-items:center"><span class="eyebrow">Doors unlocking</span><div class="num" id="cd" aria-live="assertive">'+n+'</div><p class="muted">First stop: the Airlock.</p></div></div>';}
+
+function challengeView(st){
+  var solved=!!(S.fb&&S.fb.ok);
+  var h='<div class="challenge'+(solved?' solved':'')+(S.shake?' shake alarm':'')+'" aria-labelledby="qtext"><div class="devhead">'+lockSvg(solved,solved&&S.anim)+'<div class="stack" style="gap:4px"><span class="eyebrow">'+esc(st.device||'Puzzle')+'</span><span class="led'+(solved?' on':'')+'" role="status">'+(solved?'UNLOCKED':'LOCKED')+'</span></div></div><p class="q" id="qtext">'+esc(st.q)+'</p>';
+  var locked=S.fb&&S.fb.ok;
+  if(st.quote)h+='<blockquote>'+esc(st.quote)+'</blockquote>';
+  if(st.type==='choice')h+='<div class="opts" role="group" aria-label="Answers">'+st.options.map(function(o,i){return '<button class="opt" data-act="pick" data-i="'+i+'" aria-pressed="'+(S.sel===i)+'" '+(locked?'disabled':'')+'><span class="k">'+(i+1)+'</span><span>'+esc(o)+'</span></button>'}).join('')+'</div>';
+  if(st.type==='tap')h+='<div class="words" role="group" aria-label="Words in the prompt">'+st.words.map(function(w,i){return '<button class="word" data-act="tap" data-i="'+i+'" aria-pressed="'+(S.tap.indexOf(i)>=0)+'" '+(locked?'disabled':'')+'>'+esc(w)+'</button>'}).join('')+'</div><p class="hint">'+S.tap.length+' marked. Tap a word again to un-mark it.</p>';
+  if(st.type==='match')h+='<div class="match">'+st.items.map(function(it,i){return '<div class="mrow"><label for="m'+i+'">'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></label><select id="m'+i+'" data-act="match" data-i="'+i+'" '+(locked?'disabled':'')+'><option value="">'+(st.cats===CATS?'Choose a part…':'Choose a rule…')+'</option>'+(st.cats||CATS).map(function(c,ci){return '<option value="'+ci+'" '+(S.match[i]===ci?'selected':'')+'>'+c+'</option>'}).join('')+'</select></div>'}).join('')+'</div>';
+  if(st.type==='unscramble'){
+    var slots='';for(var i=0;i<st.tiles.length;i++){var t=S.unscr[i];slots+='<span class="slot'+(t!=null?' f':'')+'">'+(t!=null?st.tiles[t]:'')+'</span>'}
+    h+='<div class="slots" aria-label="Your password so far: '+S.unscr.map(function(i){return st.tiles[i]}).join(' ')+'">'+slots+'</div>'+
+    '<div class="tiles">'+st.tiles.map(function(t,i){return '<button class="tile" data-act="tile" data-i="'+i+'" '+(S.unscr.indexOf(i)>=0?'disabled':'')+' aria-label="Letter '+t+'">'+t+'</button>'}).join('')+'</div>'+
+    '<div class="row"><button class="btn ghost" data-act="undo" '+(S.unscr.length?'':'disabled')+'>Undo last letter</button><button class="btn ghost" data-act="clear" '+(S.unscr.length?'':'disabled')+'>Clear</button></div>';}
+  if(S.fb&&S.fb.ok&&(S.fb.letter||S.fb.badge))h+='<div class="reveal">'+(S.fb.letter?'<span class="card">'+esc(S.fb.letter)+'</span><span><b>Access letter '+esc(S.fb.letter)+' found.</b><br><span class="muted small">It\u2019s stored in the top bar for the final lock.</span></span>':'<span class="card badge">KEYCARD</span><span><b>Pod keycard collected.</b><br><span class="muted small">You can now reach the escape pod.</span></span>')+'</div>';
+  if(S.fb)h+='<div class="fb '+(S.fb.ok?'ok':'bad')+'" id="fb" tabindex="-1" role="status"><b>'+(S.fb.ok?'Lock open':'Not quite · +'+PEN+' seconds')+'</b><span>'+esc(S.fb.text)+'</span>'+(S.fb.ok?'':'<span class="small muted">Adjust your answer and submit again.</span>')+'</div>';
+  if(locked&&S.fb.final){}
+  else if(locked){var nx=STAGES[S.stage+1];h+='<div class="row"><button class="btn primary" data-act="next" id="nextbtn">Continue to '+esc(nx?nx.room:'the pod')+' →</button><span class="kbd">Enter</span></div>';}
+  else h+='<div class="row"><button class="btn primary" data-act="submit" id="subbtn" '+(canSubmit()?'':'disabled')+'>Submit answer</button><span class="muted small">'+(canSubmit()?'Press Enter to submit':'Make your choice first')+'</span></div>';
+  return h+'</div>';}
+
+function gameView(){
+  var st=STAGES[S.stage];
+  var warn=S.mode==='player'&&S.hostGone?'<div class="banner" role="status">Mission Control has left. Keep going: your time still counts on this screen.</div>':'';
+  var cn=S.connErr?'<p class="err" role="alert">'+esc(S.connErr)+'</p>':'';
+  var doors=S.enter?'<div class="doors" aria-hidden="true"><i class="dl"></i><i class="dr"></i><b>'+esc(st.room)+'</b></div>':'';
+  return warn+cn+'<div class="game"><div class="stack roomwrap">'+doors+'<div class="roomhead"><span class="eyebrow">Room '+(S.stage+1)+' of '+N+' · '+esc(st.room)+'</span><h2>'+esc(st.title)+'</h2><p class="story">'+esc(st.story||'')+'</p></div>'+
+  '<details class="brief" open><summary>Briefing</summary><div class="body">'+st.lesson+'</div></details>'+challengeView(st)+'</div>'+
+  '<aside class="side"><div class="panel"><h3>Station map</h3><div class="map" id="map">'+mapView()+'</div></div>'+
+  (S.mode!=='solo'?'<div class="panel"><h3>Crew race</h3>'+boardView()+'</div>':'')+
+  '<div class="panel small muted"><h3>Rules</h3>Wrong answers add '+PEN+' s. Keys: <span class="kbd">1</span>–<span class="kbd">4</span> pick, <span class="kbd">Enter</span> submit. <button class="btn ghost" data-act="home" style="margin-top:10px;width:100%">Quit mission</button></div></aside></div>';}
+
+function doneView(){
+  var r=ranked(),pos=r.findIndex(function(p){return p.me})+1;
+  var head=S.mode==='solo'?(S.newBest?'New personal best':'Escaped'):(pos===1?'You escaped first':'You escaped · place '+pos);
+  return '<div class="stack"><span class="eyebrow">Escape pod launched</span><h2 style="font-size:34px">'+head+'</h2><div class="big">'+fmt(S.finishMs)+'</div>'+
+  '<p class="muted">Includes '+S.penalty+' s of penalties. Password: <b>CLEAR</b>. Context, Length and format, Examples, Audience and role, Refine.</p>'+
+  (S.mode==='solo'?'<div class="row"><button class="btn primary" data-act="solo">Play again</button><button class="btn ghost" data-act="home">Back to start</button></div>':
+  '<div class="game"><div class="panel stack"><h2>Live leaderboard</h2>'+boardView()+'<p class="muted small">Waiting for Mission Control to end the mission. Standings update live.</p></div><div class="side"><div class="panel"><h3>Station map</h3><div class="map" id="map">'+mapView()+'</div></div></div></div>'+
+  '<div class="row"><button class="btn ghost" data-act="home">Leave room</button></div>')+'</div>';}
+
+function timeupView(){
+  return '<div class="stack"><span class="eyebrow">Time\u2019s up \u00b7 Room '+esc(S.code)+'</span><h2 style="font-size:34px">The station went dark</h2>'+
+  '<p class="muted">You reached room '+Math.min(S.stage+1,N)+' of '+N+' ('+esc(STAGES[Math.min(S.stage,N-1)].room)+') with '+S.letters.length+' access letter'+(S.letters.length===1?'':'s')+'. Final standings appear here when Mission Control closes the session.</p>'+
+  '<div class="panel">'+boardView()+'</div><div class="row"><button class="btn ghost" data-act="home">Leave room</button></div></div>';}
+function endedView(){
+  return '<div class="stack"><span class="eyebrow">Mission complete · Room '+esc(S.code)+'</span><h2 style="font-size:34px">Final standings</h2><div class="podium">'+podium()+'</div>'+
+  '<div class="panel">'+boardView()+'</div><p class="muted">Stay in the room: if Mission Control runs another round, you’ll move to the lobby automatically.</p><div class="row"><button class="btn ghost" data-act="home">Leave room</button></div></div>';}
+
+function render(){
+  var v='';
+  switch(S.screen){
+    case 'home':v=homeView();break;
+    case 'join':v=joinView();break;
+    case 'host':v=(S.hostPhase==='lobby')?hostLobbyView():hostLiveView();break;
+    case 'lobby':v=lobbyView();break;
+    case 'countdown':v=countdownView();break;
+    case 'game':v=gameView();break;
+    case 'done':v=doneView();break;
+    case 'ended':v=endedView();break;
+    case 'timeup':v=timeupView();break;}
+  barEl.innerHTML=barView();app.innerHTML=v;updateLive();}
+function focusId(id){var e=document.getElementById(id);if(e)e.focus()}
+
+/* ---------- events ---------- */
+app.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');if(!b||b.disabled)return;var a=b.dataset.act,i=Number(b.dataset.i);
+  if(b.tagName==='SELECT')return;
+  switch(a){
+    case 'host':hostCreate();break;
+    case 'tojoin':leaveRoom().then(function(){S.screen='join';S.joinErr='';S.mode=null;render();focusId(S.codeInput?'in-name':'in-code')});break;
+    case 'solo':solo();break;
+    case 'home':goHome();break;
+    case 'color':S.color=i;saveProfile();render();break;
+    case 'copy':(function(){var ok=function(){$('#copied').textContent='Copied '+S.code};
+      try{navigator.clipboard.writeText(S.code).then(ok,function(){$('#copied').textContent='Copy blocked here. The code is '+S.code+'.'})}catch(err){$('#copied').textContent='Copy blocked here. The code is '+S.code+'.'}})();break;
+    case 'copylink':(function(){var l=joinLink();try{navigator.clipboard.writeText(l).then(function(){$('#copied').textContent='Join link copied'},function(){$('#copied').textContent='Copy blocked. Select the link below instead.'})}catch(err){$('#copied').textContent='Copy blocked. Select the link below instead.'}})();break;
+    case 'start':hostSetPhase('live');break;
+    case 'end':S.endConfirm=true;render();break;
+    case 'endno':S.endConfirm=false;render();break;
+    case 'endyes':hostSetPhase('ended');play('win');confetti();break;
+    case 'again':S.record={};hostSetPhase('lobby');break;
+    case 'limit':S.limitMin=i;render();break;
+    case 'export':exportBoard();break;
+    case 'mute':setMuted(!muted);render();break;
+    case 'pick':play('click');S.sel=i;if(S.fb&&!S.fb.ok)S.fb=null;render();break;
+    case 'tap':play('click');var k=S.tap.indexOf(i);if(k>=0)S.tap.splice(k,1);else S.tap.push(i);if(S.fb&&!S.fb.ok)S.fb=null;render();break;
+    case 'tile':play('click');S.unscr.push(i);if(S.fb&&!S.fb.ok)S.fb=null;render();break;
+    case 'undo':S.unscr.pop();S.fb=null;render();break;
+    case 'clear':S.unscr=[];S.fb=null;render();break;
+    case 'submit':submit();break;
+    case 'next':advance();break;}});
+app.addEventListener('change',function(e){var t=e.target;if(t.dataset&&t.dataset.act==='match'){S.match[Number(t.dataset.i)]=t.value===''?null:Number(t.value);if(S.fb&&!S.fb.ok)S.fb=null;
+  var sb=$('#subbtn');if(sb){sb.disabled=!canSubmit();if(sb.nextElementSibling)sb.nextElementSibling.textContent=canSubmit()?'Press Enter to submit':'Make your choice first'}
+  var fb=$('#fb');if(fb&&!S.fb)fb.remove();}});
+app.addEventListener('input',function(e){var t=e.target;
+  if(t.id==='in-code'){var v=t.value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);if(t.value!==v)t.value=v;S.codeInput=v;}
+  if(t.id==='in-name'){S.name=t.value.slice(0,14);}});
+app.addEventListener('submit',function(e){e.preventDefault();if(e.target.id==='joinform')playerJoin();});
+document.addEventListener('keydown',function(e){
+  if(S.screen!=='game')return;var tag=(e.target.tagName||'');if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
+  var st=STAGES[S.stage];
+  if(st&&st.type==='choice'&&!(S.fb&&S.fb.ok)&&/^[1-4]$/.test(e.key)){S.sel=Number(e.key)-1;if(S.fb&&!S.fb.ok)S.fb=null;render();e.preventDefault();return}
+  if(e.key==='Enter'){if(e.target.closest&&e.target.closest('button')&&!e.target.closest('#subbtn,#nextbtn'))return;e.preventDefault();submit();}});
+
+/* ---------- ticker ---------- */
+setInterval(function(){
+  if(S.screen==='countdown'){if(Date.now()>=S.cdEnd){S.startLocal=S.cdEnd;S.screen='game';S.enter=true;play('go');play('door');render();S.enter=false;clearDoors();focusId('qtext');}else{var c=$('#cd'),n=String(Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000)));if(c&&c.textContent!==n){c.textContent=n;play('beep')}}}
+  var t=$('#timer');if(t)t.textContent=fmt(elapsed());
+  var ht=$('#htimer');if(ht)ht.textContent=S.limitMs?fmt(Math.max(0,S.liveAt+S.limitMs-Date.now())):fmt(Math.max(0,Date.now()-S.liveAt));
+  if(S.mode==='host'&&S.hostPhase==='live'&&S.limitMs&&Date.now()>=S.liveAt+S.limitMs+1500){hostSetPhase('ended');play('win');confetti();}
+  var tl=$('#tleft');if(tl&&S.limitMs&&S.startLocal)tl.textContent=fmt(Math.max(0,S.startLocal+S.limitMs-Date.now()));
+  if(S.mode==='player'&&S.screen==='game'&&S.limitMs&&S.startLocal&&S.finishMs==null&&!(S.fb&&S.fb.final)&&Date.now()>=S.startLocal+S.limitMs){S.screen='timeup';play('bad');pushPresence();render();}
+},100);
+
+/* ---------- live rooms over this site's own WebSocket server ---------- */
+function createRoomClient(onStatus){
+  var ws=null,myId=null,cur=null,retry=600,everOpen=false;
+  var url=(location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws';
+  function send(o){if(ws&&ws.readyState===1)ws.send(JSON.stringify(o))}
+  function connect(){
+    try{ws=new WebSocket(url)}catch(e){setTimeout(connect,retry);return}
+    ws.onopen=function(){retry=600;everOpen=true;onStatus(true);if(cur)send({t:'join',room:cur.name,presence:cur.me})};
+    ws.onmessage=function(e){var m;try{m=JSON.parse(e.data)}catch(x){return}
+      if(m.t==='hello')myId=m.id;
+      else if(m.t==='peers'&&cur&&m.room===cur.name){var st=cur;
+        st.list=Object.freeze((m.peers||[]).map(function(p){return Object.freeze({peer:p.id,sameTab:p.id===myId,isMe:p.id===myId,kind:'viewer',presence:Object.freeze(p.presence||{})})}));
+        if(st.resolve){st.resolve(st.api);st.resolve=null;st.reject=null}
+        st.fns.slice().forEach(function(f){try{f({peers:st.list})}catch(x){}});}
+      else if(m.t==='error'&&cur&&cur.reject){cur.reject({code:m.code==='room_full'?'limit_reached':'invalid_argument'});cur.reject=null;cur=null}};
+    ws.onclose=function(){onStatus(false);setTimeout(connect,retry);retry=Math.min(retry*2,5000)};
+  }
+  connect();
+  return {
+    join:function(name){
+      if(cur&&cur.name!==name){send({t:'leave'});cur=null}
+      if(cur)return Promise.resolve(cur.api);
+      var st={name:name,me:{},list:Object.freeze([]),fns:[]};
+      st.api={name:name,
+        peers:function(){return st.list},
+        onPeers:function(fn){st.fns.push(fn);return function(){var i=st.fns.indexOf(fn);if(i>=0)st.fns.splice(i,1)}},
+        presence:function(patch){Object.keys(patch).forEach(function(k){if(patch[k]===null)delete st.me[k];else st.me[k]=patch[k]});if(cur===st)send({t:'presence',data:st.me});return Promise.resolve()},
+        connected:function(){return !!ws&&ws.readyState===1},
+        leave:function(){if(cur===st){send({t:'leave'});cur=null}st.fns=[];return Promise.resolve()}};
+      cur=st;
+      return new Promise(function(res,rej){st.resolve=res;st.reject=rej;send({t:'join',room:name,presence:st.me});
+        setTimeout(function(){if(st.resolve){st.resolve=null;st.reject=null;if(cur===st)cur=null;rej({code:'upstream_error'})}},8000);});
+    },
+    everOpen:function(){return everOpen}
+  };
+}
+var client=createRoomClient(function(up){
+  var was=roomApi;
+  if(up){roomApi=client;S.offline=false}else if(client.everOpen()){S.offline=true}
+  if(was!==roomApi&&(S.screen==='home'||S.screen==='join'))render();
+  var ob=document.getElementById('offline');if(ob)ob.hidden=!S.offline;
+});
+setTimeout(function(){if(roomApi===undefined){roomApi=null;if(S.screen==='home'||S.screen==='join')render()}},6000);
+(function(){var q=new URLSearchParams(location.search).get('code');
+  if(q&&/^[A-Za-z]{4}$/.test(q)){S.codeInput=q.toUpperCase();S.screen='join';}})();
+render();
+})();
+</script>
+
+</body>
+</html>
