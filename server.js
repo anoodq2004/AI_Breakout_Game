@@ -15,6 +15,7 @@ const ROOM_RE = /^[a-z0-9][a-z0-9_.-]{0,47}$/;
 
 const indexPath = path.join(__dirname, 'public', 'index.html');
 const xlsxPath = path.join(__dirname, 'node_modules', 'xlsx', 'dist', 'xlsx.full.min.js');
+const qrPath = path.join(__dirname, 'node_modules', 'qrcode-generator', 'qrcode.js');
 
 const server = http.createServer((req, res) => {
   const url = (req.url || '/').split('?')[0];
@@ -22,6 +23,14 @@ const server = http.createServer((req, res) => {
     fs.readFile(indexPath, (err, data) => {
       if (err) { res.writeHead(500); res.end('Could not load the game page.'); return; }
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
+      res.end(data);
+    });
+    return;
+  }
+  if (url === '/vendor/qrcode.js') {
+    fs.readFile(qrPath, (err, data) => {
+      if (err) { res.writeHead(404); res.end('Not found'); return; }
+      res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'public, max-age=86400' });
       res.end(data);
     });
     return;
