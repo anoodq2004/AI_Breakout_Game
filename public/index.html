@@ -1,26 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="A multiplayer escape room that teaches AI prompting basics.">
 <title>Prompt Station</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Noto+Kufi+Arabic:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap">
 <style>
 body{margin:0}[hidden]{display:none!important}img{max-width:100%}
 
 /* Layout: a station console. Sticky status bar on top, the room's briefing + puzzle in the main column, a live station map and crew ranks in a side column that stacks below on phones. Single dark theme by choice (a ship interior). */
 :root{
-  --bg:#0D1220; --panel:#151C2E; --panel-2:#1C2439; --line:#2A3450;
-  --fg:#E9EDF6; --muted:#93A0BD; --accent:#FFB547; --accent-ink:#1C1405;
-  --ok:#5CD68F; --bad:#FF7F7F; --focus:#FFD28A;
+  --bg:#F4F6FA; --panel:#FFFFFF; --panel-2:#EDF1F7; --line:#D3DAE6;
+  --fg:#14213D; --muted:#56637D; --accent:#2C5697; --accent-ink:#FFFFFF; --gold:#8C7A4B;
+  --ok:#2E7D4F; --bad:#C8323A; --focus:#A39161;
   --l-open:#3FB950; --l-conf:#2F7FE0; --l-sens:#E97132; --l-secret:#E5484D;
-  --f-display:"Oxanium","Trebuchet MS",system-ui,sans-serif;
-  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --f-display:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --f-body:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --f-mono:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
   --r:10px;
-  color-scheme:dark;
+  color-scheme:light;
 }
 html,body{background:var(--bg);color:var(--fg)}
 body{font-family:var(--f-body);font-size:16px;line-height:1.55}
@@ -48,8 +48,8 @@ p{margin:0}
 
 /* home */
 .hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:24px}
-.hero h1{font-size:clamp(40px,7vw,76px);font-weight:800;letter-spacing:-.01em}
-.hero h1 span{color:var(--accent)}
+.hero h1{font-size:clamp(40px,7vw,72px);font-weight:700;letter-spacing:-.02em;color:var(--accent)}
+.hero h1 span{color:var(--gold)}
 .lede{font-size:18px;max-width:58ch;color:var(--fg)}
 .note{font-size:14px;color:var(--muted);max-width:60ch}
 .note.warn{color:var(--accent)}
@@ -221,7 +221,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 
 /* language toggle + Arabic / right-to-left */
 .langbtn[lang="ar"]{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-weight:700}
-.langbtn[lang="en"]{font-family:"Atkinson Hyperlegible",system-ui,sans-serif}
+.langbtn[lang="en"]{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 
 .briefpage{display:flex;flex-direction:column;gap:14px}
 .briefpage .body{display:flex;flex-direction:column;gap:12px;max-width:68ch}
@@ -231,12 +231,24 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .qr{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px}
 .qrbox{width:168px;height:168px;max-width:100%;border-radius:10px;overflow:hidden;background:#FFFFFF}
 .chip.paused{border-color:var(--accent);color:var(--accent)}
+
+.brandbar{background:var(--panel);border-bottom:3px solid var(--accent)}
+.brandbar .in{max-width:1120px;margin:0 auto;padding:8px 16px;padding-right:150px;min-height:58px;display:flex;align-items:center;gap:14px}
+[dir="rtl"] .brandbar .in{padding-right:150px;padding-left:16px}
+@media (max-width:520px){.brandbar .org{font-size:13px}.brandbar .sep{display:none}}
+.brandbar .logo{height:68px;width:auto;max-width:100%;display:block}
+@media (max-width:520px){.brandbar .logo{height:46px}}
+.brandbar .org{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:14px;color:var(--fg)}
+.brandbar .org [lang="ar"]{font-family:"IBM Plex Sans Arabic",Arial,sans-serif;font-weight:600}
+.brandbar .sep{width:1px;height:16px;background:var(--line)}
+.panel{box-shadow:0 1px 2px rgba(20,33,61,.06)}
+.eyebrow{color:var(--gold)}
 #langfab{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:14px;z-index:20}
 #langfab .btn{background:var(--panel);border-color:var(--muted);min-height:38px;padding:6px 14px}
 .bar .in{padding-right:130px}
-#bar:empty ~ #app{padding-top:64px}
+#bar:empty ~ #app{padding-top:28px}
 .timer,.big,.codebig,input.code{direction:ltr;unicode-bidi:isolate}
-:root[lang="ar"]{--f-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",system-ui,sans-serif;--f-body:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif}
+:root[lang="ar"]{--f-display:"IBM Plex Sans Arabic","Helvetica Neue Arabic",Arial,system-ui,sans-serif;--f-body:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif}
 :root[lang="ar"] body{line-height:1.75}
 :root[lang="ar"] .eyebrow,:root[lang="ar"] .chip,:root[lang="ar"] .cell .t,:root[lang="ar"] .side h3,:root[lang="ar"] .board th,
 :root[lang="ar"] dl.parts dt,:root[lang="ar"] .devhead .led,:root[lang="ar"] .labelrow .scope,:root[lang="ar"] .badge-slot,
@@ -273,6 +285,7 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 <script src="/vendor/qrcode.js" defer></script>
 </head>
 <body>
+<header class="brandbar"><div class="in"><img class="logo" src="data:image/png;base64,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" alt="Department of Government Enablement · دائرة التمكين الحكومي" width="257" height="64"></div></header>
 <div id="langfab"></div>
 <div id="bar"></div>
 <div id="offline" class="wrap" hidden style="padding-block:8px 0"><div class="banner" role="status">Connection lost. Reconnecting… Your progress on this screen is kept.</div></div>
@@ -290,79 +303,79 @@ var PEN=10; // seconds added per wrong answer
 var COLORS=['#FF6B6B','#FFB547','#F2E266','#5CD68F','#4FC3E8','#8C9BFF','#C77DFF','#FF8FC7'];
 
 /* ---------- language ---------- */
-var LANG='en';
+var LANG='ar';
 try{var _l=localStorage.getItem('ps-lang');if(_l==='ar'||_l==='en')LANG=_l}catch(e){}
 try{var _q=new URLSearchParams(location.search).get('lang');if(_q==='ar'||_q==='en')LANG=_q}catch(e){}
 var TX={
 en:{
- doc_title:'Prompt Station',lang_aria:'Switch to Arabic',sound_on:'Sound on',sound_off:'Sound off',
+ doc_title:'DGE Prompt Challenge',lang_aria:'Switch to Arabic',sound_on:'Sound on',sound_off:'Sound off',
  colors:['Red','Amber','Yellow','Green','Sky','Indigo','Violet','Pink'],
  cats:['Role','Task','Context','Format','Constraints'],
  places:['1st','2nd','3rd'],
- eyebrow_home:'Multiplayer escape room · AI prompting basics',
- h1:'Prompt<br><span>Station</span>',
- lede:'The station’s AI has sealed every door. Your crew races through five locked rooms. Each room teaches one prompting skill and hides a puzzle. Solve it to unlock the next door. The first crew member through the vault reaches the escape pod and wins.',
+ eyebrow_home:'AI prompting basics · Multiplayer challenge',
+ h1:'Prompt<br><span>Challenge</span>',
+ lede:'An AI-native government starts with good prompts. Your team races through five DGE offices. Each office teaches one prompting skill and holds a challenge. Solve it to unlock the next office. The first player to clear all five offices wins.',
  host_btn:'Host a room',join_btn:'Join with a code',solo_btn:'Practise solo',
  connecting:'Connecting to live rooms… Solo practice is ready now.',
  offline_home:'Can’t reach the game server right now, so hosting and joining are paused. Check your internet connection and reload the page. You can still practise solo.',
- best:'Your best solo time: ',opening:'Opening a room…',station_map:'Station map',pod_launch:'Escape pod launch',
+ best:'Your best solo time: ',opening:'Opening a room…',station_map:'DGE floor plan',pod_launch:'Challenge complete',
  how1_t:'Host opens a room',how1_d:'You get a 4-letter code. Put it on screen or read it out.',
- how2_t:'Crew joins with the code',how2_d:'Players open this same page, choose Join, and pick a name and colour.',
- how3_t:'Fastest escape wins',how3_d:'The clock starts together. Every wrong answer adds {p} seconds, and you see why it was wrong.',
+ how2_t:'Players join with the code',how2_d:'Players open this same page, choose Join, and pick a name and colour.',
+ how3_t:'Fastest finish wins',how3_d:'The clock starts together. Every wrong answer adds {p} seconds, and you see why it was wrong.',
  back:'← Back',join_title:'Join a room',code_lbl:'Room code',code_hint:'4 letters, shown on the host’s screen.',
- name_lbl:'Crew name',name_ph:'e.g. Noor',name_hint:'Up to 14 characters. Everyone in the room sees it.',colour:'Colour',
+ name_lbl:'Your name',name_ph:'e.g. Noor',name_hint:'Up to 14 characters. Everyone in the room sees it.',colour:'Colour',
  joining:'Joining…',join_room:'Join room',
- mission_control:'Mission Control',close_room:'Close room',
+ mission_control:'Host dashboard',close_room:'Close room',
  players_open:'Players scan the QR code, or open this page, choose <b>Join with a code</b>, and enter:',room_code_aria:'Room code {c}',
  qr_aria:'QR code to join this room',qr_cap:'Scan to join with your phone camera',copy_code:'Copy code',copy_link:'Copy join link',link_note:'The join link opens the game with the code already filled in: ',
  time_limit:'Session time limit',no_limit:'No limit',min:'{m} min',
- limit_hint:'When time runs out, the mission ends for everyone and you can export the leaderboard to Excel.',
- start:'Start mission',late_note:'Players who join after the start begin with their own clock.',
- crew_1:'1 crew member aboard',crew_n:'{n} crew members aboard',
- start_wait:'Start mission (waiting for crew)',start_n:'Start mission for {n} crew',
- mission_complete:'Mission complete · Room {c}',final:'Final standings',live_board:'Live leaderboard',
+ limit_hint:'When time runs out, the session ends for everyone and you can export the leaderboard to Excel.',
+ start:'Start session',late_note:'Players who join after the start begin with their own clock.',
+ crew_1:'1 player joined',crew_n:'{n} players joined',
+ start_wait:'Start session (waiting for players)',start_n:'Start session for {n} players',
+ mission_complete:'Session complete · Room {c}',final:'Final standings',live_board:'Live leaderboard',
  export_xl:'Export leaderboard to Excel',again:'Run another round',
- end_confirm:'End the mission for everyone? Unfinished players keep their current room.',
- end_btn:'End mission',keep:'Keep playing',end_dots:'End mission…',export_now:'Export current standings',
- podium_none:'Nobody reached the escape pod this round.',
- mc_here:'<b>Mission Control is here.</b> <span class="muted">The mission starts when your host presses Start. Keep this page open.</span>',
- no_mc:'No Mission Control found for room <b>{c}</b> yet. Check the code with your host, or keep waiting. You’ll join automatically when they open it.',
- change_code:'Change code',looking:'Looking for Mission Control…',room_eyebrow:'Room {c}',leave:'Leave room',
- waiting:'Waiting for launch',before_t:'Before you start',
- before_d:'Five rooms. Each starts with a short briefing, then a puzzle. Your clock runs nonstop from the first briefing to the end of the game. Wrong answers add {p} seconds and tell you why. Keyboard: <span class="kbd">1</span>–<span class="kbd">4</span> to pick, <span class="kbd">Enter</span> to submit.',
- doors_unlock:'Doors unlocking',first_stop:'First stop: the {r}.',
+ end_confirm:'End the session for everyone? Unfinished players keep their current office.',
+ end_btn:'End session',keep:'Keep playing',end_dots:'End session…',export_now:'Export current standings',
+ podium_none:'Nobody cleared all five offices this round.',
+ mc_here:'<b>Your host is here.</b> <span class="muted">The session starts when your host presses Start. Keep this page open.</span>',
+ no_mc:'No host found for room <b>{c}</b> yet. Check the code with your host, or keep waiting. You’ll join automatically when they open it.',
+ change_code:'Change code',looking:'Looking for your host…',room_eyebrow:'Room {c}',leave:'Leave room',
+ waiting:'Waiting for the host to start',before_t:'Before you start',
+ before_d:'Five offices, one challenge each. Keep your printed reference guide beside you. Your clock runs nonstop until you finish. Wrong answers add {p} seconds and tell you why. Keyboard: <span class="kbd">1</span>–<span class="kbd">4</span> to pick, <span class="kbd">Enter</span> to submit.',
+ doors_unlock:'Get ready',first_stop:'First stop: {r}.',
  puzzle:'Puzzle',led_on:'UNLOCKED',led_off:'LOCKED',answers_aria:'Answers',words_aria:'Words in the prompt',
  marked:'{n} marked. Tap a word again to un-mark it.',choose_part:'Choose a part…',choose_rule:'Choose a rule…',
  pw_aria:'Your password so far: {w}',letter_aria:'Letter {l}',undo:'Undo last letter',clear:'Clear',
  letter_found:'Access letter {l} found.',letter_stored:'It’s stored in the top bar for the final lock.',
  keycard:'KEYCARD',keycard_got:'Pod keycard collected.',keycard_note:'You can now reach the escape pod.',
  lock_open:'Lock open',not_quite:'Not quite · +{p} seconds',adjust:'Adjust your answer and submit again.',
- continue_to:'Continue to {r} →',the_pod:'the pod',submit:'Submit answer',press_enter:'Press Enter to submit',choose_first:'Make your choice first',
- mc_left:'Mission Control has left. Keep going: your time still counts on this screen.',
- room_of:'Room {i} of {n} · {r}',briefing:'Briefing',crew_race:'Crew race',rules:'Rules',
+ continue_to:'Continue to {r} →',the_pod:'the finish',submit:'Submit answer',press_enter:'Press Enter to submit',choose_first:'Make your choice first',
+ mc_left:'Your host has left. Keep going: your time still counts on this screen.',
+ room_of:'Office {i} of {n} · {r}',briefing:'Briefing',crew_race:'Live race',rules:'Rules',
  rules_d:'The clock runs nonstop until you finish. Wrong answers add {p} s. Keys: <span class="kbd">1</span>–<span class="kbd">4</span> pick, <span class="kbd">Enter</span> submit.',
- quit:'Quit mission',brief_eb:'Briefing',brief_next:'Next: start the puzzle →',paused_note:'The clock is running. Press Next when you’re ready for the puzzle.',paused_chip:'Paused · reading',review_brief:'Review the briefing',new_best:'New personal best',escaped:'Escaped',escaped_cell:'Escaped',
- first_out:'You escaped first',place_out:'You escaped · place {n}',pod_launched:'Escape pod launched',
+ quit:'Leave the challenge',brief_eb:'Briefing',brief_next:'Next: start the puzzle →',paused_note:'The clock is running. Press Next when you’re ready for the puzzle.',paused_chip:'Paused · reading',review_brief:'Review the briefing',new_best:'New personal best',escaped:'Completed',escaped_cell:'Completed',
+ first_out:'You finished first',place_out:'You finished · place {n}',pod_launched:'Challenge complete',
  done_note:'Includes {p} s of penalties.',play_again:'Play again',back_start:'Back to start',
- waiting_mc:'Waiting for Mission Control to end the mission. Standings update live.',
- timeup_eb:'Time’s up · Room {c}',dark:'The station went dark',
- timeup_d:'You reached room {i} of {n} ({r}). Final standings appear here when Mission Control closes the session.',
- stay:'Stay in the room: if Mission Control runs another round, you’ll move to the lobby automatically.',
- solo_chip:'<b>Solo practice</b>',room_chip:'Room <b>{c}</b>',room_pos:'Room <b>{i} of {n} · {r}</b>',room_done:'<b>Escaped</b>',
+ waiting_mc:'Waiting for the host to end the session. Standings update live.',
+ timeup_eb:'Time’s up · Room {c}',dark:'Time’s up',
+ timeup_d:'You reached office {i} of {n} ({r}). Final standings appear here when the host closes the session.',
+ stay:'Stay in the room: if the host runs another round, you’ll move to the lobby automatically.',
+ solo_chip:'<b>Solo practice</b>',room_chip:'Room <b>{c}</b>',room_pos:'Office <b>{i} of {n} · {r}</b>',room_done:'<b>Completed</b>',
  letters_aria:'Access letters: {n} of 5',letter_none:'Letter not found yet',keycard_yes:'Keycard collected',keycard_no:'Keycard not found yet',
- time_left:'Time left',mission_time:'Mission time',penalty:'+{p}s penalty',your_time:'Your time',mc_room:'Mission Control · Room <b>{c}</b>',
+ time_left:'Time left',mission_time:'Session time',penalty:'+{p}s penalty',your_time:'Your time',mc_room:'Host dashboard · Room <b>{c}</b>',
  open_s:' · open',locked_s:' · locked',
- no_crew:'No crew yet.',no_crew_long:'No crew yet. Players appear here the moment they join.',you:'YOU',left:'left',
- th_crew:'Crew',th_room:'Room',th_time:'Time',pen_short:'+{p}s',
+ no_crew:'No players yet.',no_crew_long:'No players yet. Players appear here the moment they join.',you:'YOU',left:'left',
+ th_crew:'Player',th_room:'Office',th_time:'Time',pen_short:'+{p}s',
  err_code:'Room codes are 4 letters, like KQRT. Check the code on your host’s screen.',
- err_name:'Add a crew name so others can see you on the leaderboard.',
+ err_name:'Add your name so others can see you on the leaderboard.',
  err_join:'Could not join room {c} ({e}). Check your connection and try again.',
  err_open:'Could not open a room ({e}). Wait a moment and try again.',
  err_taken:'Every code we tried was taken. Try again.',
  err_conn:'The connection to room {c} dropped ({e}). Leave and join again with the same code to continue.',
  offline_banner:'Connection lost. Reconnecting… Your progress on this screen is kept.',
  copied:'Copied {c}',copy_blocked:'Copy blocked here. The code is {c}.',link_copied:'Join link copied',link_blocked:'Copy blocked. Select the link below instead.',
- you_name:'You',crewmate:'Crewmate',
+ you_name:'You',crewmate:'Player',
  tap_ok:'You found all five. Each one could mean a hundred different things.',
  tap_extra_1:'{w} is already clear, so un-mark it.',tap_extra_pl:'{w} are already clear, so un-mark them.',and:' and ',
  tap_missed_1:'1 vague word is still unmarked. Look for words two people would picture differently.',
@@ -372,72 +385,72 @@ en:{
  match_wrong:'{r} of {n} are right. Recheck: {w}',
  pw_ok:'Password accepted. Launching the escape pod…',pw_bad:'{w} does not open the pod. The password means the opposite of vague.',
  x_rank:'Rank',x_name:'Name',x_status:'Status',x_time:'Time',x_secs:'Time (seconds)',x_pen:'Penalty (seconds)',x_wrong:'Wrong answers',
- x_rooms:'Rooms cleared',x_last:'Last room',x_left:'Left early',x_escaped:'Escaped',x_dnf:'Did not finish',x_yes:'Yes',x_no:'No',x_of:'{i} of {n}',
+ x_rooms:'Offices cleared',x_last:'Last office',x_left:'Left early',x_escaped:'Completed',x_dnf:'Did not finish',x_yes:'Yes',x_no:'No',x_of:'{i} of {n}',
  x_session:'Session',x_code:'Room code',x_date:'Date',x_started:'Started',x_limit:'Time limit',x_minutes:'{m} minutes',x_nolimit:'No limit',
- x_players:'Players',x_escapedn:'Escaped',x_state:'Status',x_final:'Final',x_progress:'In progress (exported early)',
+ x_players:'Players',x_escapedn:'Completed',x_state:'Status',x_final:'Final',x_progress:'In progress (exported early)',
  x_sheet1:'Leaderboard',x_sheet2:'Session',x_none:'No players to export yet.',x_saved:'Saved {f}',
  x_csv:'The Excel library could not load, so it saved {f} instead. Excel opens that too.'
 },
 ar:{
- doc_title:'محطة الأوامر',lang_aria:'التبديل إلى الإنجليزية',sound_on:'الصوت يعمل',sound_off:'الصوت متوقف',
+ doc_title:'تحدي الأوامر',lang_aria:'التبديل إلى الإنجليزية',sound_on:'الصوت يعمل',sound_off:'الصوت متوقف',
  colors:['أحمر','كهرماني','أصفر','أخضر','سماوي','نيلي','بنفسجي','وردي'],
- cats:['الدور','المهمة','السياق','الصيغة','القيود'],
+ cats:['الدور','المهمة','السياق','التنسيق','القيود'],
  places:['الأول','الثاني','الثالث'],
- eyebrow_home:'غرفة هروب جماعية · أساسيات كتابة الأوامر للذكاء الاصطناعي',
- h1:'محطة<br><span>الأوامر</span>',
- lede:'أغلق ذكاء المحطة الاصطناعي كل الأبواب. يتسابق طاقمك عبر خمس غرف مقفلة. كل غرفة تعلّم مهارة في كتابة الأوامر وتخفي لغزًا. حُلّه لتفتح الباب التالي. أول من يجتاز الخزنة يصل إلى كبسولة النجاة ويفوز.',
+ eyebrow_home:'أساسيات كتابة الأوامر للذكاء الاصطناعي · تحدٍّ جماعي',
+ h1:'تحدي<br><span>الأوامر</span>',
+ lede:'الحكومة القائمة على الذكاء الاصطناعي تبدأ بأوامر جيدة. يتسابق فريقك عبر خمس مراحل. كل مرحلة تعلّم مهارة في كتابة الأوامر وفيها تحدٍّ. حُلّه لتنتقل إلى المرحلة التالية. أول من يجتاز المراحل الخمس يفوز.',
  host_btn:'استضف غرفة',join_btn:'انضم برمز',solo_btn:'تدرّب منفردًا',
  connecting:'جارٍ الاتصال بالغرف المباشرة… التدريب المنفرد متاح الآن.',
  offline_home:'تعذّر الوصول إلى خادم اللعبة الآن، لذلك الاستضافة والانضمام متوقفان. تحقق من اتصالك بالإنترنت وأعد تحميل الصفحة. ما زال بإمكانك التدرّب منفردًا.',
- best:'أفضل وقت لك منفردًا: ',opening:'جارٍ فتح غرفة…',station_map:'خريطة المحطة',pod_launch:'إطلاق كبسولة النجاة',
+ best:'أفضل وقت لك منفردًا: ',opening:'جارٍ فتح غرفة…',station_map:'خريطة المراحل',pod_launch:'اكتمل التحدي',
  how1_t:'المضيف يفتح غرفة',how1_d:'تحصل على رمز من 4 أحرف. اعرضه على الشاشة أو اقرأه بصوت عالٍ.',
- how2_t:'الطاقم ينضم بالرمز',how2_d:'يفتح اللاعبون هذه الصفحة نفسها، ويختارون «انضم برمز»، ثم اسمًا ولونًا.',
- how3_t:'الأسرع في الهروب يفوز',how3_d:'يبدأ المؤقت للجميع معًا. كل إجابة خاطئة تضيف {p} ثوانٍ، وترى سبب الخطأ.',
+ how2_t:'اللاعبون ينضمون بالرمز',how2_d:'يفتح اللاعبون هذه الصفحة نفسها، ويختارون «انضم برمز»، ثم اسمًا ولونًا.',
+ how3_t:'الأسرع في الإنجاز يفوز',how3_d:'يبدأ المؤقت للجميع معًا. كل إجابة خاطئة تضيف {p} ثوانٍ، وترى سبب الخطأ.',
  back:'→ رجوع',join_title:'انضم إلى غرفة',code_lbl:'رمز الغرفة',code_hint:'4 أحرف إنجليزية تظهر على شاشة المضيف.',
- name_lbl:'اسمك في الطاقم',name_ph:'مثال: نور',name_hint:'حتى 14 حرفًا. يراه الجميع في الغرفة.',colour:'اللون',
+ name_lbl:'اسمك',name_ph:'مثال: نور',name_hint:'حتى 14 حرفًا. يراه الجميع في الغرفة.',colour:'اللون',
  joining:'جارٍ الانضمام…',join_room:'انضم إلى الغرفة',
- mission_control:'مركز التحكم',close_room:'أغلق الغرفة',
+ mission_control:'لوحة المضيف',close_room:'أغلق الغرفة',
  players_open:'يمسح اللاعبون رمز QR، أو يفتحون هذه الصفحة ويختارون <b>انضم برمز</b>، ثم يُدخلون:',room_code_aria:'رمز الغرفة {c}',
  qr_aria:'رمز QR للانضمام إلى هذه الغرفة',qr_cap:'امسح الرمز بكاميرا هاتفك للانضمام',copy_code:'انسخ الرمز',copy_link:'انسخ رابط الانضمام',link_note:'رابط الانضمام يفتح اللعبة والرمز مكتوب مسبقًا: ',
  time_limit:'مدة الجلسة',no_limit:'بلا حد',min:'{m} دقيقة',
- limit_hint:'عند انتهاء الوقت تنتهي المهمة للجميع، ويمكنك تصدير لوحة الصدارة إلى Excel.',
- start:'ابدأ المهمة',late_note:'من ينضم بعد البدء يبدأ بمؤقته الخاص.',
- crew_1:'على متن المحطة: 1',crew_n:'على متن المحطة: {n}',
- start_wait:'ابدأ المهمة (بانتظار الطاقم)',start_n:'ابدأ المهمة لـ {n} من الطاقم',
- mission_complete:'اكتملت المهمة · الغرفة {c}',final:'الترتيب النهائي',live_board:'لوحة الصدارة المباشرة',
+ limit_hint:'عند انتهاء الوقت تنتهي الجلسة للجميع، ويمكنك تصدير لوحة الصدارة إلى Excel.',
+ start:'ابدأ الجلسة',late_note:'من ينضم بعد البدء يبدأ بمؤقته الخاص.',
+ crew_1:'انضم لاعب واحد',crew_n:'عدد اللاعبين: {n}',
+ start_wait:'ابدأ الجلسة (بانتظار اللاعبين)',start_n:'ابدأ الجلسة لـ {n} من اللاعبين',
+ mission_complete:'اكتملت الجلسة · الغرفة {c}',final:'الترتيب النهائي',live_board:'لوحة الصدارة المباشرة',
  export_xl:'صدّر لوحة الصدارة إلى Excel',again:'ابدأ جولة أخرى',
- end_confirm:'إنهاء المهمة للجميع؟ من لم ينتهِ يبقى في غرفته الحالية.',
- end_btn:'أنهِ المهمة',keep:'تابع اللعب',end_dots:'أنهِ المهمة…',export_now:'صدّر الترتيب الحالي',
- podium_none:'لم يصل أحد إلى كبسولة النجاة في هذه الجولة.',
- mc_here:'<b>مركز التحكم موجود.</b> <span class="muted">تبدأ المهمة عندما يضغط المضيف «ابدأ». أبقِ هذه الصفحة مفتوحة.</span>',
- no_mc:'لم يُعثر على مركز تحكم للغرفة <b>{c}</b> بعد. تأكد من الرمز مع المضيف، أو انتظر. ستنضم تلقائيًا عندما يفتحها.',
- change_code:'غيّر الرمز',looking:'جارٍ البحث عن مركز التحكم…',room_eyebrow:'الغرفة {c}',leave:'غادر الغرفة',
- waiting:'بانتظار الإطلاق',before_t:'قبل أن تبدأ',
- before_d:'خمس غرف، تبدأ كل منها بشرح قصير ثم لغز. يعمل مؤقتك دون توقف من أول شرح حتى نهاية اللعبة. الإجابة الخاطئة تضيف {p} ثوانٍ وتوضح السبب. لوحة المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
- doors_unlock:'الأبواب تُفتح',first_stop:'المحطة الأولى: {r}.',
+ end_confirm:'إنهاء الجلسة للجميع؟ من لم ينتهِ يبقى في مرحلته الحالية.',
+ end_btn:'أنهِ الجلسة',keep:'تابع اللعب',end_dots:'أنهِ الجلسة…',export_now:'صدّر الترتيب الحالي',
+ podium_none:'لم يجتز أحد المراحل الخمس في هذه الجولة.',
+ mc_here:'<b>المضيف موجود.</b> <span class="muted">تبدأ الجلسة عندما يضغط المضيف «ابدأ». أبقِ هذه الصفحة مفتوحة.</span>',
+ no_mc:'لم يُعثر على مضيف للغرفة <b>{c}</b> بعد. تأكد من الرمز مع المضيف، أو انتظر. ستنضم تلقائيًا عندما يفتحها.',
+ change_code:'غيّر الرمز',looking:'جارٍ البحث عن المضيف…',room_eyebrow:'الغرفة {c}',leave:'غادر الغرفة',
+ waiting:'بانتظار أن يبدأ المضيف',before_t:'قبل أن تبدأ',
+ before_d:'خمس مراحل، في كل منها تحدٍّ واحد. أبقِ دليلك المطبوع بجانبك. يعمل مؤقتك دون توقف حتى تنتهي. الإجابة الخاطئة تضيف {p} ثوانٍ وتوضح السبب. لوحة المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
+ doors_unlock:'استعد',first_stop:'البداية: {r}.',
  puzzle:'لغز',led_on:'مفتوح',led_off:'مقفل',answers_aria:'الإجابات',words_aria:'كلمات الأمر',
  marked:'المحدد: {n}. اضغط الكلمة مرة أخرى لإلغاء تحديدها.',choose_part:'اختر الجزء…',choose_rule:'اختر القاعدة…',
  pw_aria:'كلمة المرور حتى الآن: {w}',letter_aria:'الحرف {l}',undo:'تراجع عن آخر حرف',clear:'امسح',
  letter_found:'وجدت حرف الدخول {l}.',letter_stored:'محفوظ في الشريط العلوي للقفل الأخير.',
  keycard:'بطاقة الدخول',keycard_got:'حصلت على بطاقة دخول الكبسولة.',keycard_note:'يمكنك الآن الوصول إلى كبسولة النجاة.',
  lock_open:'القفل مفتوح',not_quite:'ليس تمامًا · +{p} ثوانٍ',adjust:'عدّل إجابتك وأرسلها مرة أخرى.',
- continue_to:'تابع إلى {r} ←',the_pod:'الكبسولة',submit:'أرسل الإجابة',press_enter:'اضغط Enter للإرسال',choose_first:'اختر إجابتك أولًا',
- mc_left:'غادر مركز التحكم. تابع اللعب: وقتك ما زال يُحتسب على هذه الشاشة.',
- room_of:'الغرفة {i} من {n} · {r}',briefing:'الشرح',crew_race:'سباق الطاقم',rules:'القواعد',
+ continue_to:'التالي ←',the_pod:'النهاية',submit:'أرسل الإجابة',press_enter:'اضغط Enter للإرسال',choose_first:'اختر إجابتك أولًا',
+ mc_left:'غادر المضيف. تابع اللعب: وقتك ما زال يُحتسب على هذه الشاشة.',
+ room_of:'المرحلة {i} من {n}',briefing:'الشرح',crew_race:'السباق المباشر',rules:'القواعد',
  rules_d:'المؤقت يعمل دون توقف حتى تنتهي. الإجابة الخاطئة تضيف {p} ث. المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
- quit:'انسحب من المهمة',brief_eb:'الشرح',brief_next:'التالي: ابدأ اللغز ←',paused_note:'المؤقت يعمل. اضغط «التالي» عندما تكون جاهزًا للغز.',paused_chip:'متوقف · قراءة',review_brief:'راجع الشرح',new_best:'رقم شخصي جديد',escaped:'نجا',escaped_cell:'الناجون',
- first_out:'نجوت أولًا',place_out:'نجوت · المركز {n}',pod_launched:'انطلقت كبسولة النجاة',
+ quit:'اخرج من التحدي',brief_eb:'الشرح',brief_next:'التالي: ابدأ اللغز ←',paused_note:'المؤقت يعمل. اضغط «التالي» عندما تكون جاهزًا للغز.',paused_chip:'متوقف · قراءة',review_brief:'راجع الشرح',new_best:'رقم شخصي جديد',escaped:'أنجز',escaped_cell:'المنجزون',
+ first_out:'أنجزت أولًا',place_out:'أنجزت · المركز {n}',pod_launched:'اكتمل التحدي',
  done_note:'يشمل {p} ث من الجزاءات.',play_again:'العب مرة أخرى',back_start:'العودة إلى البداية',
- waiting_mc:'بانتظار أن يُنهي مركز التحكم المهمة. يتحدّث الترتيب مباشرةً.',
- timeup_eb:'انتهى الوقت · الغرفة {c}',dark:'انطفأت أنوار المحطة',
- timeup_d:'وصلت إلى الغرفة {i} من {n} ({r}). يظهر الترتيب النهائي هنا عندما يُغلق مركز التحكم الجلسة.',
- stay:'ابقَ في الغرفة: إذا بدأ مركز التحكم جولة أخرى، ستنتقل إلى الانتظار تلقائيًا.',
- solo_chip:'<b>تدريب منفرد</b>',room_chip:'الغرفة <b>{c}</b>',room_pos:'الغرفة <b>{i} من {n} · {r}</b>',room_done:'<b>نجوت</b>',
+ waiting_mc:'بانتظار أن يُنهي المضيف الجلسة. يتحدّث الترتيب مباشرةً.',
+ timeup_eb:'انتهى الوقت · الغرفة {c}',dark:'انتهى الوقت',
+ timeup_d:'وصلت إلى المرحلة {i} من {n} ({r}). يظهر الترتيب النهائي هنا عندما يُغلق المضيف الجلسة.',
+ stay:'ابقَ في الغرفة: إذا بدأ المضيف جولة أخرى، ستنتقل إلى الانتظار تلقائيًا.',
+ solo_chip:'<b>تدريب منفرد</b>',room_chip:'الغرفة <b>{c}</b>',room_pos:'المرحلة <b>{i} من {n}</b>',room_done:'<b>أنجزت</b>',
  letters_aria:'أحرف الدخول: {n} من 5',letter_none:'لم يُعثر على الحرف بعد',keycard_yes:'تم الحصول على البطاقة',keycard_no:'لم يُعثر على البطاقة بعد',
- time_left:'الوقت المتبقي',mission_time:'وقت المهمة',penalty:'+{p} ث جزاء',your_time:'وقتك',mc_room:'مركز التحكم · الغرفة <b>{c}</b>',
+ time_left:'الوقت المتبقي',mission_time:'وقت الجلسة',penalty:'+{p} ث جزاء',your_time:'وقتك',mc_room:'لوحة المضيف · الغرفة <b>{c}</b>',
  open_s:' · مفتوحة',locked_s:' · مقفلة',
- no_crew:'لا يوجد طاقم بعد.',no_crew_long:'لا يوجد طاقم بعد. يظهر اللاعبون هنا فور انضمامهم.',you:'أنت',left:'غادر',
- th_crew:'الطاقم',th_room:'الغرفة',th_time:'الوقت',pen_short:'+{p} ث',
+ no_crew:'لا يوجد لاعبون بعد.',no_crew_long:'لا يوجد لاعبون بعد. يظهر اللاعبون هنا فور انضمامهم.',you:'أنت',left:'غادر',
+ th_crew:'اللاعب',th_room:'المرحلة',th_time:'الوقت',pen_short:'+{p} ث',
  err_code:'رمز الغرفة 4 أحرف إنجليزية مثل KQRT. تحقق من الرمز على شاشة المضيف.',
  err_name:'أضف اسمك حتى يراك الآخرون في لوحة الصدارة.',
  err_join:'تعذّر الانضمام إلى الغرفة {c} ({e}). تحقق من اتصالك وحاول مرة أخرى.',
@@ -446,7 +459,7 @@ ar:{
  err_conn:'انقطع الاتصال بالغرفة {c} ({e}). غادر وانضم مرة أخرى بالرمز نفسه للمتابعة.',
  offline_banner:'انقطع الاتصال. جارٍ إعادة الاتصال… تقدّمك على هذه الشاشة محفوظ.',
  copied:'تم نسخ {c}',copy_blocked:'النسخ غير متاح هنا. الرمز هو {c}.',link_copied:'تم نسخ رابط الانضمام',link_blocked:'النسخ غير متاح. حدّد الرابط بالأسفل بدلًا من ذلك.',
- you_name:'أنت',crewmate:'عضو الطاقم',
+ you_name:'أنت',crewmate:'لاعب',
  tap_ok:'وجدت الكلمات الخمس كلها. كل واحدة منها قد تعني مئة شيء مختلف.',
  tap_extra_1:'الكلمة {w} واضحة بالفعل، فألغِ تحديدها.',tap_extra_pl:'الكلمات {w} واضحة بالفعل، فألغِ تحديدها.',and:'، ',
  tap_missed_1:'بقيت كلمة غامضة واحدة لم تحددها. ابحث عن الكلمات التي قد يتخيلها شخصان بشكل مختلف.',
@@ -456,9 +469,9 @@ ar:{
  match_wrong:'{r} من {n} صحيحة. راجع: {w}',
  pw_ok:'تم قبول كلمة المرور. جارٍ إطلاق كبسولة النجاة…',pw_bad:'{w} لا تفتح الكبسولة. كلمة المرور تعني عكس «غامضة».',
  x_rank:'الترتيب',x_name:'الاسم',x_status:'الحالة',x_time:'الوقت',x_secs:'الوقت (بالثواني)',x_pen:'الجزاء (بالثواني)',x_wrong:'الإجابات الخاطئة',
- x_rooms:'الغرف المجتازة',x_last:'آخر غرفة',x_left:'غادر مبكرًا',x_escaped:'نجا',x_dnf:'لم ينتهِ',x_yes:'نعم',x_no:'لا',x_of:'{i} من {n}',
+ x_rooms:'المراحل المجتازة',x_last:'آخر مرحلة',x_left:'غادر مبكرًا',x_escaped:'أنجز',x_dnf:'لم ينتهِ',x_yes:'نعم',x_no:'لا',x_of:'{i} من {n}',
  x_session:'الجلسة',x_code:'رمز الغرفة',x_date:'التاريخ',x_started:'وقت البدء',x_limit:'مدة الجلسة',x_minutes:'{m} دقيقة',x_nolimit:'بلا حد',
- x_players:'اللاعبون',x_escapedn:'الناجون',x_state:'الحالة',x_final:'نهائي',x_progress:'قيد التقدم (تم التصدير مبكرًا)',
+ x_players:'اللاعبون',x_escapedn:'المنجزون',x_state:'الحالة',x_final:'نهائي',x_progress:'قيد التقدم (تم التصدير مبكرًا)',
  x_sheet1:'لوحة الصدارة',x_sheet2:'الجلسة',x_none:'لا يوجد لاعبون للتصدير بعد.',x_saved:'تم حفظ {f}',
  x_csv:'تعذّر تحميل مكتبة Excel، لذلك تم حفظ {f} بدلًا منه. يفتحه Excel أيضًا.'
 }};
@@ -509,8 +522,8 @@ function lockSvg(open,anim){return '<svg class="lock'+(open?' open':'')+(anim?' 
 
 /* ---------- rooms: English ---------- */
 var STAGES_EN=[
-{room:'Airlock',letter:'C',title:'The anatomy of a prompt',device:'Airlock terminal',
- story:'Red lights everywhere. The airlock won’t open until the station AI receives a well-built prompt. Study the terminal manual, then crack the lock.',
+{room:'Onboarding Office',letter:'C',title:'The anatomy of a prompt',device:'Onboarding desk',
+ story:'Study your reference guide, then answer the questions.',
  lesson:'<p>A strong prompt gives the AI what a new teammate would need on day one. Most good prompts combine five parts:</p>'+
  '<dl class="parts"><dt>Role</dt><dd>Who the AI should act as. <i>"You are a patient math tutor."</i></dd>'+
  '<dt>Task</dt><dd>The job, starting with a clear verb: explain, draft, compare, summarize.</dd>'+
@@ -522,8 +535,8 @@ var STAGES_EN=[
  quote:'You are a travel planner. Plan a 3-day trip to Rome for a family with two kids under 10. Present it as a day-by-day table. Keep each day under €150.',
  options:['Role','Context','Format','Examples of the output'], answer:3,
  why:['"You are a travel planner" is the role, so that part is there.','"A family with two kids under 10" is context, so that part is there.','"A day-by-day table" is the format, so that part is there.','Right. The prompt never shows a sample itinerary, so it has no examples.']},
-{room:'Navigation',letter:'L',title:'Be specific',device:'Nav computer',
- story:'The nav computer is lost. Someone fed it a vague prompt. Strike out every fuzzy word to recalibrate it.',
+{room:'Policy Unit',letter:'L',title:'Be specific',device:'Policy brief',
+ story:'Strike out every vague word so the policy brief is clear.',
  lesson:'<p>Vague words make the AI guess, and guesses come back generic. Replace each vague word with something you could check.</p>'+
  '<div class="tablewrap"><table class="swap"><tbody>'+
  '<tr><td>short</td><td>under 120 words</td></tr>'+
@@ -534,23 +547,23 @@ var STAGES_EN=[
  '<p>A quick test: could two different people read your prompt and picture the same result? If not, it is still vague.</p>',
  type:'tap', q:'Tap every vague word in this prompt, then submit.',
  words:['Write','a','good,','short','blog','post','about','something','interesting','for','people.'], vague:[2,3,7,8,10]},
-{room:'Reactor',letter:'E',title:'Build it part by part',device:'Reactor control panel',kind:'parts',cats:TX.en.cats,
- story:'The reactor is overheating. Its control prompt got scrambled. Wire each sentence back into the right slot before it melts down.',
+{room:'Talent Hub',letter:'E',title:'Build it part by part',device:'HR request form',kind:'parts',cats:TX.en.cats,
+ story:'Put each sentence of the HR request in the right slot.',
  lesson:'<p>Writing one sentence per part keeps a prompt easy to read and easy to fix. When a result is off, you can see which part to change.</p>'+
  '<pre class="ex">Role:        You are a science teacher.\nContext:     My class is 12-year-olds who find physics boring.\nTask:        Explain why the sky is blue.\nFormat:      Use one everyday analogy and 3 short steps.\nConstraints: No equations. Under 150 words.</pre>'+
  '<p>Context usually works best before the task, so the AI reads the situation before the instruction.</p>',
  type:'match', q:'Label each sentence with the prompt part it plays.',
  items:[['Don’t mention salaries. Keep it under 200 words.',4],['You are a senior HR manager.',0],['Draft an announcement email to all staff.',1],['Our team of 12 is moving to a 4-day work week in May.',2],['Use a subject line and three short paragraphs.',3]]},
-{room:'Bridge',letter:'R',title:'Refine the result',device:'Captain’s console',
- story:'The captain’s console spat out the wrong report. Send one follow-up that gets it right.',
+{room:'Customer Experience Centre',letter:'R',title:'Refine the result',device:'Communications desk',
+ story:'Send one follow-up that gets the post right.',
  lesson:'<p>The first answer is a draft. Improve it with a follow-up that says exactly what to change.</p>'+
  '<dl class="parts"><dt>Weak</dt><dd>"Make it better." "Try again."</dd><dt>Strong</dt><dd>Name what to keep, what to change and the target: length, tone, audience.</dd></dl>'+
  '<p>Other useful moves: ask the AI to think step by step on a hard problem, ask it to ask you questions first, and always check facts and numbers yourself.</p>',
  type:'choice', q:'You asked for a LinkedIn post and got a 900-word essay. What is the best follow-up?',
  options:['"Try again."','"Make it better."','"Rewrite this as a LinkedIn post under 100 words. Keep the 3 key statistics and use a friendly tone."','"Why is this so long?"'], answer:2,
  why:['"Try again" gives no direction, so you will likely get another long essay.','"Better" is vague. The AI cannot tell what you want improved.','Right. It names the format, the length, what to keep and the tone.','This asks for an explanation, not a fix, so you still have no post.']},
-{room:'Vault',letter:'',title:'Know your data labels',device:'Clearance scanner',
- story:'The escape pod is behind the vault door. The clearance scanner only opens for crew who know what is safe to paste into Copilot.',
+{room:'Information Security Office',letter:'',title:'Know your data labels',device:'Clearance check',
+ story:'Only staff who know what is safe to paste into Copilot get clearance.',
  lesson:'<p>Every file and email carries a classification label. The label tells you who may see the data, and how much harm a leak would cause.</p>'+
  '<div class="labels">'+
  '<div class="labelrow">'+SHIELD('open')+'<div><div class="nm">Open</div><div class="scope">Anyone · inside and outside the organization</div><p class="small">Meant for public use, with no legal, regulatory or organizational limits. Examples: press releases, published reports, anonymized statistics.</p></div></div>'+
@@ -561,13 +574,13 @@ var STAGES_EN=[
  type:'match', q:'Can this go into a Copilot prompt? Match each label and example to the rule.',
  cats:['Yes','Yes, in our organization’s Copilot only','Only with approval','Never'],
  items:[['Secret',3,'secret'],['Open',0,'open'],['An employee’s Emirates ID number',3],['Sensitive',3,'sens'],['A press release already on our website',0],['Confidential',1,'conf']],
- okText:'Scanner cleared. The pod is yours. Open data is fine, Confidential data stays inside your organization’s Copilot, and Sensitive or Secret data never goes into an AI prompt. That includes personal details like Emirates ID numbers.'}
+ okText:'Clearance granted. Open data is fine, Confidential data stays inside your organization’s Copilot, and Sensitive or Secret data never goes into an AI prompt. That includes personal details like Emirates ID numbers.'}
 ];
 
 /* ---------- rooms: Arabic (same order, same answer positions) ---------- */
 var STAGES_AR=[
-{room:'غرفة الضغط',letter:'و',title:'تشريح الأمر النصي',device:'محطة غرفة الضغط',
- story:'أضواء حمراء في كل مكان. لن تُفتح غرفة الضغط حتى يتلقى ذكاء المحطة أمرًا نصيًا محكمًا. ادرس دليل المحطة، ثم افتح القفل.',
+{room:'مكوّنات الأمر',letter:'و',title:'مكوّنات الأمر النصي',device:'تحدي المكوّنات',
+ story:'راجع دليلك المرجعي، ثم أجب عن الأسئلة.',
  lesson:'<p>الأمر النصي (البرومبت) القوي يعطي الذكاء الاصطناعي ما يحتاجه زميل جديد في يومه الأول. معظم الأوامر الجيدة تجمع خمسة أجزاء:</p>'+
  '<dl class="parts"><dt>الدور</dt><dd>الشخصية التي يتقمصها الذكاء الاصطناعي. <i>«أنت مدرّس رياضيات صبور.»</i></dd>'+
  '<dt>المهمة</dt><dd>العمل المطلوب، ويبدأ بفعل واضح: اشرح، اكتب مسودة، قارن، لخّص.</dd>'+
@@ -577,10 +590,10 @@ var STAGES_AR=[
  '<p>كثير من الأوامر تضيف أيضًا <b>أمثلة</b> على النتيجة المطلوبة.</p>',
  type:'choice', q:'اقرأ هذا الأمر. ما الجزء الناقص؟',
  quote:'أنت مخطط رحلات. خطط لرحلة مدتها 3 أيام إلى روما لعائلة لديها طفلان دون العاشرة. اعرضها في جدول يومي. اجعل تكلفة كل يوم أقل من 150 يورو.',
- options:['الدور','السياق','الصيغة','أمثلة على النتيجة'], answer:3,
- why:['«أنت مخطط رحلات» هو الدور، فهذا الجزء موجود.','«عائلة لديها طفلان دون العاشرة» هو السياق، فهذا الجزء موجود.','«جدول يومي» هو الصيغة، فهذا الجزء موجود.','صحيح. الأمر لا يعرض أي برنامج رحلة نموذجي، فلا توجد فيه أمثلة.']},
-{room:'الملاحة',letter:'ا',title:'كن محددًا',device:'حاسوب الملاحة',
- story:'حاسوب الملاحة تائه. أحدهم أعطاه أمرًا غامضًا. اشطب كل كلمة مبهمة لإعادة معايرته.',
+ options:['الدور','السياق','التنسيق','أمثلة على النتيجة'], answer:3,
+ why:['«أنت مخطط رحلات» هو الدور، فهذا الجزء موجود.','«عائلة لديها طفلان دون العاشرة» هو السياق، فهذا الجزء موجود.','«جدول يومي» هو التنسيق، فهذا الجزء موجود.','صحيح. الأمر لا يعرض أي برنامج رحلة نموذجي، فلا توجد فيه أمثلة.']},
+{room:'الوضوح والتحديد',letter:'ا',title:'كن محددًا',device:'تحدي الوضوح',
+ story:'اشطب كل كلمة غامضة حتى يصبح الأمر واضحًا.',
  lesson:'<p>الكلمات الغامضة تجعل الذكاء الاصطناعي يخمّن، والتخمين يأتي بنتائج عامة. استبدل كل كلمة غامضة بشيء يمكنك التحقق منه.</p>'+
  '<div class="tablewrap"><table class="swap"><tbody>'+
  '<tr><td>قصير</td><td>أقل من 120 كلمة</td></tr>'+
@@ -591,23 +604,23 @@ var STAGES_AR=[
  '<p>اختبار سريع: هل يمكن لشخصين مختلفين قراءة أمرك وتخيّل النتيجة نفسها؟ إن لم يكن، فهو ما زال غامضًا.</p>',
  type:'tap', q:'اضغط على كل كلمة غامضة في هذا الأمر، ثم أرسل الإجابة.',
  words:['اكتب','مقالًا','جيدًا','قصيرًا','عن','موضوع','ممتع','للناس.'], vague:[2,3,5,6,7]},
-{room:'المفاعل',letter:'ض',title:'ابنِه جزءًا جزءًا',device:'لوحة تحكم المفاعل',kind:'parts',cats:TX.ar.cats,
- story:'المفاعل يسخن بشدة. أمر التحكم الخاص به اختلط. أعِد كل جملة إلى خانتها الصحيحة قبل أن ينصهر.',
+{room:'بناء الأمر',letter:'ض',title:'ابنِه جزءًا جزءًا',device:'تحدي البناء',kind:'parts',cats:TX.ar.cats,
+ story:'ضع كل جملة في خانتها الصحيحة.',
  lesson:'<p>كتابة جملة واحدة لكل جزء تجعل الأمر سهل القراءة وسهل الإصلاح. وإذا جاءت النتيجة غير مناسبة، تعرف أي جزء تغيّر.</p>'+
  '<pre class="ex">الدور:   أنت معلم علوم.\nالسياق:  طلاب صفي في الثانية عشرة ويجدون الفيزياء مملة.\nالمهمة:  اشرح لماذا السماء زرقاء.\nالصيغة:  استخدم تشبيهًا واحدًا من الحياة اليومية و3 خطوات قصيرة.\nالقيود:  بلا معادلات. أقل من 150 كلمة.</pre>'+
  '<p>يعمل السياق عادةً بشكل أفضل قبل المهمة، حتى يفهم الذكاء الاصطناعي الموقف قبل التعليمات.</p>',
  type:'match', q:'حدّد الجزء الذي تؤديه كل جملة في الأمر.',
- items:[['لا تذكر الرواتب. اجعله أقل من 200 كلمة.',4],['أنت مدير موارد بشرية أول.',0],['اكتب مسودة بريد إعلان لجميع الموظفين.',1],['فريقنا المكوّن من 12 شخصًا سينتقل إلى أسبوع عمل من 4 أيام في مايو.',2],['استخدم سطر موضوع وثلاث فقرات قصيرة.',3]]},
-{room:'منصة القيادة',letter:'ة',title:'حسّن النتيجة',device:'لوحة القائد',
- story:'أخرجت لوحة القائد التقرير الخطأ. أرسل رسالة متابعة واحدة تصحح الأمر.',
+ items:[['لا تذكر الرواتب. اجعله أقل من 200 كلمة.',4],['أنت مدير موارد بشرية أول.',0],['اكتب مسودة بريد إعلان لجميع الموظفين.',1],['فريقنا المكوّن من 12 شخصًا سينتقل إلى أسبوع عمل من 4 أيام في مايو.',2],['نسّق البريد: عنوان في الأعلى، ثم ثلاث فقرات قصيرة.',3]]},
+{room:'تحسين النتيجة',letter:'ة',title:'حسّن النتيجة',device:'تحدي التحسين',
+ story:'أرسل رسالة متابعة واحدة تصحح المنشور.',
  lesson:'<p>الإجابة الأولى مسودة. حسّنها برسالة متابعة تحدد بالضبط ما يجب تغييره.</p>'+
  '<dl class="parts"><dt>ضعيفة</dt><dd>«اجعله أفضل.» «حاول مرة أخرى.»</dd><dt>قوية</dt><dd>حدّد ما تُبقيه، وما تغيّره، والهدف: الطول، والنبرة، والجمهور.</dd></dl>'+
  '<p>خطوات مفيدة أخرى: اطلب من الذكاء الاصطناعي التفكير خطوة بخطوة في المسائل الصعبة، واطلب منه أن يسألك أسئلة أولًا، وتحقق دائمًا من الحقائق والأرقام بنفسك.</p>',
  type:'choice', q:'طلبت منشورًا على LinkedIn فحصلت على مقال من 900 كلمة. ما أفضل رسالة متابعة؟',
  options:['«حاول مرة أخرى.»','«اجعله أفضل.»','«أعد كتابته كمنشور على LinkedIn في أقل من 100 كلمة. احتفظ بالإحصاءات الثلاث الرئيسية واستخدم نبرة ودودة.»','«لماذا هو طويل هكذا؟»'], answer:2,
  why:['«حاول مرة أخرى» لا تعطي أي توجيه، فغالبًا ستحصل على مقال طويل آخر.','«أفضل» كلمة غامضة. لا يعرف الذكاء الاصطناعي ما الذي تريد تحسينه.','صحيح. تحدد الصيغة والطول وما يجب الإبقاء عليه والنبرة.','هذا يطلب تفسيرًا لا إصلاحًا، فما زلت بلا منشور.']},
-{room:'الخزنة',letter:'',title:'اعرف تصنيفات بياناتك',device:'ماسح التصاريح',
- story:'كبسولة النجاة خلف باب الخزنة. ماسح التصاريح لا يفتح إلا لمن يعرف ما يجوز لصقه في Copilot.',
+{room:'تصنيف البيانات',letter:'',title:'اعرف تصنيفات بياناتك',device:'تحدي التصنيف',
+ story:'حدّد ما يجوز لصقه في Copilot وما لا يجوز.',
  lesson:'<p>كل ملف وبريد إلكتروني يحمل تصنيفًا. التصنيف يحدد من يحق له رؤية البيانات، وحجم الضرر إذا تسرّبت.</p>'+
  '<div class="labels">'+
  '<div class="labelrow">'+SHIELD('open')+'<div><div class="nm">مفتوح</div><div class="scope">الجميع · داخل المؤسسة وخارجها</div><p class="small">مخصص للاستخدام العام، بلا قيود قانونية أو تنظيمية أو مؤسسية. أمثلة: البيانات الصحفية، والتقارير المنشورة، والإحصاءات مجهولة الهوية.</p></div></div>'+
@@ -618,7 +631,7 @@ var STAGES_AR=[
  type:'match', q:'هل يجوز وضع هذا في أمر Copilot؟ طابق كل تصنيف ومثال مع القاعدة.',
  cats:['نعم','نعم، في Copilot مؤسستنا فقط','بموافقة فقط','أبدًا'],
  items:[['سري للغاية',3,'secret'],['مفتوح',0,'open'],['رقم الهوية الإماراتية لموظف',3],['حساس',3,'sens'],['بيان صحفي منشور على موقعنا',0],['سري',1,'conf']],
- okText:'تم اجتياز الماسح. الكبسولة لك. البيانات المفتوحة مسموحة، والبيانات السرية تبقى داخل Copilot الخاص بمؤسستك، والبيانات الحساسة والسرية للغاية لا تدخل أي أمر للذكاء الاصطناعي أبدًا، ومنها البيانات الشخصية مثل أرقام الهوية الإماراتية.'}
+ okText:'تم منح التصريح. البيانات المفتوحة مسموحة، والبيانات السرية تبقى داخل Copilot الخاص بمؤسستك، والبيانات الحساسة والسرية للغاية لا تدخل أي أمر للذكاء الاصطناعي أبدًا، ومنها البيانات الشخصية مثل أرقام الهوية الإماراتية.'}
 ];
 var STAGES=LANG==='ar'?STAGES_AR:STAGES_EN;
 var N=STAGES.length;
@@ -689,7 +702,7 @@ function exportBoard(){
   var info=[[t('x_session'),t('doc_title')],[t('x_code'),S.code],[t('x_date'),dateStr],[t('x_started'),pad(d.getHours())+':'+pad(d.getMinutes())],
     [t('x_limit'),S.limitMs?t('x_minutes',{m:S.limitMs/60000}):t('x_nolimit')],[t('x_players'),rows.length],[t('x_escapedn'),escN],
     [t('x_state'),S.hostPhase==='ended'?t('x_final'):t('x_progress')]];
-  var base='prompt-station-'+S.code+'-'+dateStr;
+  var base='dge-prompt-challenge-'+S.code+'-'+dateStr;
   if(window.XLSX){
     var wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(rows);
     ws['!cols']=[{wch:6},{wch:18},{wch:15},{wch:10},{wch:14},{wch:17},{wch:14},{wch:14},{wch:14},{wch:11}];
@@ -753,7 +766,7 @@ function onPeersChanged(){
   updateLive();}
 
 /* ---------- flow ---------- */
-function resetRun(){S.stage=0;S.startLocal=null;S.activeMs=0;S.runSince=null;S.phase='brief';S.penalty=0;S.finishMs=null;S.letters=[];S.badge=false;clearAnswer()}
+function resetRun(){S.stage=0;S.startLocal=null;S.activeMs=0;S.runSince=null;S.phase='quiz';S.penalty=0;S.finishMs=null;S.letters=[];S.badge=false;clearAnswer()}
 function clearAnswer(){S.sel=null;S.tap=[];S.match=[];S.unscr=[];S.fb=null}
 function startCountdown(){resetRun();S.screen='countdown';S.cdEnd=Date.now()+3000;pushPresence();render();play('beep')}
 
@@ -840,7 +853,7 @@ function submit(){
   var f=document.getElementById('fb');if(f)f.focus();}
 function pushPresenceDone(){if(R&&S.mode==='player'){var p=myPresence();p.stage=N;p.done=true;p.ms=S.finishMs;R.presence(p).catch(function(){})}}
 function clearDoors(){setTimeout(function(){var d=document.querySelector('.doors');if(d)d.remove()},1400)}
-function advance(){S.stage++;clearAnswer();pauseClock();S.phase='brief';S.enter=true;play('door');pushPresence();render();S.enter=false;clearDoors();window.scrollTo({top:0});}
+function advance(){S.stage++;clearAnswer();S.phase='quiz';S.enter=true;play('door');pushPresence();render();S.enter=false;clearDoors();window.scrollTo({top:0});}
 function canSubmit(){var st=STAGES[S.stage];if(!st)return false;
   if(st.type==='choice')return S.sel!=null;
   if(st.type==='tap')return S.tap.length>0;
@@ -979,10 +992,7 @@ function gameView(){
   var cn=S.connErr?'<p class="err" role="alert">'+esc(tx(S.connErr))+'</p>':'';
   var doors=S.enter?'<div class="doors" aria-hidden="true"><i class="dl"></i><i class="dr"></i><b>'+esc(st.room)+'</b></div>':'';
   return warn+cn+'<div class="game"><div class="stack roomwrap">'+doors+'<div class="roomhead"><span class="eyebrow">'+t('room_of',{i:S.stage+1,n:N,r:esc(st.room)})+'</span><h2>'+esc(st.title)+'</h2><p class="story">'+esc(st.story||'')+'</p></div>'+
-  (S.phase==='brief'
-    ?'<section class="panel briefpage"><span class="eyebrow">'+t('brief_eb')+'</span><div class="body">'+st.lesson+'</div>'+
-      '<div class="briefgo"><button class="btn primary big-go" id="briefnext" data-act="startpuzzle">'+t('brief_next')+'</button><p class="muted small">'+t('paused_note')+'</p></div></section>'
-    :challengeView(st)+'<details class="brief"><summary>'+t('review_brief')+'</summary><div class="body">'+st.lesson+'</div></details>')+'</div>'+
+  challengeView(st)+'</div>'+
   '<aside class="side"><div class="panel"><h3>'+t('station_map')+'</h3><div class="map" id="map">'+mapView()+'</div></div>'+
   (S.mode!=='solo'?'<div class="panel"><h3>'+t('crew_race')+'</h3>'+boardView()+'</div>':'')+
   '<div class="panel small muted"><h3>'+t('rules')+'</h3>'+t('rules_d',{p:PEN})+' <button class="btn ghost" data-act="home" style="margin-top:10px;width:100%">'+t('quit')+'</button></div></aside></div>';}
@@ -1065,7 +1075,7 @@ applyLang();
 
 /* ---------- ticker ---------- */
 setInterval(function(){
-  if(S.screen==='countdown'){if(Date.now()>=S.cdEnd){S.startLocal=S.cdEnd;S.screen='game';S.phase='brief';S.enter=true;play('go');play('door');render();S.enter=false;clearDoors();focusId('briefnext');}else{var c=$('#cd'),n=String(Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000)));if(c&&c.textContent!==n){c.textContent=n;play('beep')}}}
+  if(S.screen==='countdown'){if(Date.now()>=S.cdEnd){S.startLocal=S.cdEnd;S.screen='game';S.phase='quiz';S.enter=true;play('go');play('door');render();S.enter=false;clearDoors();focusId('qtext');}else{var c=$('#cd'),n=String(Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000)));if(c&&c.textContent!==n){c.textContent=n;play('beep')}}}
   var t=$('#timer');if(t)t.textContent=fmt(elapsed());
   var ht=$('#htimer');if(ht)ht.textContent=S.limitMs?fmt(Math.max(0,S.liveAt+S.limitMs-Date.now())):fmt(Math.max(0,Date.now()-S.liveAt));
   if(S.mode==='host'&&S.hostPhase==='live'&&S.limitMs&&Date.now()>=S.liveAt+S.limitMs+1500){hostSetPhase('ended');play('win');confetti();}
