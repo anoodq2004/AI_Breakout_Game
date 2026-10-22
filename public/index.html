@@ -245,6 +245,76 @@ canvas.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:non
 .brandbar .sep{width:1px;height:16px;background:var(--line)}
 .panel{box-shadow:0 1px 2px rgba(20,33,61,.06)}
 .eyebrow{color:var(--gold)}
+
+/* hosted game */
+:root{--k1:#2C5697;--k2:#8C7A4B;--k3:#3B8389;--k4:#B2464B}
+.kgrid{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px;align-items:start}
+.kgrid > *{min-width:0}
+.kside{align-items:stretch;text-align:center}
+.ktitle{font-size:clamp(22px,3vw,30px)}
+.kq{font-size:clamp(18px,2.4vw,24px);font-weight:700;margin:0}
+.ktimer{font-family:var(--f-display);font-weight:800;font-size:64px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;direction:ltr}
+.kans{font-weight:700;color:var(--muted);margin:0}
+.kopts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kopt{position:relative;display:flex;gap:12px;align-items:center;min-height:72px;padding:14px 16px;border-radius:10px;color:#FFFFFF;font-weight:700;font-size:18px;overflow:hidden}
+.kopt.k1{background:var(--k1)}.kopt.k2{background:var(--k2)}.kopt.k3{background:var(--k3)}.kopt.k4{background:var(--k4)}
+.kopt.dim{opacity:.38}
+.kopt.right{outline:4px solid var(--ok);outline-offset:2px}
+.kopt .kn{display:grid;place-items:center;width:30px;height:30px;border-radius:6px;background:rgba(255,255,255,.22);flex:none}
+.kopt .kt{flex:1;min-width:0}
+.kopt .kmark{font-size:24px}
+.kbar{position:absolute;inset-inline:0;bottom:0;height:22px;background:rgba(0,0,0,.18);display:flex;align-items:center}
+.kbar i{display:block;height:100%;background:rgba(255,255,255,.35)}
+.kbar em{position:absolute;inset-inline-end:8px;font-style:normal;font-size:13px}
+.kopt:has(.kbar){padding-bottom:30px}
+.kwords .word{cursor:default}
+.kwords .word.kv{border-style:solid;border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--bg));color:var(--bad);font-weight:700}
+.kitems{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.kitems li{display:flex;gap:10px;align-items:center;background:var(--panel-2);border-radius:8px;padding:10px 12px;font-weight:600}
+.kcat{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;margin:2px;background:var(--panel-2)}
+.kmatch .kok{color:var(--ok);font-weight:700}
+.kstat{margin:0;font-size:17px}
+.kplayers{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.kp{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;opacity:.6}
+.kp b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kp.done{opacity:1;border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--panel))}
+.kchk{color:var(--ok);font-weight:800}
+.kintro{min-height:46vh;display:grid;place-items:center;align-content:center;gap:10px;text-align:center}
+.kintro .num{font-family:var(--f-display);font-size:clamp(80px,18vw,150px);font-weight:800;color:var(--accent);line-height:1}
+.kwait{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding-block:32px}
+.kbig{font-size:56px;color:var(--ok);line-height:1}
+.kverdict{text-align:center;display:flex;flex-direction:column;gap:6px;border-width:2px}
+.kverdict.ok{border-color:var(--ok)}.kverdict.part{border-color:var(--gold)}.kverdict.bad{border-color:var(--bad)}
+.kverdict h2{font-size:32px}
+.kplus{font-family:var(--f-display);font-size:28px;font-weight:800;color:var(--accent);margin:0}
+.kgain{color:var(--ok);font-weight:700}
+.kscore{font-weight:700;color:var(--accent)}
+.kscorebig{color:var(--accent);margin:0}
+@media (max-width:860px){.kgrid{grid-template-columns:minmax(0,1fr)}.kopts{grid-template-columns:minmax(0,1fr)}}
+
+/* one-try reveal + 50:50 */
+.opt.r{cursor:default}
+.r-ok{background:color-mix(in srgb,var(--ok) 16%,var(--panel))!important;border-color:var(--ok)!important;color:var(--fg)}
+.r-ok .k{background:var(--ok)!important;color:#FFFFFF!important;border-color:var(--ok)!important}
+.r-bad{background:color-mix(in srgb,var(--bad) 14%,var(--panel))!important;border-color:var(--bad)!important}
+.r-bad .k{background:var(--bad)!important;color:#FFFFFF!important;border-color:var(--bad)!important}
+.r-dim{opacity:.5}
+.rtag{margin-inline-start:auto;font-size:12px;font-weight:700;color:var(--muted)}
+.word.r{cursor:default}
+.word.r-ok{border-style:solid;color:var(--ok);font-weight:700}
+.word.r-bad{border-style:solid;color:var(--bad);text-decoration:line-through}
+.word.r-miss{border:2px dashed var(--ok);color:var(--ok)}
+.mrow.r{grid-template-columns:minmax(0,1fr) minmax(0,auto)}
+.rlbl{display:flex;align-items:center;gap:10px}
+.rans{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:end}
+.r-ok .rans b{color:var(--ok)}.r-bad .rans b{color:var(--bad)}
+.rfix{color:var(--ok);font-weight:700;font-size:14px}
+.challenge.missed{border-color:var(--bad)}
+.ffbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--gold) 14%,var(--panel));border:1px solid var(--gold)}
+.btn.ff,.ffchip{background:var(--gold);color:#FFFFFF;border-color:var(--gold);font-weight:800;letter-spacing:.04em;direction:ltr}
+.ffchip{display:inline-block;padding:4px 10px;border-radius:6px}
+.word.gone{opacity:.25;text-decoration:line-through;cursor:not-allowed}
+@media (max-width:520px){.mrow.r{grid-template-columns:minmax(0,1fr)}.rans{align-items:flex-start;text-align:start}}
 #langfab{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:14px;z-index:20}
 #langfab .btn{background:var(--panel);border-color:var(--muted);min-height:38px;padding:6px 14px}
 .bar .in{padding-right:130px}
@@ -310,20 +380,22 @@ try{var _l=localStorage.getItem('ps-lang');if(_l==='ar'||_l==='en')LANG=_l}catch
 try{var _q=new URLSearchParams(location.search).get('lang');if(_q==='ar'||_q==='en')LANG=_q}catch(e){}
 var TX={
 en:{
+ ff_hint:'You got the last question right, so you can remove half of the wrong answers.',ff_used:'50:50 used: half of the wrong answers are gone.',r_yours:'Your answer',r_legend:'Green: correct · Red: wrong · Dashed green: a vague word you missed',r_none:'No answer',r_correct:'Correct',see_results:'See your results',score_chip:'Score {p}',one_try:'One try only',solo_done:'Well done',
+ k_qtime:'Time per question',k_sec:'{s} sec',k_qtime_hint:'Each question closes when the timer ends or when everyone has answered. You move the game on with Next.',k_q:'Question {i} of {n}',k_ready:'Get ready',k_answered:'{a} of {n} answered',k_show:'Show results now',k_next:'Next question →',k_final_btn:'Show final results',k_correct_ans:'Correct answer',k_stats:'{c} of {n} fully correct',k_board:'Leaderboard',k_pts:'{p} pts',k_round_pts:'This question',k_total:'Total',k_lock:'Lock in answer',k_locked:'Answer locked in',k_wait_others:'Waiting for the others and the timer…',k_v_ok:'Correct!',k_v_part:'Partly right',k_v_bad:'Not this time',k_v_none:'No answer',k_plus:'<bdi dir="ltr">+{p}</bdi> points',k_your_total:'Your total: {p} points',k_place:'place {r} of {n}',k_wait_host:'Waiting for the host to continue…',k_none_expl:'The correct answer: ',k_choose_from:'Answer options',k_vague_words:'The vague words are highlighted.',k_final_eb:'Final results · Room {c}',k_you_final:'You finished in place {r} of {n}',k_end_confirm:'End the game for everyone now?',k_end:'End game',x_score:'Total score',x_correct:'Correct answers',x_answered:'Questions answered',x_qcol:'Q{i} points',x_qtime:'Time per question',x_questions:'Questions',x_seconds:'{s} seconds',
  doc_title:'DGE Prompt Challenge',lang_aria:'Switch to Arabic',sound_on:'Sound on',sound_off:'Sound off',
  colors:['Red','Amber','Yellow','Green','Sky','Indigo','Violet','Pink'],
  cats:['Role','Task','Context','Format','Constraints'],
  places:['1st','2nd','3rd'],
  eyebrow_home:'AI prompting basics · Multiplayer challenge',
  h1:'Prompt<br><span>Challenge</span>',
- lede:'An AI-native government starts with good prompts. Your team races through five stages. Each stage teaches one prompting skill and holds a challenge. Solve it to move to the next stage. The first player to clear all five stages wins.',
+ lede:'An AI-native government starts with good prompts. Five stages, five questions. Each stage teaches one prompting skill. Answer correctly and quickly to earn points. The player with the most points wins.',
  host_btn:'Host a room',join_btn:'Join with a code',solo_btn:'Practise solo',
  connecting:'Connecting to live rooms… Solo practice is ready now.',
  offline_home:'Can’t reach the game server right now, so hosting and joining are paused. Check your internet connection and reload the page. You can still practise solo.',
- best:'Your best solo time: ',opening:'Opening a room…',station_map:'Stage map',pod_launch:'Challenge complete',
+ best:'Your best solo score: ',opening:'Opening a room…',station_map:'Stage map',pod_launch:'Challenge complete',
  how1_t:'Host opens a room',how1_d:'You get a 4-letter code. Put it on screen or read it out.',
  how2_t:'Players join with the code',how2_d:'Players open this same page, choose Join, and pick a name and colour.',
- how3_t:'Fastest finish wins',how3_d:'The clock starts together. Every wrong answer adds {p} seconds, and you see why it was wrong.',
+ how3_t:'Most points wins',how3_d:'Each question has a timer. Correct answers earn up to 1,000 points, and faster answers earn more.',
  back:'← Back',join_title:'Join a room',code_lbl:'Room code',code_hint:'4 letters, shown on the host’s screen.',
  name_lbl:'Your name',name_ph:'e.g. Noor',name_hint:'Up to 14 characters. Everyone in the room sees it.',colour:'Colour',
  joining:'Joining…',join_room:'Join room',
@@ -332,7 +404,7 @@ en:{
  qr_aria:'QR code to join this room',qr_cap:'Scan to join with your phone camera',copy_code:'Copy code',copy_link:'Copy join link',link_note:'The join link opens the game with the code already filled in: ',
  time_limit:'Session time limit',no_limit:'No limit',min:'{m} min',
  limit_hint:'When time runs out, the session ends for everyone and you can export the leaderboard to Excel.',
- start:'Start session',late_note:'Players who join after the start begin with their own clock.',
+ start:'Start session',late_note:'Players who join late can still answer the questions that are left.',
  crew_1:'1 player joined',crew_n:'{n} players joined',
  start_wait:'Start session (waiting for players)',start_n:'Start session for {n} players',
  mission_complete:'Session complete · Room {c}',final:'Final standings',live_board:'Live leaderboard',
@@ -344,7 +416,7 @@ en:{
  no_mc:'No host found for room <b>{c}</b> yet. Check the code with your host, or keep waiting. You’ll join automatically when they open it.',
  change_code:'Change code',looking:'Looking for your host…',room_eyebrow:'Room {c}',leave:'Leave room',
  waiting:'Waiting for the host to start',before_t:'Before you start',
- before_d:'Five stages, one challenge each. Keep your printed reference guide beside you. Your clock runs nonstop until you finish. Wrong answers add {p} seconds and tell you why. Keyboard: <span class="kbd">1</span>–<span class="kbd">4</span> to pick, <span class="kbd">Enter</span> to submit.',
+ before_d:'Five questions. Your host shows each one on the main screen with a timer, and you answer on your own device. You get one try per question. Correct answers earn up to 1,000 points, and faster answers earn more. Get a question fully right to earn a 50:50 on the next one.',
  doors_unlock:'Get ready',first_stop:'First stop: {r}.',
  puzzle:'Puzzle',led_on:'UNLOCKED',led_off:'LOCKED',answers_aria:'Answers',words_aria:'Words in the prompt',
  marked:'{n} marked. Tap a word again to un-mark it.',choose_part:'Choose a part…',choose_rule:'Choose a rule…',
@@ -355,10 +427,10 @@ en:{
  continue_to:'Continue to {r} →',the_pod:'the finish',submit:'Submit answer',press_enter:'Press Enter to submit',choose_first:'Make your choice first',
  mc_left:'Your host has left. Keep going: your time still counts on this screen.',
  room_of:'Stage {i} of {n}',briefing:'Briefing',crew_race:'Live race',rules:'Rules',
- rules_d:'The clock runs nonstop until you finish. Wrong answers add {p} s. Keys: <span class="kbd">1</span>–<span class="kbd">4</span> pick, <span class="kbd">Enter</span> submit.',
+ rules_d:'One try per question. Get a question fully right to earn a 50:50 on the next one. Keys: <span class="kbd">1</span>–<span class="kbd">4</span> pick, <span class="kbd">Enter</span> submit.',
  quit:'Leave the challenge',brief_eb:'Briefing',brief_next:'Next: start the puzzle →',paused_note:'The clock is running. Press Next when you’re ready for the puzzle.',paused_chip:'Paused · reading',review_brief:'Review the briefing',new_best:'New personal best',escaped:'Completed',escaped_cell:'Completed',
  first_out:'You finished first',place_out:'You finished · place {n}',pod_launched:'Challenge complete',
- done_note:'Includes {p} s of penalties.',play_again:'Play again',back_start:'Back to start',
+ done_note:'You got {c} of {n} fully correct in {t}.',play_again:'Play again',back_start:'Back to start',
  waiting_mc:'Waiting for the host to end the session. Standings update live.',
  timeup_eb:'Time’s up · Room {c}',dark:'Time’s up',
  timeup_d:'You reached stage {i} of {n} ({r}). Final standings appear here when the host closes the session.',
@@ -378,13 +450,13 @@ en:{
  offline_banner:'Connection lost. Reconnecting… Your progress on this screen is kept.',
  copied:'Copied {c}',copy_blocked:'Copy blocked here. The code is {c}.',link_copied:'Join link copied',link_blocked:'Copy blocked. Select the link below instead.',
  you_name:'You',crewmate:'Player',
- tap_ok:'You found all five. Each one could mean a hundred different things.',
- tap_extra_1:'{w} is already clear, so un-mark it.',tap_extra_pl:'{w} are already clear, so un-mark them.',and:' and ',
- tap_missed_1:'1 vague word is still unmarked. Look for words two people would picture differently.',
- tap_missed_pl:'{n} vague words are still unmarked. Look for words two people would picture differently.',
- tap_check:'Check which words two people would picture differently.',
+ tap_ok:'You found all four. Each one could mean a hundred different things.',
+ tap_extra_1:'{w} is not vague.',tap_extra_pl:'{w} are not vague.',and:' and ',
+ tap_missed_1:'You missed 1 vague word (dashed green).',
+ tap_missed_pl:'You missed {n} vague words (dashed green).',
+ tap_check:'The vague words are shown in green.',
  match_ok:'Every part is in place. Notice how easy it is to spot which line to edit.',
- match_wrong:'{r} of {n} are right. Recheck: {w}',
+ match_wrong:'{r} of {n} are right. The red rows show the correct answer.',
  pw_ok:'Password accepted. Launching the escape pod…',pw_bad:'{w} does not open the pod. The password means the opposite of vague.',
  x_rank:'Rank',x_name:'Name',x_status:'Status',x_time:'Time',x_secs:'Time (seconds)',x_pen:'Penalty (seconds)',x_wrong:'Wrong answers',
  x_rooms:'Stages cleared',x_last:'Last stage',x_left:'Left early',x_escaped:'Completed',x_dnf:'Did not finish',x_yes:'Yes',x_no:'No',x_of:'{i} of {n}',
@@ -394,20 +466,22 @@ en:{
  x_csv:'The Excel library could not load, so it saved {f} instead. Excel opens that too.'
 },
 ar:{
+ ff_hint:'أجبت عن السؤال السابق إجابة صحيحة، فيمكنك حذف نصف الإجابات الخاطئة.',ff_used:'استخدمت 50:50: حُذف نصف الإجابات الخاطئة.',r_yours:'إجابتك',r_legend:'الأخضر: صحيح · الأحمر: خطأ · الأخضر المتقطع: كلمة غامضة لم تحددها',r_none:'لا توجد إجابة',r_correct:'الصحيح',see_results:'اعرض نتيجتك',score_chip:'النقاط {p}',one_try:'محاولة واحدة فقط',solo_done:'أحسنت',
+ k_qtime:'الوقت لكل سؤال',k_sec:'{s} ثانية',k_qtime_hint:'يُغلق كل سؤال عند انتهاء الوقت أو عندما يجيب الجميع. أنت من ينقل اللعبة إلى السؤال التالي.',k_q:'السؤال {i} من {n}',k_ready:'استعد',k_answered:'أجاب {a} من {n}',k_show:'اعرض النتائج الآن',k_next:'السؤال التالي ←',k_final_btn:'اعرض النتائج النهائية',k_correct_ans:'الإجابة الصحيحة',k_stats:'{c} من {n} أجابوا إجابة صحيحة بالكامل',k_board:'لوحة الصدارة',k_pts:'{p} نقطة',k_round_pts:'هذا السؤال',k_total:'المجموع',k_lock:'ثبّت إجابتك',k_locked:'تم تثبيت إجابتك',k_wait_others:'بانتظار بقية اللاعبين وانتهاء الوقت…',k_v_ok:'إجابة صحيحة!',k_v_part:'صحيحة جزئيًا',k_v_bad:'ليست صحيحة هذه المرة',k_v_none:'لم تُجب',k_plus:'<bdi dir="ltr">+{p}</bdi> نقطة',k_your_total:'مجموعك: {p} نقطة',k_place:'المركز {r} من {n}',k_wait_host:'بانتظار أن يتابع المضيف…',k_none_expl:'الإجابة الصحيحة: ',k_choose_from:'الخيارات',k_vague_words:'الكلمات الغامضة مظللة.',k_final_eb:'النتائج النهائية · الغرفة {c}',k_you_final:'أنهيت في المركز {r} من {n}',k_end_confirm:'إنهاء اللعبة للجميع الآن؟',k_end:'أنهِ اللعبة',x_score:'مجموع النقاط',x_correct:'الإجابات الصحيحة',x_answered:'الأسئلة التي أجاب عنها',x_qcol:'نقاط س{i}',x_qtime:'الوقت لكل سؤال',x_questions:'الأسئلة',x_seconds:'{s} ثانية',
  doc_title:'تحدي الأوامر',lang_aria:'التبديل إلى الإنجليزية',sound_on:'الصوت يعمل',sound_off:'الصوت متوقف',
  colors:['أحمر','كهرماني','أصفر','أخضر','سماوي','نيلي','بنفسجي','وردي'],
  cats:['الدور','المهمة','السياق','التنسيق','القيود'],
  places:['الأول','الثاني','الثالث'],
  eyebrow_home:'أساسيات كتابة الأوامر للذكاء الاصطناعي · تحدٍّ جماعي',
  h1:'تحدي<br><span>الأوامر</span>',
- lede:'الحكومة القائمة على الذكاء الاصطناعي تبدأ بأوامر جيدة. يتسابق فريقك عبر خمس مراحل. كل مرحلة تعلّم مهارة في كتابة الأوامر وفيها تحدٍّ. حُلّه لتنتقل إلى المرحلة التالية. أول من يجتاز المراحل الخمس يفوز.',
+ lede:'الحكومة القائمة على الذكاء الاصطناعي تبدأ بأوامر جيدة. خمس مراحل وخمسة أسئلة. كل مرحلة تعلّم مهارة في كتابة الأوامر. أجب إجابة صحيحة وبسرعة لتجمع النقاط. الفائز هو صاحب أعلى نقاط.',
  host_btn:'استضف غرفة',join_btn:'انضم برمز',solo_btn:'تدرّب منفردًا',
  connecting:'جارٍ الاتصال بالغرف المباشرة… التدريب المنفرد متاح الآن.',
  offline_home:'تعذّر الوصول إلى خادم اللعبة الآن، لذلك الاستضافة والانضمام متوقفان. تحقق من اتصالك بالإنترنت وأعد تحميل الصفحة. ما زال بإمكانك التدرّب منفردًا.',
- best:'أفضل وقت لك منفردًا: ',opening:'جارٍ فتح غرفة…',station_map:'خريطة المراحل',pod_launch:'اكتمل التحدي',
+ best:'أفضل نتيجة لك منفردًا: ',opening:'جارٍ فتح غرفة…',station_map:'خريطة المراحل',pod_launch:'اكتمل التحدي',
  how1_t:'المضيف يفتح غرفة',how1_d:'تحصل على رمز من 4 أحرف. اعرضه على الشاشة أو اقرأه بصوت عالٍ.',
  how2_t:'اللاعبون ينضمون بالرمز',how2_d:'يفتح اللاعبون هذه الصفحة نفسها، ويختارون «انضم برمز»، ثم اسمًا ولونًا.',
- how3_t:'الأسرع في الإنجاز يفوز',how3_d:'يبدأ المؤقت للجميع معًا. كل إجابة خاطئة تضيف {p} ثوانٍ، وترى سبب الخطأ.',
+ how3_t:'الأكثر نقاطًا يفوز',how3_d:'لكل سؤال مؤقت. الإجابة الصحيحة تمنح حتى 1000 نقطة، والأسرع يحصل على نقاط أكثر.',
  back:'→ رجوع',join_title:'انضم إلى غرفة',code_lbl:'رمز الغرفة',code_hint:'4 أحرف إنجليزية تظهر على شاشة المضيف.',
  name_lbl:'اسمك',name_ph:'مثال: نور',name_hint:'حتى 14 حرفًا. يراه الجميع في الغرفة.',colour:'اللون',
  joining:'جارٍ الانضمام…',join_room:'انضم إلى الغرفة',
@@ -416,7 +490,7 @@ ar:{
  qr_aria:'رمز QR للانضمام إلى هذه الغرفة',qr_cap:'امسح الرمز بكاميرا هاتفك للانضمام',copy_code:'انسخ الرمز',copy_link:'انسخ رابط الانضمام',link_note:'رابط الانضمام يفتح اللعبة والرمز مكتوب مسبقًا: ',
  time_limit:'مدة الجلسة',no_limit:'بلا حد',min:'{m} دقيقة',
  limit_hint:'عند انتهاء الوقت تنتهي الجلسة للجميع، ويمكنك تصدير لوحة الصدارة إلى Excel.',
- start:'ابدأ الجلسة',late_note:'من ينضم بعد البدء يبدأ بمؤقته الخاص.',
+ start:'ابدأ الجلسة',late_note:'من ينضم متأخرًا يمكنه الإجابة عن الأسئلة المتبقية.',
  crew_1:'انضم لاعب واحد',crew_n:'عدد اللاعبين: {n}',
  start_wait:'ابدأ الجلسة (بانتظار اللاعبين)',start_n:'ابدأ الجلسة لـ {n} من اللاعبين',
  mission_complete:'اكتملت الجلسة · الغرفة {c}',final:'الترتيب النهائي',live_board:'لوحة الصدارة المباشرة',
@@ -428,7 +502,7 @@ ar:{
  no_mc:'لم يُعثر على مضيف للغرفة <b>{c}</b> بعد. تأكد من الرمز مع المضيف، أو انتظر. ستنضم تلقائيًا عندما يفتحها.',
  change_code:'غيّر الرمز',looking:'جارٍ البحث عن المضيف…',room_eyebrow:'الغرفة {c}',leave:'غادر الغرفة',
  waiting:'بانتظار أن يبدأ المضيف',before_t:'قبل أن تبدأ',
- before_d:'خمس مراحل، في كل منها تحدٍّ واحد. أبقِ دليلك المطبوع بجانبك. يعمل مؤقتك دون توقف حتى تنتهي. الإجابة الخاطئة تضيف {p} ثوانٍ وتوضح السبب. لوحة المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
+ before_d:'خمسة أسئلة. يعرض المضيف كل سؤال على الشاشة الرئيسية مع مؤقت، وتجيب أنت من جهازك. لديك محاولة واحدة لكل سؤال. الإجابة الصحيحة تمنح حتى 1000 نقطة، والأسرع يحصل على نقاط أكثر. أجب إجابة صحيحة بالكامل لتحصل على 50:50 في السؤال التالي.',
  doors_unlock:'استعد',first_stop:'البداية: {r}.',
  puzzle:'لغز',led_on:'مفتوح',led_off:'مقفل',answers_aria:'الإجابات',words_aria:'كلمات الأمر',
  marked:'المحدد: {n}. اضغط الكلمة مرة أخرى لإلغاء تحديدها.',choose_part:'اختر الجزء…',choose_rule:'اختر القاعدة…',
@@ -439,10 +513,10 @@ ar:{
  continue_to:'التالي ←',the_pod:'النهاية',submit:'أرسل الإجابة',press_enter:'اضغط Enter للإرسال',choose_first:'اختر إجابتك أولًا',
  mc_left:'غادر المضيف. تابع اللعب: وقتك ما زال يُحتسب على هذه الشاشة.',
  room_of:'المرحلة {i} من {n}',briefing:'الشرح',crew_race:'السباق المباشر',rules:'القواعد',
- rules_d:'المؤقت يعمل دون توقف حتى تنتهي. الإجابة الخاطئة تضيف {p} ث. المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
+ rules_d:'محاولة واحدة لكل سؤال. أجب إجابة صحيحة بالكامل لتحصل على 50:50 في السؤال التالي. المفاتيح: <span class="kbd">1</span>–<span class="kbd">4</span> للاختيار، و<span class="kbd">Enter</span> للإرسال.',
  quit:'اخرج من التحدي',brief_eb:'الشرح',brief_next:'التالي: ابدأ اللغز ←',paused_note:'المؤقت يعمل. اضغط «التالي» عندما تكون جاهزًا للغز.',paused_chip:'متوقف · قراءة',review_brief:'راجع الشرح',new_best:'رقم شخصي جديد',escaped:'أنجز',escaped_cell:'المنجزون',
  first_out:'أنجزت أولًا',place_out:'أنجزت · المركز {n}',pod_launched:'اكتمل التحدي',
- done_note:'يشمل {p} ث من الجزاءات.',play_again:'العب مرة أخرى',back_start:'العودة إلى البداية',
+ done_note:'أجبت إجابة صحيحة بالكامل عن {c} من {n} في {t}.',play_again:'العب مرة أخرى',back_start:'العودة إلى البداية',
  waiting_mc:'بانتظار أن يُنهي المضيف الجلسة. يتحدّث الترتيب مباشرةً.',
  timeup_eb:'انتهى الوقت · الغرفة {c}',dark:'انتهى الوقت',
  timeup_d:'وصلت إلى المرحلة {i} من {n} ({r}). يظهر الترتيب النهائي هنا عندما يُغلق المضيف الجلسة.',
@@ -462,13 +536,13 @@ ar:{
  offline_banner:'انقطع الاتصال. جارٍ إعادة الاتصال… تقدّمك على هذه الشاشة محفوظ.',
  copied:'تم نسخ {c}',copy_blocked:'النسخ غير متاح هنا. الرمز هو {c}.',link_copied:'تم نسخ رابط الانضمام',link_blocked:'النسخ غير متاح. حدّد الرابط بالأسفل بدلًا من ذلك.',
  you_name:'أنت',crewmate:'لاعب',
- tap_ok:'وجدت الكلمات الخمس كلها. كل واحدة منها قد تعني مئة شيء مختلف.',
- tap_extra_1:'الكلمة {w} واضحة بالفعل، فألغِ تحديدها.',tap_extra_pl:'الكلمات {w} واضحة بالفعل، فألغِ تحديدها.',and:'، ',
- tap_missed_1:'بقيت كلمة غامضة واحدة لم تحددها. ابحث عن الكلمات التي قد يتخيلها شخصان بشكل مختلف.',
- tap_missed_pl:'عدد الكلمات الغامضة التي لم تحددها بعد: {n}. ابحث عن الكلمات التي قد يتخيلها شخصان بشكل مختلف.',
- tap_check:'تحقق من الكلمات التي قد يتخيلها شخصان بشكل مختلف.',
+ tap_ok:'وجدت الكلمات الأربع كلها. كل واحدة منها قد تعني مئة شيء مختلف.',
+ tap_extra_1:'الكلمة {w} ليست غامضة.',tap_extra_pl:'الكلمات {w} ليست غامضة.',and:'، ',
+ tap_missed_1:'فاتتك كلمة غامضة واحدة (بالأخضر المتقطع).',
+ tap_missed_pl:'عدد الكلمات الغامضة التي فاتتك: {n} (بالأخضر المتقطع).',
+ tap_check:'الكلمات الغامضة ظاهرة بالأخضر.',
  match_ok:'كل جزء في مكانه. لاحظ كم يسهل الآن معرفة السطر الذي يحتاج تعديلًا.',
- match_wrong:'{r} من {n} صحيحة. راجع: {w}',
+ match_wrong:'{r} من {n} صحيحة. الصفوف الحمراء توضح الإجابة الصحيحة.',
  pw_ok:'تم قبول كلمة المرور. جارٍ إطلاق كبسولة النجاة…',pw_bad:'{w} لا تفتح الكبسولة. كلمة المرور تعني عكس «غامضة».',
  x_rank:'الترتيب',x_name:'الاسم',x_status:'الحالة',x_time:'الوقت',x_secs:'الوقت (بالثواني)',x_pen:'الجزاء (بالثواني)',x_wrong:'الإجابات الخاطئة',
  x_rooms:'المراحل المجتازة',x_last:'آخر مرحلة',x_left:'غادر مبكرًا',x_escaped:'أنجز',x_dnf:'لم ينتهِ',x_yes:'نعم',x_no:'لا',x_of:'{i} من {n}',
@@ -547,22 +621,22 @@ var STAGES_EN=[
  '<tr><td>something interesting</td><td>how sleep affects memory</td></tr>'+
  '</tbody></table></div>'+
  '<p>A quick test: could two different people read your prompt and picture the same result? If not, it is still vague.</p>',
- type:'tap', q:'Tap every vague word in this prompt, then submit.',
- words:['Write','a','good,','short','blog','post','about','something','interesting','for','people.'], vague:[2,3,7,8,10]},
+ type:'tap', q:'Tap the 4 vague words in this prompt, then submit.',
+ words:['Write','a','good,','short','blog','post','about','something','interesting','for','new','employees.'], vague:[2,3,7,8]},
 {room:'Building the prompt',letter:'E',title:'Build it part by part',device:'Building challenge',kind:'parts',cats:TX.en.cats,
  story:'Put each sentence in the right slot.',
  lesson:'<p>Writing one sentence per part keeps a prompt easy to read and easy to fix. When a result is off, you can see which part to change.</p>'+
  '<pre class="ex">Role:        You are a science teacher.\nContext:     My class is 12-year-olds who find physics boring.\nTask:        Explain why the sky is blue.\nFormat:      Use one everyday analogy and 3 short steps.\nConstraints: No equations. Under 150 words.</pre>'+
  '<p>Context usually works best before the task, so the AI reads the situation before the instruction.</p>',
  type:'match', q:'Label each sentence with the prompt part it plays.',
- items:[['Don’t mention salaries. Keep it under 200 words.',4],['You are a senior HR manager.',0],['Draft an announcement email to all staff.',1],['Our team of 12 is moving to a 4-day work week in May.',2],['Use a subject line and three short paragraphs.',3]]},
+ items:[['Don’t mention salaries.',4],['You are an HR manager.',0],['Write an email to all staff.',1],['Our team is moving to a 4-day work week.',2]]},
 {room:'Refining results',letter:'R',title:'Refine the result',device:'Refining challenge',
  story:'Send one follow-up that gets the post right.',
  lesson:'<p>The first answer is a draft. Improve it with a follow-up that says exactly what to change.</p>'+
  '<dl class="parts"><dt>Weak</dt><dd>"Make it better." "Try again."</dd><dt>Strong</dt><dd>Name what to keep, what to change and the target: length, tone, audience.</dd></dl>'+
  '<p>Other useful moves: ask the AI to think step by step on a hard problem, ask it to ask you questions first, and always check facts and numbers yourself.</p>',
- type:'choice', q:'You asked for a LinkedIn post and got a 900-word essay. What is the best follow-up?',
- options:['"Try again."','"Make it better."','"Rewrite this as a LinkedIn post under 100 words. Keep the 3 key statistics and use a friendly tone."','"Why is this so long?"'], answer:2,
+ type:'choice', q:'You asked the AI to write a LinkedIn post, but it wrote a 900-word text. What would you ask it to improve it?',
+ options:['"Try again."','"Make it better."','"Shorten the post to under 100 words, keep the 3 key statistics, and use a friendly tone."','"Why is this so long?"'], answer:2,
  why:['"Try again" gives no direction, so you will likely get another long essay.','"Better" is vague. The AI cannot tell what you want improved.','Right. It names the format, the length, what to keep and the tone.','This asks for an explanation, not a fix, so you still have no post.']},
 {room:'Data labels',letter:'',title:'Know your data labels',device:'Data labels challenge',
  story:'Decide what can and can’t go into Copilot.',
@@ -575,8 +649,8 @@ var STAGES_EN=[
  '</div><p>The rule of thumb: <b>the higher the label, the tighter the rule for AI tools</b>. Always check the label before you paste anything into a prompt.</p>',
  type:'match', q:'Can this go into a Copilot prompt? Match each label and example to the rule.',
  cats:['Yes','Yes, in our organization’s Copilot only','Only with approval','Never'],
- items:[['Secret',3,'secret'],['Open',0,'open'],['An employee’s Emirates ID number',3],['Sensitive',3,'sens'],['A press release already on our website',0],['Confidential',1,'conf']],
- okText:'Correct. Open data is fine, Confidential data stays inside your organization’s Copilot, and Sensitive or Secret data never goes into an AI prompt. That includes personal details like Emirates ID numbers.'}
+ items:[['Top secret',3,'secret'],['Open',0,'open'],['An employee’s Emirates ID number',3],['Public information already on our website',0]],
+ okText:'Correct. Open data and public information are fine to use, but top secret data and personal details like Emirates ID numbers never go into an AI prompt.'}
 ];
 
 /* ---------- rooms: Arabic (same order, same answer positions) ---------- */
@@ -604,22 +678,22 @@ var STAGES_AR=[
  '<tr><td>موضوع ممتع</td><td>كيف يؤثر النوم على الذاكرة</td></tr>'+
  '</tbody></table></div>'+
  '<p>اختبار سريع: هل يمكن لشخصين مختلفين قراءة أمرك وتخيّل النتيجة نفسها؟ إن لم يكن، فهو ما زال غامضًا.</p>',
- type:'tap', q:'اضغط على كل كلمة غامضة في هذا الأمر، ثم أرسل الإجابة.',
- words:['اكتب','مقالًا','جيدًا','قصيرًا','عن','موضوع','ممتع','للناس.'], vague:[2,3,5,6,7]},
+ type:'tap', q:'اضغط على الكلمات الغامضة الأربع في هذا الأمر، ثم أرسل الإجابة.',
+ words:['اكتب','مقالًا','جيدًا','قصيرًا','عن','موضوع','ممتع','للموظفين','الجدد.'], vague:[2,3,5,6]},
 {room:'بناء الأمر',letter:'ض',title:'ابنِه جزء جزء',device:'تحدي البناء',kind:'parts',cats:TX.ar.cats,
  story:'ضع كل جملة في خانتها الصحيحة.',
  lesson:'<p>كتابة جملة واحدة لكل جزء تجعل الأمر سهل القراءة وسهل الإصلاح. وإذا جاءت النتيجة غير مناسبة، تعرف أي جزء تغيّر.</p>'+
  '<pre class="ex">الدور:   أنت معلم علوم.\nالسياق:  طلاب صفي في الثانية عشرة ويجدون الفيزياء مملة.\nالمهمة:  اشرح لماذا السماء زرقاء.\nالصيغة:  استخدم تشبيهًا واحدًا من الحياة اليومية و3 خطوات قصيرة.\nالقيود:  بلا معادلات. أقل من 150 كلمة.</pre>'+
  '<p>يعمل السياق عادةً بشكل أفضل قبل المهمة، حتى يفهم الذكاء الاصطناعي الموقف قبل التعليمات.</p>',
  type:'match', q:'حدّد الجزء الذي تؤديه كل جملة في الأمر.',
- items:[['لا تذكر الرواتب. اجعله أقل من 200 كلمة.',4],['أنت مدير موارد بشرية أول.',0],['اكتب مسودة بريد إعلان لجميع الموظفين.',1],['فريقنا المكوّن من 12 شخصًا سينتقل إلى أسبوع عمل من 4 أيام في مايو.',2],['نسّق البريد: عنوان في الأعلى، ثم ثلاث فقرات قصيرة.',3]]},
+ items:[['لا تذكر الرواتب.',4],['أنت مدير موارد بشرية.',0],['اكتب بريدًا لجميع الموظفين.',1],['سينتقل فريقنا إلى أسبوع عمل من 4 أيام.',2]]},
 {room:'تحسين النتيجة',letter:'ة',title:'حسّن النتيجة',device:'تحدي التحسين',
  story:'أرسل رسالة متابعة واحدة تصحح المنشور.',
  lesson:'<p>الإجابة الأولى مسودة. حسّنها برسالة متابعة تحدد بالضبط ما يجب تغييره.</p>'+
  '<dl class="parts"><dt>ضعيفة</dt><dd>«اجعله أفضل.» «حاول مرة أخرى.»</dd><dt>قوية</dt><dd>حدّد ما تُبقيه، وما تغيّره، والهدف: الطول، والنبرة، والجمهور.</dd></dl>'+
  '<p>خطوات مفيدة أخرى: اطلب من الذكاء الاصطناعي التفكير خطوة بخطوة في المسائل الصعبة، واطلب منه أن يسألك أسئلة أولًا، وتحقق دائمًا من الحقائق والأرقام بنفسك.</p>',
- type:'choice', q:'طلبت منشورًا على LinkedIn فحصلت على مقال من 900 كلمة. ما أفضل رسالة متابعة؟',
- options:['«حاول مرة أخرى.»','«اجعله أفضل.»','«أعد كتابته كمنشور على LinkedIn في أقل من 100 كلمة. احتفظ بالإحصاءات الثلاث الرئيسية واستخدم نبرة ودودة.»','«لماذا هو طويل هكذا؟»'], answer:2,
+ type:'choice', q:'طلبت من الذكاء الاصطناعي كتابة منشور على LinkedIn، لكنه كتب لك نصًا طويلًا من 900 كلمة. ماذا ستطلب منه لتحسينه؟',
+ options:['«حاول مرة أخرى.»','«اجعله أفضل.»','«اختصر المنشور إلى أقل من 100 كلمة، واحتفظ بأهم 3 إحصائيات، واستخدم أسلوبًا ودودًا.»','«لماذا هو طويل هكذا؟»'], answer:2,
  why:['«حاول مرة أخرى» لا تعطي أي توجيه، فغالبًا ستحصل على مقال طويل آخر.','«أفضل» كلمة غامضة. لا يعرف الذكاء الاصطناعي ما الذي تريد تحسينه.','صحيح. تحدد الصيغة والطول وما يجب الإبقاء عليه والنبرة.','هذا يطلب تفسيرًا لا إصلاحًا، فما زلت بلا منشور.']},
 {room:'تصنيف البيانات',letter:'',title:'اعرف تصنيفات بياناتك',device:'تحدي التصنيف',
  story:'حدّد ما يجوز لصقه في Copilot وما لا يجوز.',
@@ -632,17 +706,17 @@ var STAGES_AR=[
  '</div><p>القاعدة العامة: <b>كلما ارتفع التصنيف، تشددت القاعدة مع أدوات الذكاء الاصطناعي</b>. تحقق دائمًا من التصنيف قبل أن تلصق أي شيء في أمر نصي.</p>',
  type:'match', q:'هل يجوز وضع هذا في أمر Copilot؟ طابق كل تصنيف ومثال مع القاعدة.',
  cats:['نعم','نعم، في Copilot مؤسستنا فقط','بموافقة فقط','أبدًا'],
- items:[['سري للغاية',3,'secret'],['مفتوح',0,'open'],['رقم الهوية الإماراتية لموظف',3],['حساس',3,'sens'],['بيان صحفي منشور على موقعنا',0],['سري',1,'conf']],
- okText:'تم منح التصريح. البيانات المفتوحة مسموحة، والبيانات السرية تبقى داخل Copilot الخاص بمؤسستك، والبيانات الحساسة والسرية للغاية لا تدخل أي أمر للذكاء الاصطناعي أبدًا، ومنها البيانات الشخصية مثل أرقام الهوية الإماراتية.'}
+ items:[['سري للغاية',3,'secret'],['مفتوح',0,'open'],['رقم الهوية الإماراتية لموظف',3],['معلومات عامة منشورة على موقعنا',0]],
+ okText:'إجابة صحيحة. البيانات المفتوحة والمعلومات العامة مسموحة، أما البيانات السرية للغاية والبيانات الشخصية مثل أرقام الهوية الإماراتية فلا تدخل أي أمر للذكاء الاصطناعي أبدًا.'}
 ];
 var STAGES=LANG==='ar'?STAGES_AR:STAGES_EN;
 var N=STAGES.length;
 
 var saved={};try{saved=JSON.parse(localStorage.getItem('ps-profile')||'{}')||{}}catch(e){}
-function saveProfile(){try{localStorage.setItem('ps-profile',JSON.stringify({name:S.name,color:S.color,best:S.best}))}catch(e){}}
+function saveProfile(){try{localStorage.setItem('ps-profile',JSON.stringify({name:S.name,color:S.color,bestPts:S.bestPts}))}catch(e){}}
 
 var S={screen:'home',mode:null,code:'',codeInput:'',name:typeof saved.name==='string'?saved.name.slice(0,14):'',
-  color:(saved.color>=0&&saved.color<8)?saved.color:1,best:typeof saved.best==='number'?saved.best:null,
+  color:(saved.color>=0&&saved.color<8)?saved.color:1,best:null,bestPts:typeof saved.bestPts==='number'?saved.bestPts:null,
   stage:0,startLocal:null,penalty:0,finishMs:null,letters:[],sel:null,tap:[],match:[],unscr:[],fb:null,
   hostPhase:'lobby',hostSeen:false,hostGone:false,noHost:false,joinErr:'',busy:false,endConfirm:false,
   since:0,liveAt:0,cdEnd:0,connErr:''};
@@ -691,23 +765,21 @@ function qrSvg(text){
   }catch(e){return ''}}
 function exportBoard(){
   var msg=document.getElementById('exportmsg');
-  var rows=ranked().map(function(p,i){var r={};
-    r[t('x_rank')]=i+1;r[t('x_name')]=p.name;r[t('x_status')]=p.done?t('x_escaped'):t('x_dnf');
-    r[t('x_time')]=p.done?fmt(p.ms):'';r[t('x_secs')]=p.done?Math.round(p.ms/100)/10:'';
-    r[t('x_pen')]=p.pen;r[t('x_wrong')]=Math.round(p.pen/PEN);
-    r[t('x_rooms')]=t('x_of',{i:p.done?N:p.stage,n:N});r[t('x_last')]=p.done?t('x_escaped'):STAGES[Math.min(p.stage,N-1)].room;
-    r[t('x_left')]=p.left&&!p.done?t('x_yes'):t('x_no');return r});
+  var rows=kRanked().map(function(p,i){var r={};
+    r[t('x_rank')]=i+1;r[t('x_name')]=p.name;r[t('x_score')]=p.score;r[t('x_correct')]=p.correct;r[t('x_answered')]=Object.keys(p.ans||{}).filter(function(k){return p.ans[k]&&!p.ans[k].n}).length+' / '+N;
+    for(var q=0;q<N;q++){var a=p.ans&&p.ans[q];r[t('x_qcol',{i:q+1})]=a?a.p:0;}
+    r[t('x_left')]=p.left?t('x_yes'):t('x_no');return r});
   if(!rows.length){if(msg)msg.textContent=t('x_none');return}
   var d=new Date(S.startedAt||Date.now());function pad(n){return (n<10?'0':'')+n}
   var dateStr=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-  var escN=ranked().filter(function(p){return p.done}).length;
+  var escN=N;
   var info=[[t('x_session'),t('doc_title')],[t('x_code'),S.code],[t('x_date'),dateStr],[t('x_started'),pad(d.getHours())+':'+pad(d.getMinutes())],
-    [t('x_limit'),S.limitMs?t('x_minutes',{m:S.limitMs/60000}):t('x_nolimit')],[t('x_players'),rows.length],[t('x_escapedn'),escN],
-    [t('x_state'),S.hostPhase==='ended'?t('x_final'):t('x_progress')]];
+    [t('x_qtime'),t('x_seconds',{s:S.qSec})],[t('x_questions'),escN],[t('x_players'),rows.length],
+    [t('x_state'),S.k.phase==='final'?t('x_final'):t('x_progress')]];
   var base='dge-prompt-challenge-'+S.code+'-'+dateStr;
   if(window.XLSX){
     var wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(rows);
-    ws['!cols']=[{wch:6},{wch:18},{wch:15},{wch:10},{wch:14},{wch:17},{wch:14},{wch:14},{wch:14},{wch:11}];
+    ws['!cols']=[{wch:6},{wch:18},{wch:12},{wch:12},{wch:12}].concat(STAGES.map(function(){return {wch:11}})).concat([{wch:11}]);
     XLSX.utils.book_append_sheet(wb,ws,t('x_sheet1'));
     var ws2=XLSX.utils.aoa_to_sheet(info);ws2['!cols']=[{wch:14},{wch:30}];XLSX.utils.book_append_sheet(wb,ws2,t('x_sheet2'));
     if(LANG==='ar')wb.Workbook={Views:[{RTL:true}]};
@@ -723,7 +795,7 @@ function genCode(){var a='ABCDEFGHJKMNPQRSTUVWXYZ',s='';for(var i=0;i<4;i++)s+=a
 function sanitize(p){var pr=p.presence||{};
   return {peer:p.peer,me:!!p.sameTab,role:pr.role,name:(typeof pr.name==='string'&&pr.name.trim()?pr.name:t('crewmate')).slice(0,14),
     color:(pr.color>=0&&pr.color<8)?Math.floor(pr.color):0,stage:Math.max(0,Math.min(N,Math.floor(Number(pr.stage)||0))),
-    pid:typeof pr.pid==='string'?pr.pid.slice(0,16):'',
+    pid:typeof pr.pid==='string'?pr.pid.slice(0,16):'',ans:(Number(pr.round)===kRound()?cleanAns(pr.ans):{}),
     done:pr.done===true&&typeof pr.ms==='number',ms:typeof pr.ms==='number'?pr.ms:null,pen:Math.max(0,Math.floor(Number(pr.pen)||0))};}
 function getHost(){var hs=peers.filter(function(p){return p.presence&&p.presence.role==='host'&&!p.sameTab});
   hs.sort(function(a,b){return (Number(a.presence.since)||0)-(Number(b.presence.since)||0)});return hs[0]||null}
@@ -731,12 +803,13 @@ function crew(){
   if(S.mode==='solo')return [{peer:'me',me:true,name:S.name||t('you_name'),color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty}];
   if(S.mode==='host'&&S.hostPhase!=='lobby')return Object.keys(S.record).map(function(k){return S.record[k]});
   var list=peers.filter(function(p){return p.presence&&p.presence.role==='player'}).map(sanitize);
-  if(S.mode==='player'&&!list.some(function(x){return x.me}))list.push({peer:'me',me:true,name:S.name,color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty});
+  if(S.mode==='player'&&!list.some(function(x){return x.me}))list.push({peer:'me',me:true,name:S.name,color:S.color,stage:S.stage,ans:S.ans});
+  if(S.mode==='player')list.forEach(function(x){if(x.me)x.ans=S.ans});
   return list;}
-function ranked(){return crew().slice().sort(function(a,b){
+function ranked(){if(S.mode==='host'||S.mode==='player')return kRanked();return crew().slice().sort(function(a,b){
   if(a.done&&b.done)return a.ms-b.ms; if(a.done)return -1; if(b.done)return 1;
   if(b.stage!==a.stage)return b.stage-a.stage; return a.pen-b.pen;});}
-function myPresence(){return {role:'player',pid:PID,name:S.name,color:S.color,stage:S.stage,done:S.finishMs!=null,ms:S.finishMs,pen:S.penalty}}
+function myPresence(){return {role:'player',pid:PID,name:S.name,color:S.color,round:S.kround,ans:S.ans}}
 function pushPresence(){if(R&&S.mode==='player')R.presence(myPresence()).catch(function(){})}
 
 async function joinRoom(code){
@@ -751,25 +824,24 @@ function recordPlayers(){
   if(S.mode!=='host'||S.hostPhase==='lobby')return;
   var here={};
   peers.forEach(function(p){if(!p.presence||p.presence.role!=='player')return;var x=sanitize(p);var key=x.pid||x.peer;here[key]=1;
-    var old=S.record[key];if(S.hostPhase==='ended'&&old&&old.done)return;x.left=false;S.record[key]=x;});
+    var old=S.record[key];if(old)x.ans=Object.assign({},old.ans||{},x.ans||{});x.left=false;S.record[key]=x;});
   Object.keys(S.record).forEach(function(k){if(!here[k])S.record[k].left=true});}
 function onPeersChanged(){
   recordPlayers();
   if(S.mode==='player'){
     var h=getHost();
-    if(h){S.hostSeen=true;S.noHost=false;S.hostGone=false;clearTimeout(noHostTimer);
-      var ph=h.presence.phase, prev=S.hostPhase; S.hostPhase=ph;
-      if(ph==='live'&&S.screen==='lobby'){S.limitMs=Math.max(0,Number(h.presence.limitMs)||0);startCountdown();return}
-      if(ph==='lobby'&&prev!=='lobby'&&S.screen!=='lobby'){resetRun();S.screen='lobby';render();return}
-      if(ph==='ended'&&prev!=='ended'){S.screen='ended';render();play('win');confetti();return}
-      if(S.screen==='lobby'&&prev==='lobby'){render();return}
-    } else if(S.hostSeen && !S.hostGone){S.hostGone=true;render();return}
+    if(h){S.hostSeen=true;S.noHost=false;S.hostGone=false;clearTimeout(noHostTimer);playerSync(h);return}
+    else if(S.hostSeen&&!S.hostGone){S.hostGone=true;render();return}
+  }
+  if(S.mode==='host'&&S.k.phase==='q'&&Date.now()>=S.k.qStart&&!S.kAuto){
+    var list=presentPlayers();
+    if(list.length&&list.every(function(p){return p.ans&&p.ans[S.k.qi]})){S.kAuto=true;var qi=S.k.qi,rd=S.k.round;setTimeout(function(){if(S.k.phase==='q'&&S.k.qi===qi&&S.k.round===rd)hostResults()},900)}
   }
   updateLive();}
 
 /* ---------- flow ---------- */
-function resetRun(){S.stage=0;S.startLocal=null;S.activeMs=0;S.runSince=null;S.phase='quiz';S.penalty=0;S.finishMs=null;S.letters=[];S.badge=false;clearAnswer()}
-function clearAnswer(){S.sel=null;S.tap=[];S.match=[];S.unscr=[];S.fb=null}
+function resetRun(){S.ans={};S.stage=0;S.startLocal=null;S.activeMs=0;S.runSince=null;S.phase='quiz';S.penalty=0;S.finishMs=null;S.letters=[];S.badge=false;clearAnswer()}
+function clearAnswer(){S.sel=null;S.tap=[];S.match=[];S.unscr=[];S.fb=null;S.reveal=false;S.ff=null}
 function startCountdown(){resetRun();S.screen='countdown';S.cdEnd=Date.now()+3000;pushPresence();render();play('beep')}
 
 async function hostCreate(){
@@ -780,7 +852,7 @@ async function hostCreate(){
     await sleep(1200);
     if(getHost()){await leaveRoom();continue}
     S.mode='host';S.code=code;S.hostPhase='lobby';S.since=Date.now();
-    R.presence({role:'host',phase:'lobby',since:S.since}).catch(function(){});
+    S.k.phase='lobby';S.k.round=0;hostPush();
     S.busy=false;S.screen='host';render();return;}
   S.busy=false;S.joinErr=['err_taken'];render();}
 function hostSetPhase(ph){S.endConfirm=false;
@@ -799,12 +871,12 @@ async function playerJoin(){
   try{await joinRoom(code)}catch(e){S.busy=false;S.joinErr=['err_join',{c:code,e:e&&e.code||'error'}];render();return}
   S.name=S.name.trim().slice(0,14);saveProfile();
   S.mode='player';S.code=code;S.busy=false;S.hostSeen=false;S.hostGone=false;S.noHost=false;S.hostPhase='lobby';S.connErr='';
-  resetRun();S.screen='lobby';pushPresence();
+  resetRun();S.ans={};S.kround=0;S.kKey='';S.locked=false;S.screen='lobby';pushPresence();
   noHostTimer=setTimeout(function(){if(!getHost()){S.noHost=true;render()}},4000);
   onPeersChanged();render();}
 
 function solo(){if(!S.name.trim())S.name=t('you_name');S.mode='solo';startCountdown()}
-async function goHome(){await leaveRoom();S.mode=null;S.code='';S.connErr='';S.endConfirm=false;resetRun();S.screen='home';render()}
+async function goHome(){await leaveRoom();S.kKey='';S.k.phase='lobby';S.ans={};S.mode=null;S.code='';S.connErr='';S.endConfirm=false;resetRun();S.screen='home';render()}
 
 /* feedback text is built at render time, so it follows the current language */
 function fbText(fb){
@@ -827,40 +899,169 @@ function fbText(fb){
   return '';}
 
 function submit(){
+  if(S.mode==='player'){if(S.screen==='kq'&&!S.locked&&canSubmit())submitK(false);return}
   var st=STAGES[S.stage];if(!st||S.screen!=='game')return;
-  if(S.phase==='brief'){startPuzzle();return}
-  if(S.fb&&S.fb.final)return;
-  if(S.fb&&S.fb.ok){advance();return}
+  if(S.reveal){advance();return}
   if(!canSubmit())return;
-  var ok=false,fb;
-  if(st.type==='choice'){ok=S.sel===st.answer;fb={k:'choice',d:{sel:S.sel}}}
-  else if(st.type==='tap'){
-    var picked=S.tap.slice().sort(function(a,b){return a-b}),want=st.vague;
-    ok=picked.length===want.length&&picked.every(function(v,i){return v===want[i]});fb={k:'tap',d:{picked:picked}}}
-  else if(st.type==='match'){var wrong=[];st.items.forEach(function(it,i){if(S.match[i]!==it[1])wrong.push(i)});ok=!wrong.length;fb={k:'match',d:{wrong:wrong}}}
-  else if(st.type==='unscramble'){ok=S.unscr.map(function(i){return st.tiles[i]}).join('')===st.answer;fb={k:'unscr',d:{u:S.unscr.slice()}}}
-  fb.ok=ok;
-  if(ok){
-    if(st.letter)S.letters.push(S.stage);
-    if(st.badge)S.badge=true;
-    S.anim=true;play('unlock');
-    pauseClock();
-    if(S.stage===N-1){S.finishMs=Date.now()-S.startLocal+S.penalty*1000;fb.final=true;S.fb=fb;
-      if(S.mode==='solo'&&(S.best==null||S.finishMs<S.best)){S.best=S.finishMs;S.newBest=true;saveProfile()}else S.newBest=false;
-      pushPresenceDone();render();
-      setTimeout(function(){S.stage=N;S.screen='done';pushPresence();render();play('win');confetti();window.scrollTo({top:0})},1600);return;}
-    fb.letter=!!st.letter;fb.badge=!!st.badge;S.fb=fb;
-  } else {S.penalty+=PEN;S.fb=fb;S.shake=true;play('bad');pushPresence();}
-  render();S.anim=false;S.shake=false;
+  var acc=kAccuracy(st);
+  var picked=S.tap.slice().sort(function(a,b){return a-b}),wrong=[];
+  if(st.type==='match')st.items.forEach(function(it,i){if(S.match[i]!==it[1])wrong.push(i)});
+  S.ans[S.stage]={p:Math.round(acc*1000),a:Math.round(acc*100),c:st.type==='choice'?S.sel:-1,n:0};
+  S.fb={k:st.type,ok:acc===1,d:{sel:S.sel,picked:picked,wrong:wrong}};
+  S.reveal=true;S.anim=acc===1;play(acc===1?'unlock':(acc>0?'click':'bad'));
+  if(S.stage===N-1){S.finishMs=Date.now()-S.startLocal;var tot=totalOf(S.ans);S.newBest=S.bestPts==null||tot>S.bestPts;if(S.newBest){S.bestPts=tot;saveProfile();}}
+  render();S.anim=false;
   var f=document.getElementById('fb');if(f)f.focus();}
 function pushPresenceDone(){if(R&&S.mode==='player'){var p=myPresence();p.stage=N;p.done=true;p.ms=S.finishMs;R.presence(p).catch(function(){})}}
 function clearDoors(){setTimeout(function(){var d=document.querySelector('.doors');if(d)d.remove()},1400)}
-function advance(){S.stage++;clearAnswer();S.phase='quiz';S.enter=true;play('door');pushPresence();render();S.enter=false;clearDoors();window.scrollTo({top:0});}
+function advance(){if(S.stage>=N-1){S.stage=N;S.screen='done';render();play('win');confetti();window.scrollTo({top:0});return}S.stage++;clearAnswer();S.phase='quiz';S.enter=true;play('door');pushPresence();render();S.enter=false;clearDoors();window.scrollTo({top:0});}
 function canSubmit(){var st=STAGES[S.stage];if(!st)return false;
   if(st.type==='choice')return S.sel!=null;
   if(st.type==='tap')return S.tap.length>0;
   if(st.type==='match')return st.items.every(function(_,i){return S.match[i]!=null});
   if(st.type==='unscramble')return S.unscr.length===st.tiles.length;return false;}
+
+/* ---------- hosted game: host-paced questions with points ---------- */
+var QTIMES=[20,30,45,60,90,120];
+S.qSec=60;S.k={phase:'lobby',round:0,qi:0,qStart:0,qEnd:0,qDur:60000};S.kround=0;S.ans={};S.koff=0;S.kKey='';S.kSig='';
+function kRound(){return S.mode==='host'?S.k.round:S.kround}
+function cleanAns(raw){var out={};if(!raw||typeof raw!=='object')return out;
+  for(var i=0;i<N;i++){var a=raw[i];if(!a||typeof a!=='object')continue;
+    out[i]={p:Math.max(0,Math.min(1000,Math.round(Number(a.p)||0))),a:Math.max(0,Math.min(100,Math.round(Number(a.a)||0))),c:Number.isInteger(a.c)?a.c:-1,n:a.n?1:0}}
+  return out}
+function totalOf(ans){var s=0;for(var k in ans)if(ans[k])s+=ans[k].p;return s}
+function correctOf(ans){var s=0;for(var k in ans)if(ans[k]&&ans[k].a===100)s++;return s}
+function kRanked(){return crew().map(function(p){p.score=totalOf(p.ans||{});p.correct=correctOf(p.ans||{});return p})
+  .sort(function(a,b){return b.score-a.score||b.correct-a.correct||String(a.name).localeCompare(String(b.name))})}
+function hostPush(){if(R&&S.mode==='host')R.presence({role:'host',since:S.since,phase:S.k.phase,round:S.k.round,qi:S.k.qi,qStart:S.k.qStart,qEnd:S.k.qEnd,qDur:S.k.qDur,now:Date.now()}).catch(function(){})}
+function hostNow(){return S.mode==='host'?Date.now():Date.now()+S.koff}
+function presentPlayers(){return peers.filter(function(p){return p.presence&&p.presence.role==='player'}).map(sanitize)}
+
+function hostStart(){
+  S.k.round=(S.k.round||0)+1;S.record={};S.startedAt=Date.now();S.endConfirm=false;
+  peers.forEach(function(p){if(p.presence&&p.presence.role==='player'){var x=sanitize(p);x.ans={};S.record[x.pid||x.peer]=x}});
+  hostQuestion(0);}
+function hostQuestion(i){var now=Date.now();S.endConfirm=false;S.kAuto=false;
+  S.k.qi=i;S.k.phase='q';S.k.qDur=S.qSec*1000;S.k.qStart=now+3000;S.k.qEnd=S.k.qStart+S.k.qDur;S.hostPhase='q';S.kLive=false;
+  hostPush();render();play('go');}
+function hostResults(){if(S.k.phase!=='q')return;S.k.phase='res';S.hostPhase='res';S.k.qEnd=Math.min(S.k.qEnd,Date.now());hostPush();recordPlayers();render();play('unlock');}
+function hostNext(){if(S.k.qi<N-1)hostQuestion(S.k.qi+1);else hostFinal();}
+function hostFinal(){S.k.phase='final';S.hostPhase='final';S.endConfirm=false;S.endedAt=Date.now();hostPush();recordPlayers();render();play('win');confetti();}
+function hostAgain(){S.k.phase='lobby';S.hostPhase='lobby';S.record={};hostPush();render();}
+
+/* player side */
+function playerSync(h){
+  var hp=h.presence||{};
+  if(typeof hp.now==='number'&&hp.now!==S.kLastNow){S.kLastNow=hp.now;S.koff=hp.now-Date.now();}
+  var round=Number(hp.round)||0;
+  if(round!==S.kround){S.kround=round;S.ans={};pushPresence();}
+  var key=hp.phase+'/'+round+'/'+hp.qi;
+  if(key===S.kKey){updateLive();return}
+  var prev=S.kKey;S.kKey=key;S.hostPhase=hp.phase;
+  S.k.qi=Math.max(0,Math.min(N-1,Number(hp.qi)||0));S.k.qStart=Number(hp.qStart)||0;S.k.qEnd=Number(hp.qEnd)||0;S.k.qDur=Number(hp.qDur)||60000;
+  if(hp.phase==='lobby'){S.screen='lobby';render();return}
+  if(hp.phase==='q'){S.stage=S.k.qi;clearAnswer();S.locked=!!S.ans[S.k.qi];S.myFb=null;S.screen='kq';S.kLive=hostNow()>=S.k.qStart;render();window.scrollTo({top:0});return}
+  if(hp.phase==='res'){S.stage=S.k.qi;if(!S.ans[S.k.qi]&&prev.indexOf('q/')===0)submitK(true);S.screen='kr';render();window.scrollTo({top:0});
+    var a=S.ans[S.k.qi];play(a&&a.a===100?'unlock':(a&&a.a>0?'click':'bad'));return}
+  if(hp.phase==='final'){S.screen='kf';render();window.scrollTo({top:0});play('win');confetti();return}
+}
+function kAccuracy(st){
+  if(st.type==='choice')return S.sel===st.answer?1:0;
+  if(st.type==='tap'){var hit=0,bad=0;S.tap.forEach(function(i){if(st.vague.indexOf(i)>=0)hit++;else bad++});return Math.max(0,(hit-bad)/st.vague.length)}
+  if(st.type==='match'){var ok=0;st.items.forEach(function(it,i){if(S.match[i]===it[1])ok++});return ok/st.items.length}
+  return 0}
+function submitK(force){
+  if(S.locked)return;var st=STAGES[S.k.qi];if(!st)return;
+  var acc=kAccuracy(st),now=hostNow();
+  var rem=now<S.k.qStart?1:Math.max(0,Math.min(1,(S.k.qEnd-now)/S.k.qDur));
+  var pts=acc>0?Math.round(acc*(500+500*rem)):0;
+  var none=(st.type==='choice'&&S.sel==null)||(st.type==='tap'&&!S.tap.length)||(st.type==='match'&&!S.match.some(function(x){return x!=null}));
+  S.ans[S.k.qi]={p:pts,a:Math.round(acc*100),c:st.type==='choice'?(S.sel==null?-1:S.sel):-1,n:none?1:0};
+  var picked=S.tap.slice().sort(function(a,b){return a-b});var wrong=[];if(st.type==='match')st.items.forEach(function(it,i){if(S.match[i]!==it[1])wrong.push(i)});
+  S.myFb={k:st.type==='choice'?'choice':st.type,ok:acc===1,none:(st.type==='choice'&&S.sel==null)||(st.type==='tap'&&!S.tap.length)||(st.type==='match'&&!S.match.some(function(x){return x!=null})),d:{sel:S.sel,picked:picked,wrong:wrong}};
+  S.locked=true;pushPresence();
+  if(!force){play('click');render();}
+}
+
+/* ---------- hosted game views ---------- */
+function kBoardRows(qi){
+  var list=kRanked();if(!list.length)return '<tr><td colspan="4" class="muted">'+t('no_crew')+'</td></tr>';
+  return list.map(function(p,i){var a=qi!=null&&p.ans?p.ans[qi]:null;
+    return '<tr class="'+(p.me?'me':'')+'"><td class="rk">'+(i+1)+'</td><td><span class="nm">'+bot(p.color,22)+'<b><bdi>'+esc(p.name)+'</bdi></b>'+(p.me?'<span class="you">'+t('you')+'</span>':'')+(p.left?'<span class="muted small">'+t('left')+'</span>':'')+'</span></td>'+
+    (qi!=null?'<td class="tm kgain">'+(a?'<bdi dir="ltr">+'+a.p+'</bdi>':'—')+'</td>':'')+'<td class="tm"><b>'+p.score+'</b></td></tr>'}).join('')}
+function kBoard(qi){return '<div class="tablewrap"><table class="board kboard"><thead><tr><th>#</th><th>'+t('th_crew')+'</th>'+(qi!=null?'<th class="tm">'+t('k_round_pts')+'</th>':'')+'<th class="tm">'+t('k_total')+'</th></tr></thead><tbody id="kboard" data-qi="'+(qi==null?'':qi)+'">'+kBoardRows(qi)+'</tbody></table></div>'}
+function kPodium(){var r=kRanked().slice(0,3);
+  if(!r.length)return '<div class="empty" style="grid-column:1/-1">'+t('no_crew')+'</div>';
+  var cls=['p1','p2','p3'],lbl=t('places');
+  return r.map(function(p,i){return '<div class="pod '+cls[i]+'"><span class="place">'+lbl[i]+'</span>'+bot(p.color,48)+'<b><bdi>'+esc(p.name)+'</bdi></b><span class="kscore">'+t('k_pts',{p:p.score})+'</span></div>'}).join('')}
+function kPlayersGrid(){var qi=S.k.qi,list=presentPlayers();
+  if(!list.length)return '<div class="empty">'+t('no_crew_long')+'</div>';
+  return '<div class="kplayers">'+list.map(function(p){var done=!!(p.ans&&p.ans[qi]);return '<div class="kp'+(done?' done':'')+'">'+bot(p.color,26)+'<b><bdi>'+esc(p.name)+'</bdi></b><span class="kchk" aria-label="'+(done?t('k_locked'):'')+'">'+(done?'✓':'')+'</span></div>'}).join('')+'</div>'}
+function kAnsweredCount(){var qi=S.k.qi,list=presentPlayers();return t('k_answered',{a:list.filter(function(p){return p.ans&&p.ans[qi]}).length,n:list.length})}
+function kSecs(){return Math.max(0,Math.ceil((S.k.qEnd-hostNow())/1000))}
+function kQuestionDisplay(st,showAnswer){
+  var h='<p class="kq">'+esc(st.q)+'</p>'+(st.quote?'<blockquote>'+esc(st.quote)+'</blockquote>':'');
+  if(st.type==='choice'){
+    var counts=[0,0,0,0];if(showAnswer)kRanked().forEach(function(p){var a=p.ans&&p.ans[S.k.qi];if(a&&a.c>=0&&a.c<4)counts[a.c]++});
+    var max=Math.max(1,Math.max.apply(null,counts));
+    h+='<div class="kopts">'+st.options.map(function(o,i){var right=showAnswer&&i===st.answer;
+      return '<div class="kopt k'+(i+1)+(showAnswer&&!right?' dim':'')+(right?' right':'')+'"><span class="kn">'+(i+1)+'</span><span class="kt">'+esc(o)+'</span>'+(right?'<span class="kmark">✓</span>':'')+
+      (showAnswer?'<span class="kbar"><i style="width:'+Math.round(100*counts[i]/max)+'%"></i><em>'+counts[i]+'</em></span>':'')+'</div>'}).join('')+'</div>';}
+  if(st.type==='tap')h+='<div class="words kwords">'+st.words.map(function(w,i){var v=showAnswer&&st.vague.indexOf(i)>=0;return '<span class="word'+(v?' kv':'')+'">'+esc(w)+'</span>'}).join('')+'</div>'+(showAnswer?'<p class="muted small">'+t('k_vague_words')+'</p>':'');
+  if(st.type==='match'){
+    if(showAnswer)h+='<div class="tablewrap"><table class="board kmatch"><tbody>'+st.items.map(function(it){return '<tr><td><span class="nm">'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></span></td><td class="kok">'+esc(st.cats[it[1]])+'</td></tr>'}).join('')+'</tbody></table></div>';
+    else h+='<ul class="kitems">'+st.items.map(function(it){return '<li>'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></li>'}).join('')+'</ul><p class="muted small">'+t('k_choose_from')+': '+st.cats.map(function(c){return '<span class="kcat">'+esc(c)+'</span>'}).join(' ')+'</p>';}
+  return h}
+function hostQView(){
+  var st=STAGES[S.k.qi],pre=Date.now()<S.k.qStart;
+  var head='<div class="row"><span class="eyebrow">'+t('k_q',{i:S.k.qi+1,n:N})+' · '+esc(st.room)+'</span><span class="spacer"></span>'+soundBtn()+'<span class="chip">'+t('room_chip',{c:esc(S.code)})+'</span></div>';
+  if(pre)return '<div class="stack">'+head+'<div class="kintro"><span class="eyebrow">'+t('k_ready')+'</span><h2>'+esc(st.title)+'</h2><div class="num" id="kcd">'+Math.max(1,Math.ceil((S.k.qStart-Date.now())/1000))+'</div></div></div>';
+  return '<div class="stack">'+head+
+  '<div class="kgrid"><div class="panel stack kmain"><h2 class="ktitle">'+esc(st.title)+'</h2>'+kQuestionDisplay(st,false)+'</div>'+
+  '<aside class="panel stack kside"><div class="ktimer" id="ktime" aria-live="off">'+kSecs()+'</div><p class="kans" id="kanswered">'+kAnsweredCount()+'</p>'+
+  '<button class="btn primary" data-act="kres">'+t('k_show')+'</button>'+
+  (S.endConfirm?'<div class="confirm"><span>'+t('k_end_confirm')+'</span><button class="btn danger" data-act="kendyes">'+t('k_end')+'</button><button class="btn ghost" data-act="endno">'+t('keep')+'</button></div>':'<button class="btn ghost" data-act="end">'+t('k_end')+'</button>')+'</aside></div>'+
+  '<div class="panel"><div id="kplayers">'+kPlayersGrid()+'</div></div></div>';}
+function hostResView(){
+  var st=STAGES[S.k.qi],list=kRanked(),full=list.filter(function(p){return p.ans&&p.ans[S.k.qi]&&p.ans[S.k.qi].a===100}).length,last=S.k.qi>=N-1;
+  return '<div class="stack"><div class="row"><span class="eyebrow">'+t('k_q',{i:S.k.qi+1,n:N})+' · '+t('k_correct_ans')+'</span><span class="spacer"></span>'+soundBtn()+'</div>'+
+  '<div class="kgrid"><div class="panel stack kmain"><h2 class="ktitle">'+esc(st.title)+'</h2>'+kQuestionDisplay(st,true)+'<p class="kstat"><b>'+t('k_stats',{c:full,n:list.length})+'</b></p></div>'+
+  '<aside class="panel stack kside"><button class="btn primary big-go" data-act="knext">'+(last?t('k_final_btn'):t('k_next'))+'</button>'+
+  (S.endConfirm?'<div class="confirm"><span>'+t('k_end_confirm')+'</span><button class="btn danger" data-act="kendyes">'+t('k_end')+'</button><button class="btn ghost" data-act="endno">'+t('keep')+'</button></div>':'<button class="btn ghost" data-act="end">'+t('k_end')+'</button>')+
+  '<button class="btn ghost" data-act="export">'+t('export_now')+'</button><span class="muted small" id="exportmsg" role="status"></span></aside></div>'+
+  '<div class="panel stack"><h2>'+t('k_board')+'</h2>'+kBoard(S.k.qi)+'</div></div>';}
+function hostFinalView(){
+  return '<div class="stack"><span class="eyebrow">'+t('k_final_eb',{c:esc(S.code)})+'</span><h2 style="font-size:36px">'+t('final')+'</h2><div class="podium" id="podium">'+kPodium()+'</div>'+
+  '<div class="row"><button class="btn primary" data-act="export">'+t('export_xl')+'</button><span class="muted small" id="exportmsg" role="status"></span><button class="btn" data-act="kagain">'+t('again')+'</button><button class="btn ghost" data-act="home">'+t('close_room')+'</button></div>'+
+  '<div class="panel stack"><h2>'+t('k_board')+'</h2>'+kBoard(null)+'</div></div>';}
+
+function playerQView(){
+  var st=STAGES[S.k.qi],now=hostNow();
+  var warn=S.hostGone?'<div class="banner" role="status">'+t('mc_left')+'</div>':'';
+  var head='<div class="row"><span class="eyebrow">'+t('k_q',{i:S.k.qi+1,n:N})+'</span><span class="spacer"></span><span class="chip">'+t('time_left')+' <b id="ktime" dir="ltr">'+kSecs()+'</b></span></div>';
+  if(now<S.k.qStart){S.kLive=false;return warn+'<div class="kintro"><span class="eyebrow">'+t('k_ready')+'</span><h2>'+esc(st.title)+'</h2><div class="num" id="kcd">'+Math.max(1,Math.ceil((S.k.qStart-now)/1000))+'</div></div>'}
+  S.kLive=true;
+  if(S.locked)return warn+'<div class="stack">'+head+'<div class="panel kwait"><span class="kbig">✓</span><h2>'+t('k_locked')+'</h2><p class="muted">'+t('k_wait_others')+'</p><p class="kans" id="kanswered">'+kAnsweredCount()+'</p></div></div>';
+  return warn+'<div class="stack">'+head+'<h2>'+esc(st.title)+'</h2>'+challengeView(st)+'</div>';}
+function playerResView(){
+  var st=STAGES[S.k.qi],a=S.ans[S.k.qi],list=kRanked(),pos=list.findIndex(function(p){return p.me})+1;
+  var v=!a||(S.myFb&&S.myFb.none)?'k_v_none':(a.a===100?'k_v_ok':(a.a>0?'k_v_part':'k_v_bad'));
+  var expl='';
+  if(st.type==='choice')expl=(a&&a.c>=0)?st.why[a.c]:t('k_none_expl')+st.options[st.answer];
+  else if(S.myFb)expl=fbText(S.myFb);
+  else expl=st.okText||'';
+  return '<div class="stack"><span class="eyebrow">'+t('k_q',{i:S.k.qi+1,n:N})+'</span>'+
+  '<div class="panel kverdict '+(v==='k_v_ok'?'ok':(v==='k_v_part'?'part':'bad'))+'"><h2>'+t(v)+'</h2><p class="kplus">'+t('k_plus',{p:a?a.p:0})+'</p>'+
+  '<p>'+t('k_your_total',{p:totalOf(S.ans)})+(pos?' · '+t('k_place',{r:pos,n:list.length}):'')+'</p></div>'+
+  '<div class="panel stack"><p class="q">'+esc(st.q)+'</p>'+revealBlock(st)+'</div>'+(expl?'<div class="fb '+(v==='k_v_ok'?'ok':'bad')+'"><span>'+esc(expl)+'</span></div>':'')+
+  '<p class="muted">'+t('k_wait_host')+'</p><div class="panel stack"><h2>'+t('k_board')+'</h2>'+kBoard(S.k.qi)+'</div>'+
+  '<div class="row"><button class="btn ghost" data-act="home">'+t('leave')+'</button></div></div>';}
+function playerFinalView(){
+  var list=kRanked(),pos=list.findIndex(function(p){return p.me})+1;
+  return '<div class="stack"><span class="eyebrow">'+t('k_final_eb',{c:esc(S.code)})+'</span><h2 style="font-size:34px">'+(pos?t('k_you_final',{r:pos,n:list.length}):t('final'))+'</h2>'+
+  '<p class="big kscorebig">'+t('k_pts',{p:totalOf(S.ans)})+'</p><div class="podium">'+kPodium()+'</div>'+
+  '<div class="panel stack"><h2>'+t('k_board')+'</h2>'+kBoard(null)+'</div><p class="muted">'+t('stay')+'</p><div class="row"><button class="btn ghost" data-act="home">'+t('leave')+'</button></div></div>';}
+function kSignature(){return JSON.stringify(kRanked().map(function(p){return [p.pid||p.peer,p.name,p.color,p.score,p.left?1:0,Object.keys(p.ans||{}).length]}))}
 
 /* ---------- views ---------- */
 function mapView(){
@@ -889,7 +1090,9 @@ function updateLive(){
   if((el=$('#crew')))el.innerHTML=crewCards();
   if((el=$('#crewcount'))){var n=crew().length;el.textContent=n===1?t('crew_1'):t('crew_n',{n:n});}
   if((el=$('#startbtn'))){var n2=crew().length;el.disabled=n2<1;el.textContent=n2<1?t('start_wait'):t('start_n',{n:n2});}
-  if((el=$('#podium'))&&S.hostPhase==='ended')el.innerHTML=podium();
+  if((el=$('#kplayers')))el.innerHTML=kPlayersGrid();
+  if((el=$('#kanswered')))el.textContent=kAnsweredCount();
+  if((el=$('#kboard'))){var sig=kSignature();if(sig!==S.kSig){S.kSig=sig;el.innerHTML=kBoardRows(el.dataset.qi===''?null:Number(el.dataset.qi));var pd=$('#podium');if(pd)pd.innerHTML=kPodium();}}
 }
 
 function barView(){
@@ -897,7 +1100,7 @@ function barView(){
     var room=S.stage<N?t('room_pos',{i:S.stage+1,n:N,r:esc(STAGES[S.stage].room)}):t('room_done');
     return '<div class="bar"><div class="in"><span class="chip">'+(S.mode==='solo'?t('solo_chip'):t('room_chip',{c:esc(S.code)}))+'</span><span class="chip">'+room+'</span>'+
     '<span class="spacer"></span>'+soundBtn()+
-    (S.limitMs&&S.mode==='player'&&S.finishMs==null?'<span class="chip">'+t('time_left')+' <b id="tleft" dir="ltr">'+fmt(S.limitMs)+'</b></span>':'')+'<span class="pen" id="pen">'+(S.penalty?t('penalty',{p:S.penalty}):'')+'</span><span class="timer" id="timer" aria-label="'+t('your_time')+'">'+fmt(elapsed())+'</span></div></div>';}
+    (S.limitMs&&S.mode==='player'&&S.finishMs==null?'<span class="chip">'+t('time_left')+' <b id="tleft" dir="ltr">'+fmt(S.limitMs)+'</b></span>':'')+'<span class="chip">'+t('score_chip',{p:totalOf(S.ans||{})})+'</span><span class="timer" id="timer" aria-label="'+t('your_time')+'">'+fmt(elapsed())+'</span></div></div>';}
   if(S.mode==='host'&&S.hostPhase==='live')return '<div class="bar"><div class="in"><span class="chip">'+t('mc_room',{c:esc(S.code)})+'</span><span class="spacer"></span>'+soundBtn()+'<span class="chip">'+(S.limitMs?t('time_left'):t('mission_time'))+'</span><span class="timer" id="htimer">0:00.0</span></div></div>';
   return '';}
 
@@ -912,7 +1115,7 @@ function homeView(){
   '<h1>'+t('h1')+'</h1>'+
   '<p class="lede">'+t('lede')+'</p>'+
   '<div class="row"><button class="btn primary" data-act="host" '+(roomApi?'':'disabled')+'>'+t('host_btn')+'</button><button class="btn" data-act="tojoin" '+(roomApi?'':'disabled')+'>'+t('join_btn')+'</button><button class="btn ghost" data-act="solo">'+t('solo_btn')+'</button>'+soundBtn()+'</div>'+status+
-  (S.best!=null?'<p class="note">'+t('best')+'<b dir="ltr">'+fmt(S.best)+'</b></p>':'')+
+  (S.bestPts!=null?'<p class="note">'+t('best')+'<b>'+t('k_pts',{p:S.bestPts})+'</b></p>':'')+
   (S.joinErr&&S.screen==='home'?'<p class="err" role="alert">'+esc(tx(S.joinErr))+'</p>':'')+
   (S.busy?'<p class="note" role="status">'+t('opening')+'</p>':'')+
   '</div><div class="panel"><h3 class="eyebrow" style="margin-bottom:10px">'+t('station_map')+'</h3><div class="map">'+mapPreview+'<div class="cell exit"><span class="t">'+t('pod_launch')+'</span></div></div></div></section>'+
@@ -939,7 +1142,7 @@ function hostLobbyView(){
   (qrSvg(joinLink())?'<figure class="qr"><div class="qrbox">'+qrSvg(joinLink())+'</div><figcaption class="muted small">'+t('qr_cap')+'</figcaption></figure>':'')+'</div>'+
   '<div class="row"><button class="btn" data-act="copy" id="copybtn">'+t('copy_code')+'</button><button class="btn" data-act="copylink">'+t('copy_link')+'</button><span class="muted small" id="copied" role="status"></span></div><p class="muted small">'+t('link_note')+'<b><bdi dir="ltr">'+esc(joinLink())+'</bdi></b></p></div>'+
   '<div class="panel stack"><div class="row"><h2 id="crewcount"></h2></div><div id="crew">'+crewCards()+'</div>'+
-  '<div><span class="lbl" id="tl-lbl">'+t('time_limit')+'</span><div class="row" role="radiogroup" aria-labelledby="tl-lbl">'+LIMITS.map(function(m){return '<button class="btn'+(S.limitMin===m?' primary':'')+'" role="radio" aria-checked="'+(S.limitMin===m)+'" data-act="limit" data-i="'+m+'">'+(m?t('min',{m:m}):t('no_limit'))+'</button>'}).join('')+'</div><p class="hint">'+t('limit_hint')+'</p></div>'+
+  '<div><span class="lbl" id="tl-lbl">'+t('k_qtime')+'</span><div class="row" role="radiogroup" aria-labelledby="tl-lbl">'+QTIMES.map(function(q){return '<button class="btn'+(S.qSec===q?' primary':'')+'" role="radio" aria-checked="'+(S.qSec===q)+'" data-act="qtime" data-i="'+q+'">'+t('k_sec',{s:q})+'</button>'}).join('')+'</div><p class="hint">'+t('k_qtime_hint')+'</p></div>'+
   '<div class="row"><button class="btn primary" id="startbtn" data-act="start" disabled>'+t('start')+'</button><span class="muted small">'+t('late_note')+'</span></div></div></div>';}
 
 function hostLiveView(){
@@ -969,23 +1172,48 @@ function lobbyView(){
 function countdownView(){var n=Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000));
   return '<div class="countdown"><div class="stack" style="align-items:center"><span class="eyebrow">'+t('doors_unlock')+'</span><div class="num" id="cd" aria-live="assertive">'+n+'</div><p class="muted">'+t('first_stop',{r:esc(STAGES[0].room)})+'</p></div></div>';}
 
+function curIdx(){return S.screen==='kq'||S.screen==='kr'?S.k.qi:S.stage}
+function fiftyAvailable(){var i=curIdx(),prev=S.ans[i-1];return i>0&&!!prev&&prev.a===100}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var x=Math.imul(seed^seed>>>15,1|seed);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296}}
+function shuffled(arr,r){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var x=a[i];a[i]=a[j];a[j]=x}return a}
+function useFifty(){
+  if(S.ff||!fiftyAvailable()||S.reveal||S.locked)return;
+  var i=curIdx(),st=STAGES[i],h=0;for(var c=0;c<PID.length;c++)h=(h*31+PID.charCodeAt(c))|0;
+  var r=rng(h+i*7919+(kRound()||0)*104729),ff={hide:[],rows:{}};
+  if(st.type==='choice'){var w=[];st.options.forEach(function(_,k){if(k!==st.answer)w.push(k)});ff.hide=shuffled(w,r).slice(0,Math.floor(st.options.length/2));if(ff.hide.indexOf(S.sel)>=0)S.sel=null;}
+  if(st.type==='tap'){var nv=[];st.words.forEach(function(_,k){if(st.vague.indexOf(k)<0)nv.push(k)});ff.hide=shuffled(nv,r).slice(0,Math.floor(nv.length/2));S.tap=S.tap.filter(function(k){return ff.hide.indexOf(k)<0});}
+  if(st.type==='match')st.items.forEach(function(it,k){var w=[];st.cats.forEach(function(_,ci){if(ci!==it[1])w.push(ci)});ff.rows[k]=shuffled(w,r).slice(0,Math.floor(w.length/2));if(ff.rows[k].indexOf(S.match[k])>=0)S.match[k]=null;});
+  S.ff=ff;play('unlock');render();}
+function fiftyBar(){
+  if(S.ff)return '<div class="ffbar used"><span class="ffchip">50:50</span><span class="muted small">'+t('ff_used')+'</span></div>';
+  if(fiftyAvailable())return '<div class="ffbar"><button class="btn ff" data-act="fifty">50:50</button><span class="muted small">'+t('ff_hint')+'</span></div>';
+  return '';}
+function revealBlock(st){
+  var h='';
+  if(st.type==='choice')h+='<div class="opts">'+st.options.map(function(o,i){var ok=i===st.answer,mine=i===S.sel;
+    return '<div class="opt r '+(ok?'r-ok':(mine?'r-bad':'r-dim'))+'"><span class="k">'+(ok?'✓':(mine?'✗':(i+1)))+'</span><span>'+esc(o)+'</span>'+(mine?'<span class="rtag">'+t('r_yours')+'</span>':'')+'</div>'}).join('')+'</div>';
+  if(st.type==='tap'){h+='<div class="words">'+st.words.map(function(w,i){var v=st.vague.indexOf(i)>=0,m=S.tap.indexOf(i)>=0;
+    return '<span class="word r '+(v&&m?'r-ok':(!v&&m?'r-bad':(v?'r-miss':'')))+'">'+esc(w)+'</span>'}).join('')+'</div><p class="hint">'+t('r_legend')+'</p>';}
+  if(st.type==='match')h+='<div class="match">'+st.items.map(function(it,i){var ch=S.match[i],ok=ch===it[1];
+    return '<div class="mrow r '+(ok?'r-ok':'r-bad')+'"><span class="rlbl">'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></span><span class="rans"><b>'+(ok?'✓ ':'✗ ')+(ch!=null?esc(st.cats[ch]):t('r_none'))+'</b>'+(ok?'':'<span class="rfix">'+t('r_correct')+': '+esc(st.cats[it[1]])+'</span>')+'</span></div>'}).join('')+'</div>';
+  return h;}
+function verdictKey(a){return !a?'k_v_none':(a.a===100?'k_v_ok':(a.a>0?'k_v_part':'k_v_bad'))}
 function challengeView(st){
-  var solved=!!(S.fb&&S.fb.ok);
-  var h='<div class="challenge'+(solved?' solved':'')+(S.shake?' shake alarm':'')+'" aria-labelledby="qtext"><div class="devhead">'+lockSvg(solved,solved&&S.anim)+'<div class="stack" style="gap:4px"><span class="eyebrow">'+esc(st.device||t('puzzle'))+'</span><span class="led'+(solved?' on':'')+'" role="status">'+(solved?t('led_on'):t('led_off'))+'</span></div></div><p class="q" id="qtext">'+esc(st.q)+'</p>';
-  var locked=S.fb&&S.fb.ok;
+  var kq=S.screen==='kq',rv=!!S.reveal&&!kq;
+  var a=rv?S.ans[S.stage]:null,solved=!!(a&&a.a===100);
+  var h='<div class="challenge'+(rv?(solved?' solved':' missed'):'')+'" aria-labelledby="qtext">'+(kq?'':'<div class="devhead">'+lockSvg(solved,solved&&S.anim)+'<div class="stack" style="gap:4px"><span class="eyebrow">'+esc(st.device||t('puzzle'))+'</span><span class="led'+(solved?' on':'')+'" role="status">'+(solved?t('led_on'):t('led_off'))+'</span></div></div>')+'<p class="q" id="qtext">'+esc(st.q)+'</p>';
   if(st.quote)h+='<blockquote>'+esc(st.quote)+'</blockquote>';
-  if(st.type==='choice')h+='<div class="opts" role="group" aria-label="'+t('answers_aria')+'">'+st.options.map(function(o,i){return '<button class="opt" data-act="pick" data-i="'+i+'" aria-pressed="'+(S.sel===i)+'" '+(locked?'disabled':'')+'><span class="k">'+(i+1)+'</span><span>'+esc(o)+'</span></button>'}).join('')+'</div>';
-  if(st.type==='tap')h+='<div class="words" role="group" aria-label="'+t('words_aria')+'">'+st.words.map(function(w,i){return '<button class="word" data-act="tap" data-i="'+i+'" aria-pressed="'+(S.tap.indexOf(i)>=0)+'" '+(locked?'disabled':'')+'>'+esc(w)+'</button>'}).join('')+'</div><p class="hint">'+t('marked',{n:S.tap.length})+'</p>';
-  if(st.type==='match')h+='<div class="match">'+st.items.map(function(it,i){return '<div class="mrow"><label for="m'+i+'">'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></label><select id="m'+i+'" data-act="match" data-i="'+i+'" '+(locked?'disabled':'')+'><option value="">'+(st.kind==='parts'?t('choose_part'):t('choose_rule'))+'</option>'+st.cats.map(function(c,ci){return '<option value="'+ci+'" '+(S.match[i]===ci?'selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></div>'}).join('')+'</div>';
-  if(st.type==='unscramble'){
-    var slots='';for(var i=0;i<st.tiles.length;i++){var u=S.unscr[i];slots+='<span class="slot'+(u!=null?' f':'')+'">'+(u!=null?st.tiles[u]:'')+'</span>'}
-    h+='<div class="slots" aria-label="'+t('pw_aria',{w:S.unscr.map(function(i){return st.tiles[i]}).join(' ')})+'">'+slots+'</div>'+
-    '<div class="tiles">'+st.tiles.map(function(l,i){return '<button class="tile" data-act="tile" data-i="'+i+'" '+(S.unscr.indexOf(i)>=0?'disabled':'')+' aria-label="'+t('letter_aria',{l:l})+'">'+l+'</button>'}).join('')+'</div>'+
-    '<div class="row"><button class="btn ghost" data-act="undo" '+(S.unscr.length?'':'disabled')+'>'+t('undo')+'</button><button class="btn ghost" data-act="clear" '+(S.unscr.length?'':'disabled')+'>'+t('clear')+'</button></div>';}
-  if(S.fb)h+='<div class="fb '+(S.fb.ok?'ok':'bad')+'" id="fb" tabindex="-1" role="status"><b>'+(S.fb.ok?t('lock_open'):t('not_quite',{p:PEN}))+'</b><span>'+esc(fbText(S.fb))+'</span>'+(S.fb.ok?'':'<span class="small muted">'+t('adjust')+'</span>')+'</div>';
-  if(locked&&S.fb.final){}
-  else if(locked){var nx=STAGES[S.stage+1];h+='<div class="row"><button class="btn primary" data-act="next" id="nextbtn">'+t('continue_to',{r:esc(nx?nx.room:t('the_pod'))})+'</button><span class="kbd">Enter</span></div>';}
-  else h+='<div class="row"><button class="btn primary" data-act="submit" id="subbtn" '+(canSubmit()?'':'disabled')+'>'+t('submit')+'</button><span class="muted small">'+(canSubmit()?t('press_enter'):t('choose_first'))+'</span></div>';
+  if(rv){
+    var vk=verdictKey(a),last=S.stage>=N-1,nx=STAGES[S.stage+1];
+    h+=revealBlock(st)+'<div class="fb '+(vk==='k_v_ok'?'ok':'bad')+'" id="fb" tabindex="-1" role="status"><b>'+t(vk)+' · '+t('k_plus',{p:a?a.p:0})+'</b><span>'+esc(fbText(S.fb))+'</span></div>'+
+      '<div class="row"><button class="btn primary" data-act="next" id="nextbtn">'+(last?t('see_results'):t('continue_to',{r:esc(nx.room)}))+'</button><span class="kbd">Enter</span></div>';
+    return h+'</div>';}
+  var ff=S.ff||{hide:[],rows:{}};
+  h+=fiftyBar();
+  if(st.type==='choice')h+='<div class="opts" role="group" aria-label="'+t('answers_aria')+'">'+st.options.map(function(o,i){if(ff.hide.indexOf(i)>=0)return '';return '<button class="opt" data-act="pick" data-i="'+i+'" aria-pressed="'+(S.sel===i)+'"><span class="k">'+(i+1)+'</span><span>'+esc(o)+'</span></button>'}).join('')+'</div>';
+  if(st.type==='tap')h+='<div class="words" role="group" aria-label="'+t('words_aria')+'">'+st.words.map(function(w,i){var gone=ff.hide.indexOf(i)>=0;return '<button class="word'+(gone?' gone':'')+'" data-act="tap" data-i="'+i+'" aria-pressed="'+(S.tap.indexOf(i)>=0)+'" '+(gone?'disabled':'')+'>'+esc(w)+'</button>'}).join('')+'</div><p class="hint">'+t('marked',{n:S.tap.length})+'</p>';
+  if(st.type==='match')h+='<div class="match">'+st.items.map(function(it,i){var gone=ff.rows[i]||[];return '<div class="mrow"><label for="m'+i+'">'+(it[2]?SHIELD(it[2]):'')+'<span>'+esc(it[0])+'</span></label><select id="m'+i+'" data-act="match" data-i="'+i+'"><option value="">'+(st.kind==='parts'?t('choose_part'):t('choose_rule'))+'</option>'+st.cats.map(function(c,ci){if(gone.indexOf(ci)>=0)return '';return '<option value="'+ci+'" '+(S.match[i]===ci?'selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></div>'}).join('')+'</div>';
+  h+='<div class="row"><button class="btn primary" data-act="submit" id="subbtn" '+(canSubmit()?'':'disabled')+'>'+(kq?t('k_lock'):t('submit'))+'</button><span class="muted small">'+(canSubmit()?t('one_try'):t('choose_first'))+'</span></div>';
   return h+'</div>';}
 
 function gameView(){
@@ -1001,9 +1229,9 @@ function gameView(){
 
 function doneView(){
   var r=ranked(),pos=r.findIndex(function(p){return p.me})+1;
-  var head=S.mode==='solo'?(S.newBest?t('new_best'):t('escaped')):(pos===1?t('first_out'):t('place_out',{n:pos}));
-  return '<div class="stack"><span class="eyebrow">'+t('pod_launched')+'</span><h2 style="font-size:34px">'+head+'</h2><div class="big">'+fmt(S.finishMs)+'</div>'+
-  '<p class="muted">'+t('done_note',{p:S.penalty})+'</p>'+
+  var head=S.mode==='solo'?(S.newBest?t('new_best'):t('solo_done')):(pos===1?t('first_out'):t('place_out',{n:pos}));
+  return '<div class="stack"><span class="eyebrow">'+t('pod_launched')+'</span><h2 style="font-size:34px">'+head+'</h2><div class="big kscorebig">'+t('k_pts',{p:totalOf(S.ans||{})})+'</div>'+
+  '<p class="muted">'+t('done_note',{c:correctOf(S.ans||{}),n:N,t:fmt(S.finishMs)})+'</p>'+
   (S.mode==='solo'?'<div class="row"><button class="btn primary" data-act="solo">'+t('play_again')+'</button><button class="btn ghost" data-act="home">'+t('back_start')+'</button></div>':
   '<div class="game"><div class="panel stack"><h2>'+t('live_board')+'</h2>'+boardView()+'<p class="muted small">'+t('waiting_mc')+'</p></div><div class="side"><div class="panel"><h3>'+t('station_map')+'</h3><div class="map" id="map">'+mapView()+'</div></div></div></div>'+
   '<div class="row"><button class="btn ghost" data-act="home">'+t('leave')+'</button></div>')+'</div>';}
@@ -1021,14 +1249,17 @@ function render(){
   switch(S.screen){
     case 'home':v=homeView();break;
     case 'join':v=joinView();break;
-    case 'host':v=(S.hostPhase==='lobby')?hostLobbyView():hostLiveView();break;
+    case 'host':v=S.k.phase==='lobby'?hostLobbyView():S.k.phase==='q'?hostQView():S.k.phase==='res'?hostResView():hostFinalView();break;
+    case 'kq':v=playerQView();break;
+    case 'kr':v=playerResView();break;
+    case 'kf':v=playerFinalView();break;
     case 'lobby':v=lobbyView();break;
     case 'countdown':v=countdownView();break;
     case 'game':v=gameView();break;
     case 'done':v=doneView();break;
     case 'ended':v=endedView();break;
     case 'timeup':v=timeupView();break;}
-  barEl.innerHTML=barView();app.innerHTML=v;var lf=document.getElementById('langfab');if(lf)lf.innerHTML=langBtn();updateLive();}
+  S.kSig=kSignature();barEl.innerHTML=barView();app.innerHTML=v;var lf=document.getElementById('langfab');if(lf)lf.innerHTML=langBtn();updateLive();}
 function focusId(id){var e=document.getElementById(id);if(e)e.focus()}
 
 /* ---------- events ---------- */
@@ -1045,7 +1276,12 @@ document.addEventListener('click',function(e){
     case 'copy':(function(){var c=$('#copied');var ok=function(){c.textContent=t('copied',{c:S.code})};var no=function(){c.textContent=t('copy_blocked',{c:S.code})};
       try{navigator.clipboard.writeText(S.code).then(ok,no)}catch(err){no()}})();break;
     case 'copylink':(function(){var c=$('#copied');var l=joinLink();try{navigator.clipboard.writeText(l).then(function(){c.textContent=t('link_copied')},function(){c.textContent=t('link_blocked')})}catch(err){c.textContent=t('link_blocked')}})();break;
-    case 'start':hostSetPhase('live');break;
+    case 'start':hostStart();break;
+    case 'kres':hostResults();break;
+    case 'knext':hostNext();break;
+    case 'kagain':hostAgain();break;
+    case 'kendyes':hostFinal();break;
+    case 'qtime':S.qSec=i;render();break;
     case 'end':S.endConfirm=true;render();break;
     case 'endno':S.endConfirm=false;render();break;
     case 'endyes':hostSetPhase('ended');play('win');confetti();break;
@@ -1053,8 +1289,9 @@ document.addEventListener('click',function(e){
     case 'limit':S.limitMin=i;render();break;
     case 'export':exportBoard();break;
     case 'mute':setMuted(!muted);render();break;
-    case 'pick':play('click');S.sel=i;if(S.fb&&!S.fb.ok)S.fb=null;render();break;
-    case 'tap':play('click');var k=S.tap.indexOf(i);if(k>=0)S.tap.splice(k,1);else S.tap.push(i);if(S.fb&&!S.fb.ok)S.fb=null;render();break;
+    case 'fifty':useFifty();break;
+    case 'pick':if(S.reveal||S.locked)break;play('click');S.sel=i;if(S.fb&&!S.fb.ok)S.fb=null;render();break;
+    case 'tap':if(S.reveal||S.locked||(S.ff&&S.ff.hide.indexOf(i)>=0))break;play('click');var k=S.tap.indexOf(i);if(k>=0)S.tap.splice(k,1);else S.tap.push(i);if(S.fb&&!S.fb.ok)S.fb=null;render();break;
     case 'tile':play('click');S.unscr.push(i);if(S.fb&&!S.fb.ok)S.fb=null;render();break;
     case 'undo':S.unscr.pop();S.fb=null;render();break;
     case 'clear':S.unscr=[];S.fb=null;render();break;
@@ -1062,21 +1299,31 @@ document.addEventListener('click',function(e){
     case 'next':advance();break;
     case 'startpuzzle':startPuzzle();break;}});
 app.addEventListener('change',function(e){var el=e.target;if(el.dataset&&el.dataset.act==='match'){S.match[Number(el.dataset.i)]=el.value===''?null:Number(el.value);if(S.fb&&!S.fb.ok)S.fb=null;
-  var sb=$('#subbtn');if(sb){sb.disabled=!canSubmit();if(sb.nextElementSibling)sb.nextElementSibling.textContent=canSubmit()?t('press_enter'):t('choose_first')}
+  var sb=$('#subbtn');if(sb){sb.disabled=!canSubmit();if(sb.nextElementSibling)sb.nextElementSibling.textContent=canSubmit()?t('one_try'):t('choose_first')}
   var fb=$('#fb');if(fb&&!S.fb)fb.remove();}});
 app.addEventListener('input',function(e){var el=e.target;
   if(el.id==='in-code'){var v=el.value.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);if(el.value!==v)el.value=v;S.codeInput=v;}
   if(el.id==='in-name'){S.name=el.value.slice(0,14);}});
 app.addEventListener('submit',function(e){e.preventDefault();if(e.target.id==='joinform')playerJoin();});
 document.addEventListener('keydown',function(e){
-  if(S.screen!=='game')return;var tag=(e.target.tagName||'');if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
+  if(S.screen!=='game'&&S.screen!=='kq')return;var tag=(e.target.tagName||'');if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
   var st=STAGES[S.stage];
-  if(st&&S.phase==='quiz'&&st.type==='choice'&&!(S.fb&&S.fb.ok)&&/^[1-4]$/.test(e.key)){S.sel=Number(e.key)-1;if(S.fb&&!S.fb.ok)S.fb=null;render();e.preventDefault();return}
+  if(st&&S.phase==='quiz'&&st.type==='choice'&&!S.reveal&&!S.locked&&/^[1-4]$/.test(e.key)&&!(S.ff&&S.ff.hide.indexOf(Number(e.key)-1)>=0)){S.sel=Number(e.key)-1;if(S.fb&&!S.fb.ok)S.fb=null;render();e.preventDefault();return}
   if(e.key==='Enter'){if(e.target.closest&&e.target.closest('button')&&!e.target.closest('#subbtn,#nextbtn,#briefnext'))return;e.preventDefault();submit();}});
 applyLang();
 
 /* ---------- ticker ---------- */
+var lastBeat=0,lastSec=-1;
 setInterval(function(){
+  if(S.mode==='host'&&R&&Date.now()-lastBeat>2000){lastBeat=Date.now();hostPush();}
+  if((S.mode==='host'&&S.screen==='host'&&S.k.phase==='q')||(S.mode==='player'&&S.screen==='kq')){
+    var hn=hostNow(),cd=$('#kcd'),kt=$('#ktime');
+    if(hn<S.k.qStart){if(cd)cd.textContent=String(Math.max(1,Math.ceil((S.k.qStart-hn)/1000)));}
+    else if(!S.kLive){S.kLive=true;render();if(S.mode==='player')focusId('qtext');}
+    if(kt){var sec=kSecs();if(kt.textContent!==String(sec)){kt.textContent=String(sec);if(S.mode==='host'&&sec<=5&&sec>0&&sec!==lastSec&&hn>=S.k.qStart)play('beep');lastSec=sec;}}
+    if(S.mode==='host'&&hn>=S.k.qEnd+400)hostResults();
+    if(S.mode==='player'&&!S.locked&&hn>=S.k.qEnd&&hn>=S.k.qStart){submitK(true);render();}
+  }
   if(S.screen==='countdown'){if(Date.now()>=S.cdEnd){S.startLocal=S.cdEnd;S.screen='game';S.phase='quiz';S.enter=true;play('go');play('door');render();S.enter=false;clearDoors();focusId('qtext');}else{var c=$('#cd'),n=String(Math.max(1,Math.ceil((S.cdEnd-Date.now())/1000)));if(c&&c.textContent!==n){c.textContent=n;play('beep')}}}
   var t=$('#timer');if(t)t.textContent=fmt(elapsed());
   var ht=$('#htimer');if(ht)ht.textContent=S.limitMs?fmt(Math.max(0,S.liveAt+S.limitMs-Date.now())):fmt(Math.max(0,Date.now()-S.liveAt));
